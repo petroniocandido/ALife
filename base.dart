@@ -9,15 +9,21 @@ abstract class CellularAutomata<T> {
   int num_cells = 0;
   List<int> _shape_dimensions = [];
   
+  List<int> get shape_dimensions => _shape_dimensions;
+  
   List<T> _grid = [];
   
   List<T> get grid => _grid;
   
   CellularAutomata(this._shape){
+  
+    // NOT WORKING !!!
+    
     num_cells = _shape.reduce((i,j) => i * j);
-    var tmp1 = 1;
-    for(int s in _shape.reversed){
-      tmp1 *= s;
+    List<int> rev = [for (int s in _shape.reversed) s];
+    int tmp1 = 1;
+    for(int i = 1; i < _shape.length-1; i++){
+      tmp1 *= rev[i];
       _shape_dimensions.insert(0, tmp1);
     }
   }
@@ -48,6 +54,8 @@ abstract class CellularAutomata<T> {
     }
     return true;
   }
+  
+  // NOT WORKING !
   
   List<int> gridIndex(int list_index){
     var index = <int>[]; 
@@ -160,10 +168,14 @@ class BooleanCellularAutomata extends CellularAutomata<int>{
 
 void main() {
   print("Inicio");
-  var ca = BooleanCellularAutomata([10]);
-  ca.initialize();
+  var ca = BooleanCellularAutomata([10, 10]);
+  print(ca.shape_dimensions);
+  /*ca.initialize();
   print(ca.grid);
-  var tmp = ca.next();
-  print(tmp);
+  for(int i = 0; i < ca.grid.length; i++){
+    print(ca.gridIndex(i));
+  }*/
+  //var tmp = ca.next();
+  //print(tmp);
   print("Fim");
 }
