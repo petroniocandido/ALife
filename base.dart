@@ -2,26 +2,16 @@ import 'dart:math';
 
 final _random = Random();
 
-abstract class Cell<T> {
-  
-  T _state;
-  
-  T get state => _state;
-  
-  Cell(this._state);
-  
-  void update(List<Cell> neighbors);
-  
-}
-
-abstract class CellularAutomata<T, C extends Cell<T>> {
+abstract class CellularAutomata<T> {
   final List<int> _shape;
+  List<int> get shape => _shape;
+    
   int num_cells = 0;
   List<int> _shape_dimensions = [];
   
-  List<C> _grid = [];
+  List<T> _grid = [];
   
-  List<int> get shape => _shape;
+  List<T> get grid => _grid;
   
   CellularAutomata(this._shape){
     num_cells = _shape.reduce((i,j) => i * j);
@@ -32,17 +22,28 @@ abstract class CellularAutomata<T, C extends Cell<T>> {
     }
   }
   
-  List<C> get grid => _grid;
+  ///////////////////////////////////////////////
+  // ABSTRACT METHODS
+  ///////////////////////////////////////////////
   
-  void initialize(Function() constructor) {
-    _grid = <C>[];
+  T cellCreate();
+  List<T> cellNeighborhood(int list_index);
+  void cellUpdate(int list_index);
+  
+  ///////////////////////////////////////////////
+  // BASE METHODS
+  ///////////////////////////////////////////////
+  
+  void initialize() {
+    _grid = [];
     for(int i = 0; i < num_cells; i++){
-      _grid.add(constructor());
+      _grid.add(cellCreate());
     }
   }
   
   bool isValidGridIndex(List<int> index){
-    for(int di = 0; di < _shape.length; ) {
+    
+    for(int di = 0; di < _shape.length; di++) {
       if(index[di] < 0 || index[di] == _shape[di]){ return false; }
     }
     return true;
@@ -68,14 +69,13 @@ abstract class CellularAutomata<T, C extends Cell<T>> {
     return index;
   }
   
-  List<C> neighborhood(int list_index);
+  
   
   List<T> next(){
     List<T> tmp = [];
     for(int i = 0; i < num_cells; i++){
-      var cell = _grid[i];
-      cell.update(neighborhood(i));
-      tmp.add(cell.state);
+      cellUpdate(i);
+      tmp.add(_grid[i]);
     }
     return tmp;
   }
@@ -84,31 +84,37 @@ abstract class CellularAutomata<T, C extends Cell<T>> {
     
     for(int i = 0; i < iterations; i++){
       for(int i = 0; i < num_cells; i++){
-        var cell = _grid[i];
-        cell.update(neighborhood(i));
+        cellUpdate(i);
       }
     }
     return next();
   }
 }
 
-class BooleanCell extends Cell<int> {
-  
-  BooleanCell(): super(_random.nextInt(1));
-  
-  @override
-  void update(List<Cell> neighbors){
-    var list = [for (var i = 1; i <= neighbors.length; i++) neighbors[i].state];
-    int num = list.reduce((i,j)=>i+j);
-    _state = num % 2;
-  }
-}
 
-class BooleanCellularAutomata extends CellularAutomata<int, BooleanCell>{
+class BooleanCellularAutomata extends CellularAutomata<int>{
   BooleanCellularAutomata(List<int> shape) : super(shape);
   
+  @override
+  int cellCreate(){
+    return _random.nextInt(2);
+  }
+  
+  @override
+  void cellUpdate(int index){
+    print("cellUpdate");
+    List<int> neighbors = cellNeighborhood(index);
+    print(neighbors);
+    if(neighbors.length > 0) {
+	  var list = [for (var i = 0; i <= neighbors.length-1; i++) neighbors[i]];
+      int num = list.reduce((i,j)=>i+j);
+      _grid[index] = num % 2;
+    }
+  }
+  
   List nextDimensionNeighbors(int dim, List<int> index){
-    var neigh = [];
+    print("nextDimensionNeighbors");
+    List neigh = [];
     
     List<int> tmp1 = index;
     tmp1[dim] += 1;
@@ -139,10 +145,12 @@ class BooleanCellularAutomata extends CellularAutomata<int, BooleanCell>{
     
   }
   
-  List<BooleanCell> neighborhood(int list_index) {
+  @override
+  List<int> cellNeighborhood(int list_index) {
+    print("cellNeighborhood");
     var gix = gridIndex(list_index);
     List ix_grid = nextDimensionNeighbors(0, gix);
-    var ret = <BooleanCell>[];
+    var ret = <int>[];
     for(List<int> ix in ix_grid){
       ret.add(_grid[listIndex(ix)]);
     }
@@ -151,8 +159,11 @@ class BooleanCellularAutomata extends CellularAutomata<int, BooleanCell>{
 }
 
 void main() {
+  print("Inicio");
   var ca = BooleanCellularAutomata([10]);
-  ca.initialize(() => BooleanCell());
+  ca.initialize();
+  print(ca.grid);
   var tmp = ca.next();
   print(tmp);
+  print("Fim");
 }
