@@ -252,14 +252,37 @@
     hunk(hunkHelpers, init, holders, $);
   }
   var A = {JS_CONST: function JS_CONST() {
-    }, LateError: function LateError(t0) {
+    },
+    IterableElementError_noElement() {
+      return new A.StateError("No element");
+    },
+    LateError: function LateError(t0) {
       this._message = t0;
+    },
+    ListIterator: function ListIterator(t0, t1, t2) {
+      var _ = this;
+      _.__internal$_iterable = t0;
+      _.__internal$_length = t1;
+      _.__internal$_index = 0;
+      _.__internal$_current = null;
+      _.$ti = t2;
+    },
+    FixedLengthListMixin: function FixedLengthListMixin() {
     },
     unminifyOrTag(rawClassName) {
       var preserved = init.mangledGlobalNames[rawClassName];
       if (preserved != null)
         return preserved;
       return rawClassName;
+    },
+    isJsIndexable(object, record) {
+      var result;
+      if (record != null) {
+        result = record.x;
+        if (result != null)
+          return result;
+      }
+      return type$.JavaScriptIndexingBehavior_dynamic._is(object);
     },
     S(value) {
       var result;
@@ -276,6 +299,20 @@
         return "null";
       result = J.toString$0$(value);
       return result;
+    },
+    Primitives_objectHashCode(object) {
+      var t1, hash,
+        property = $.Primitives__identityHashCodeProperty;
+      if (property == null) {
+        t1 = Symbol("identityHashCode");
+        property = $.Primitives__identityHashCodeProperty = t1;
+      }
+      hash = object[property];
+      if (hash == null) {
+        hash = Math.random() * 0x3fffffff | 0;
+        object[property] = hash;
+      }
+      return hash;
     },
     Primitives_objectTypeName(object) {
       return A.Primitives__objectTypeNameNewRti(object);
@@ -303,6 +340,9 @@
       }
       return A._rtiToString(A.instanceType(object), null);
     },
+    iae(argument) {
+      throw A.wrapException(A.argumentErrorValue(argument));
+    },
     ioore(receiver, index) {
       if (receiver == null)
         J.get$length$asx(receiver);
@@ -314,8 +354,11 @@
         return new A.ArgumentError(true, index, _s5_, null);
       $length = A._asInt(J.get$length$asx(indexable));
       if (index < 0 || index >= $length)
-        return new A.IndexError($length, true, index, _s5_, "Index out of range");
-      return new A.RangeError(true, index, _s5_, "Value not in range");
+        return A.IndexError$(index, indexable, _s5_, null, $length);
+      return A.RangeError$value(index, _s5_);
+    },
+    argumentErrorValue(object) {
+      return new A.ArgumentError(true, object, null, null);
     },
     wrapException(ex) {
       var wrapper, t1;
@@ -338,7 +381,60 @@
       throw A.wrapException(ex);
     },
     throwConcurrentModificationError(collection) {
-      throw A.wrapException(new A.ConcurrentModificationError(collection));
+      throw A.wrapException(A.ConcurrentModificationError$(collection));
+    },
+    objectHashCode(object) {
+      if (object == null || typeof object != "object")
+        return J.get$hashCode$(object);
+      else
+        return A.Primitives_objectHashCode(object);
+    },
+    fillLiteralMap(keyValuePairs, result) {
+      var t1, t2, index, index0, key, value, strings, cell, nums, rest, hash, bucket,
+        $length = keyValuePairs.length;
+      for (t1 = A._instanceType(result), t2 = t1._precomputed1, t1 = t1._rest[1], index = 0; index < $length;) {
+        index0 = index + 1;
+        key = keyValuePairs[index];
+        index = index0 + 1;
+        value = keyValuePairs[index0];
+        t2._as(key);
+        t1._as(value);
+        if (typeof key == "string") {
+          strings = result._strings;
+          if (strings == null)
+            strings = result._strings = result._newHashTable$0();
+          cell = result._getTableCell$2(strings, key);
+          if (cell == null)
+            result._setTableEntry$3(strings, key, result._newLinkedCell$2(key, value));
+          else
+            cell.hashMapCellValue = value;
+        } else if (typeof key == "number" && (key & 0x3ffffff) === key) {
+          nums = result._nums;
+          if (nums == null)
+            nums = result._nums = result._newHashTable$0();
+          cell = result._getTableCell$2(nums, key);
+          if (cell == null)
+            result._setTableEntry$3(nums, key, result._newLinkedCell$2(key, value));
+          else
+            cell.hashMapCellValue = value;
+        } else {
+          rest = result.__js_helper$_rest;
+          if (rest == null)
+            rest = result.__js_helper$_rest = result._newHashTable$0();
+          hash = J.get$hashCode$(key) & 0x3ffffff;
+          bucket = result._getTableBucket$2(rest, hash);
+          if (bucket == null)
+            result._setTableEntry$3(rest, hash, [result._newLinkedCell$2(key, value)]);
+          else {
+            index0 = result.internalFindBucketIndex$2(bucket, key);
+            if (index0 >= 0)
+              bucket[index0].hashMapCellValue = value;
+            else
+              bucket.push(result._newLinkedCell$2(key, value));
+          }
+        }
+      }
+      return result;
     },
     Closure_fromTearOff(parameters) {
       var $prototype, $constructor, t2, trampoline, applyTrampoline, i, stub, stub0, stubName, stubCallName,
@@ -543,23 +639,24 @@
       return closure._interceptor;
     },
     BoundClosure__computeFieldNamed(fieldName) {
-      var names, i, $name,
+      var t1, i, $name,
         template = new A.BoundClosure("receiver", "interceptor"),
-        t1 = Object.getOwnPropertyNames(template);
-      t1.fixed$length = Array;
-      names = t1;
+        names = J.JSArray_markFixedList(Object.getOwnPropertyNames(template), type$.nullable_Object);
       for (t1 = names.length, i = 0; i < t1; ++i) {
         $name = names[i];
         if (template[$name] === fieldName)
           return $name;
       }
-      throw A.wrapException(new A.ArgumentError(false, null, null, "Field name " + fieldName + " not found."));
+      throw A.wrapException(A.ArgumentError$("Field name " + fieldName + " not found."));
     },
     throwCyclicInit(staticName) {
       throw A.wrapException(new A.CyclicInitializationError(staticName));
     },
     getIsolateAffinityTag($name) {
       return init.getIsolateTag($name);
+    },
+    defineProperty(obj, property, value) {
+      Object.defineProperty(obj, property, {value: value, enumerable: false, writable: true, configurable: true});
     },
     lookupAndCacheInterceptor(obj) {
       var interceptor, interceptorClass, altTag, mark, t1,
@@ -714,6 +811,18 @@
     RuntimeError: function RuntimeError(t0) {
       this.message = t0;
     },
+    JsLinkedHashMap: function JsLinkedHashMap(t0) {
+      var _ = this;
+      _.__js_helper$_length = 0;
+      _._last = _._first = _.__js_helper$_rest = _._nums = _._strings = null;
+      _._modifications = 0;
+      _.$ti = t0;
+    },
+    LinkedHashMapCell: function LinkedHashMapCell(t0, t1) {
+      this.hashMapCellKey = t0;
+      this.hashMapCellValue = t1;
+      this._next = null;
+    },
     initHooks_closure: function initHooks_closure(t0) {
       this.getTag = t0;
     },
@@ -722,6 +831,22 @@
     },
     initHooks_closure1: function initHooks_closure1(t0) {
       this.prototypeForTag = t0;
+    },
+    _checkValidIndex(index, list, $length) {
+      if (index >>> 0 !== index || index >= $length)
+        throw A.wrapException(A.diagnoseIndexError(list, index));
+    },
+    NativeTypedData: function NativeTypedData() {
+    },
+    NativeTypedArray: function NativeTypedArray() {
+    },
+    NativeTypedArrayOfInt: function NativeTypedArrayOfInt() {
+    },
+    NativeUint8ClampedList: function NativeUint8ClampedList() {
+    },
+    _NativeTypedArrayOfInt_NativeTypedArray_ListMixin: function _NativeTypedArrayOfInt_NativeTypedArray_ListMixin() {
+    },
+    _NativeTypedArrayOfInt_NativeTypedArray_ListMixin_FixedLengthListMixin: function _NativeTypedArrayOfInt_NativeTypedArray_ListMixin_FixedLengthListMixin() {
     },
     Rti__getQuestionFromStar(universe, rti) {
       var question = rti._precomputed1;
@@ -2163,112 +2288,8 @@
     _TypeError: function _TypeError(t0) {
       this.__rti$_message = t0;
     },
-    Error__objectToString(object) {
-      if (object instanceof A.Closure)
-        return object.toString$0(0);
-      return "Instance of '" + A.Primitives_objectTypeName(object) + "'";
-    },
-    StringBuffer__writeAll(string, objects, separator) {
-      var t1 = A._arrayInstanceType(objects),
-        iterator = new J.ArrayIterator(objects, objects.length, t1._eval$1("ArrayIterator<1>"));
-      if (!iterator.moveNext$0())
-        return string;
-      t1 = t1._precomputed1;
-      if (separator.length === 0) {
-        do
-          string += A.S(t1._as(iterator._current));
-        while (iterator.moveNext$0());
-      } else {
-        string += A.S(t1._as(iterator._current));
-        for (; iterator.moveNext$0();)
-          string = string + separator + A.S(t1._as(iterator._current));
-      }
-      return string;
-    },
-    Error_safeToString(object) {
-      if (typeof object == "number" || A._isBool(object) || object == null)
-        return J.toString$0$(object);
-      if (typeof object == "string")
-        return JSON.stringify(object);
-      return A.Error__objectToString(object);
-    },
-    AssertionError$(message) {
-      return new A.AssertionError(message);
-    },
-    UnsupportedError$(message) {
-      return new A.UnsupportedError(message);
-    },
-    UnimplementedError$(message) {
-      return new A.UnimplementedError(message);
-    },
-    Error: function Error() {
-    },
-    AssertionError: function AssertionError(t0) {
-      this.message = t0;
-    },
-    NullThrownError: function NullThrownError() {
-    },
-    ArgumentError: function ArgumentError(t0, t1, t2, t3) {
-      var _ = this;
-      _._hasValue = t0;
-      _.invalidValue = t1;
-      _.name = t2;
-      _.message = t3;
-    },
-    RangeError: function RangeError(t0, t1, t2, t3) {
-      var _ = this;
-      _._hasValue = t0;
-      _.invalidValue = t1;
-      _.name = t2;
-      _.message = t3;
-    },
-    IndexError: function IndexError(t0, t1, t2, t3, t4) {
-      var _ = this;
-      _.length = t0;
-      _._hasValue = t1;
-      _.invalidValue = t2;
-      _.name = t3;
-      _.message = t4;
-    },
-    UnsupportedError: function UnsupportedError(t0) {
-      this.message = t0;
-    },
-    UnimplementedError: function UnimplementedError(t0) {
-      this.message = t0;
-    },
-    ConcurrentModificationError: function ConcurrentModificationError(t0) {
-      this.modifiedObject = t0;
-    },
-    CyclicInitializationError: function CyclicInitializationError(t0) {
-      this.variableName = t0;
-    },
-    Null: function Null() {
-    },
-    Object: function Object() {
-    },
-    StringBuffer: function StringBuffer(t0) {
-      this._contents = t0;
-    },
-    HtmlElement: function HtmlElement() {
-    },
-    AnchorElement: function AnchorElement() {
-    },
-    AreaElement: function AreaElement() {
-    },
-    DomException: function DomException() {
-    },
-    Element: function Element() {
-    },
-    EventTarget: function EventTarget() {
-    },
-    FormElement: function FormElement() {
-    },
-    Node: function Node() {
-    },
-    SelectElement: function SelectElement() {
-    },
-    throwLateFieldADI(fieldName) {
-      return A.throwExpression(new A.LateError("Field '" + fieldName + "' has been assigned during initialization."));
+    LinkedHashMap_LinkedHashMap$_literal(keyValuePairs, $K, $V) {
+      return $K._eval$1("@<0>")._bind$1($V)._eval$1("LinkedHashMap<1,2>")._as(A.fillLiteralMap(keyValuePairs, new A.JsLinkedHashMap($K._eval$1("@<0>")._bind$1($V)._eval$1("JsLinkedHashMap<1,2>"))));
     },
     IterableBase_iterableToFullString(iterable, leftDelimiter, rightDelimiter) {
       var buffer, t1;
@@ -2295,10 +2316,288 @@
           return true;
       return false;
     },
+    MapBase_mapToString(m) {
+      var result, t1 = {};
+      if (A._isToStringVisiting(m))
+        return "{...}";
+      result = new A.StringBuffer("");
+      try {
+        B.JSArray_methods.add$1($._toStringVisiting, m);
+        result._contents += "{";
+        t1.first = true;
+        m.forEach$1(0, new A.MapBase_mapToString_closure(t1, result));
+        result._contents += "}";
+      } finally {
+        if (0 >= $._toStringVisiting.length)
+          return A.ioore($._toStringVisiting, -1);
+        $._toStringVisiting.pop();
+      }
+      t1 = result._contents;
+      return t1.charCodeAt(0) == 0 ? t1 : t1;
+    },
+    ListMixin: function ListMixin() {
+    },
+    MapBase: function MapBase() {
+    },
+    MapBase_mapToString_closure: function MapBase_mapToString_closure(t0, t1) {
+      this._box_0 = t0;
+      this.result = t1;
+    },
+    MapMixin: function MapMixin() {
+    },
+    Error__objectToString(object) {
+      if (object instanceof A.Closure)
+        return object.toString$0(0);
+      return "Instance of '" + A.Primitives_objectTypeName(object) + "'";
+    },
+    StringBuffer__writeAll(string, objects, separator) {
+      var iterator = J.get$iterator$ax(objects);
+      if (!iterator.moveNext$0())
+        return string;
+      if (separator.length === 0) {
+        do
+          string += A.S(iterator.get$current());
+        while (iterator.moveNext$0());
+      } else {
+        string += A.S(iterator.get$current());
+        for (; iterator.moveNext$0();)
+          string = string + separator + A.S(iterator.get$current());
+      }
+      return string;
+    },
+    Error_safeToString(object) {
+      if (typeof object == "number" || A._isBool(object) || object == null)
+        return J.toString$0$(object);
+      if (typeof object == "string")
+        return JSON.stringify(object);
+      return A.Error__objectToString(object);
+    },
+    AssertionError$(message) {
+      return new A.AssertionError(message);
+    },
+    ArgumentError$(message) {
+      return new A.ArgumentError(false, null, null, message);
+    },
+    RangeError$(message) {
+      var _null = null;
+      return new A.RangeError(_null, _null, false, _null, _null, message);
+    },
+    RangeError$value(value, $name) {
+      return new A.RangeError(null, null, true, value, $name, "Value not in range");
+    },
+    IndexError$(invalidValue, indexable, $name, message, $length) {
+      var t1 = A._asInt($length == null ? J.get$length$asx(indexable) : $length);
+      return new A.IndexError(t1, true, invalidValue, $name, "Index out of range");
+    },
+    UnsupportedError$(message) {
+      return new A.UnsupportedError(message);
+    },
+    UnimplementedError$(message) {
+      return new A.UnimplementedError(message);
+    },
+    ConcurrentModificationError$(modifiedObject) {
+      return new A.ConcurrentModificationError(modifiedObject);
+    },
+    Error: function Error() {
+    },
+    AssertionError: function AssertionError(t0) {
+      this.message = t0;
+    },
+    NullThrownError: function NullThrownError() {
+    },
+    ArgumentError: function ArgumentError(t0, t1, t2, t3) {
+      var _ = this;
+      _._hasValue = t0;
+      _.invalidValue = t1;
+      _.name = t2;
+      _.message = t3;
+    },
+    RangeError: function RangeError(t0, t1, t2, t3, t4, t5) {
+      var _ = this;
+      _.start = t0;
+      _.end = t1;
+      _._hasValue = t2;
+      _.invalidValue = t3;
+      _.name = t4;
+      _.message = t5;
+    },
+    IndexError: function IndexError(t0, t1, t2, t3, t4) {
+      var _ = this;
+      _.length = t0;
+      _._hasValue = t1;
+      _.invalidValue = t2;
+      _.name = t3;
+      _.message = t4;
+    },
+    UnsupportedError: function UnsupportedError(t0) {
+      this.message = t0;
+    },
+    UnimplementedError: function UnimplementedError(t0) {
+      this.message = t0;
+    },
+    StateError: function StateError(t0) {
+      this.message = t0;
+    },
+    ConcurrentModificationError: function ConcurrentModificationError(t0) {
+      this.modifiedObject = t0;
+    },
+    CyclicInitializationError: function CyclicInitializationError(t0) {
+      this.variableName = t0;
+    },
+    Null: function Null() {
+    },
+    Object: function Object() {
+    },
+    StringBuffer: function StringBuffer(t0) {
+      this._contents = t0;
+    },
+    HtmlElement: function HtmlElement() {
+    },
+    AnchorElement: function AnchorElement() {
+    },
+    AreaElement: function AreaElement() {
+    },
+    CanvasElement: function CanvasElement() {
+    },
+    CanvasRenderingContext2D: function CanvasRenderingContext2D() {
+    },
+    DomException: function DomException() {
+    },
+    Element: function Element() {
+    },
+    EventTarget: function EventTarget() {
+    },
+    FormElement: function FormElement() {
+    },
+    ImageData: function ImageData() {
+    },
+    Node: function Node() {
+    },
+    SelectElement: function SelectElement() {
+    },
+    convertNativeToDart_ImageData(nativeImageData) {
+      var data;
+      if (type$.ImageData._is(nativeImageData)) {
+        data = J.get$data$x(nativeImageData);
+        if (data.constructor === Array)
+          if (typeof CanvasPixelArray !== "undefined") {
+            data.constructor = CanvasPixelArray;
+            data.BYTES_PER_ELEMENT = 1;
+          }
+        return nativeImageData;
+      }
+      return new A._TypedImageData(nativeImageData.data, nativeImageData.height, nativeImageData.width);
+    },
+    convertDartToNative_ImageData(imageData) {
+      if (imageData instanceof A._TypedImageData)
+        return {data: imageData.data, height: imageData.height, width: imageData.width};
+      return imageData;
+    },
+    _TypedImageData: function _TypedImageData(t0, t1, t2) {
+      this.data = t0;
+      this.height = t1;
+      this.width = t2;
+    },
+    Random_Random() {
+      return B.C__JSRandom;
+    },
+    _JSRandom: function _JSRandom() {
+    },
+    CellularAutomata: function CellularAutomata() {
+    },
+    CellularAutomata_closure: function CellularAutomata_closure() {
+    },
+    BooleanCellularAutomata: function BooleanCellularAutomata() {
+    },
+    SierpinskiTriangle$(shape) {
+      var t1 = type$.int,
+        t2 = A.LinkedHashMap_LinkedHashMap$_literal(["[0, 0, 0]", 0, "[0, 0, 1]", 1, "[0, 1, 0]", 0, "[0, 1, 1]", 1, "[1, 0, 0]", 1, "[1, 0, 1]", 0, "[1, 1, 0]", 1, "[1, 1, 1]", 0], type$.String, t1),
+        t3 = type$.JSArray_int,
+        t4 = A._setArrayType([shape], t3);
+      t3 = new A.SierpinskiTriangle(t2, t4, A._setArrayType([], t3), A._setArrayType([], t3), A._setArrayType([], t3));
+      t3.CellularAutomata$1(t4, t1);
+      return t3;
+    },
+    SierpinskiTriangle: function SierpinskiTriangle(t0, t1, t2, t3, t4) {
+      var _ = this;
+      _.rules = t0;
+      _._shape = t1;
+      _.num_cells = 0;
+      _._shape_dimensions = t2;
+      _._grid_current = t3;
+      _._grid_working = t4;
+    },
+    throwLateFieldADI(fieldName) {
+      return A.throwExpression(new A.LateError("Field '" + fieldName + "' has been assigned during initialization."));
+    },
     main() {
-      var t1 = document.querySelector("#paragrafo");
-      if (t1 != null)
-        J.set$text$x(t1, "Hello world!");
+      var canvas, canvasWidth, canvasHeight, t3, t4, pixels, ca, t5, y, line, x, t6, t7, t8, t9, t10, t11, off, t12, _null = null,
+        t1 = document,
+        t2 = t1.querySelector("#paragrafo");
+      if (t2 != null)
+        J.set$text$x(t2, "Hello world!");
+      canvas = type$.nullable_CanvasElement._as(t1.querySelector("#canvas"));
+      t1 = canvas == null;
+      t2 = t1 ? _null : B.CanvasElement_methods.getContext$1(canvas, "2d");
+      type$.nullable_CanvasRenderingContext2D._as(t2);
+      canvasWidth = t1 ? _null : canvas.width;
+      if (canvasWidth == null)
+        canvasWidth = 100;
+      canvasHeight = t1 ? _null : canvas.height;
+      if (canvasHeight == null)
+        canvasHeight = 100;
+      t1 = t2 == null;
+      if (!t1)
+        t2.clearRect(0, 0, canvasWidth, canvasHeight);
+      t3 = t1 ? _null : A.convertNativeToDart_ImageData(t2.getImageData(0, 0, canvasWidth, canvasHeight));
+      type$.ImageData._as(t3);
+      t4 = J.getInterceptor$x(t3);
+      pixels = t4.get$data(t3);
+      ca = A.SierpinskiTriangle$(canvasWidth);
+      ca.initialize$0();
+      for (t5 = pixels.length, y = 0; y < canvasHeight; ++y) {
+        line = ca.next$0();
+        for (x = 0; x < canvasWidth; ++x) {
+          if (!(x < line.length))
+            return A.ioore(line, x);
+          t6 = line[x];
+          t7 = $.$get$_random();
+          t8 = B.JSNumber_methods.round$0(t7.nextDouble$0() * 256);
+          if (typeof t6 !== "number")
+            return t6.$mul();
+          if (!(x < line.length))
+            return A.ioore(line, x);
+          t9 = line[x];
+          t10 = B.JSNumber_methods.round$0(t7.nextDouble$0() * 256);
+          if (typeof t9 !== "number")
+            return t9.$mul();
+          if (!(x < line.length))
+            return A.ioore(line, x);
+          t11 = line[x];
+          t7 = B.JSNumber_methods.round$0(t7.nextDouble$0() * 256);
+          if (typeof t11 !== "number")
+            return t11.$mul();
+          off = (y * t4.get$width(t3) + x) * 4;
+          t12 = B.JSInt_methods.toInt$0(off);
+          if (!(t12 >= 0 && t12 < t5))
+            return A.ioore(pixels, t12);
+          pixels[t12] = t6 * t8;
+          t8 = B.JSInt_methods.toInt$0(off + 1);
+          if (!(t8 >= 0 && t8 < t5))
+            return A.ioore(pixels, t8);
+          pixels[t8] = t9 * t10;
+          t10 = B.JSInt_methods.toInt$0(off + 2);
+          if (!(t10 >= 0 && t10 < t5))
+            return A.ioore(pixels, t10);
+          pixels[t10] = t11 * t7;
+          t7 = B.JSInt_methods.toInt$0(off + 3);
+          if (!(t7 >= 0 && t7 < t5))
+            return A.ioore(pixels, t7);
+          pixels[t7] = 255;
+        }
+      }
+      if (!t1)
+        B.CanvasRenderingContext2D_methods.putImageData$3(t2, t3, 0, 0);
     }
   },
   J = {
@@ -2355,6 +2654,10 @@
       }
       return B.UnknownJavaScriptObject_methods;
     },
+    JSArray_markFixedList(list, $T) {
+      list.fixed$length = Array;
+      return list;
+    },
     getInterceptor$(receiver) {
       if (typeof receiver == "number") {
         if (Math.floor(receiver) == receiver)
@@ -2394,6 +2697,20 @@
         return receiver;
       return J.getNativeInterceptor(receiver);
     },
+    getInterceptor$ax(receiver) {
+      if (receiver == null)
+        return receiver;
+      if (receiver.constructor == Array)
+        return J.JSArray.prototype;
+      if (typeof receiver != "object") {
+        if (typeof receiver == "function")
+          return J.JavaScriptFunction.prototype;
+        return receiver;
+      }
+      if (receiver instanceof A.Object)
+        return receiver;
+      return J.getNativeInterceptor(receiver);
+    },
     getInterceptor$x(receiver) {
       if (receiver == null)
         return receiver;
@@ -2409,8 +2726,24 @@
     set$text$x(receiver, value) {
       return J.getInterceptor$x(receiver).set$text(receiver, value);
     },
+    get$data$x(receiver) {
+      return J.getInterceptor$x(receiver).get$data(receiver);
+    },
+    get$hashCode$(receiver) {
+      return J.getInterceptor$(receiver).get$hashCode(receiver);
+    },
+    get$iterator$ax(receiver) {
+      return J.getInterceptor$ax(receiver).get$iterator(receiver);
+    },
     get$length$asx(receiver) {
       return J.getInterceptor$asx(receiver).get$length(receiver);
+    },
+    $eq$(receiver, a0) {
+      if (receiver == null)
+        return a0 == null;
+      if (typeof receiver != "object")
+        return a0 != null && receiver === a0;
+      return J.getInterceptor$(receiver).$eq(receiver, a0);
     },
     toString$0$(receiver) {
       return J.getInterceptor$(receiver).toString$0(receiver);
@@ -2460,6 +2793,12 @@
   var $ = {};
   A.JS_CONST.prototype = {};
   J.Interceptor.prototype = {
+    $eq(receiver, other) {
+      return receiver === other;
+    },
+    get$hashCode(receiver) {
+      return A.Primitives_objectHashCode(receiver);
+    },
     toString$0(receiver) {
       return "Instance of '" + A.Primitives_objectTypeName(receiver) + "'";
     }
@@ -2468,15 +2807,27 @@
     toString$0(receiver) {
       return String(receiver);
     },
+    get$hashCode(receiver) {
+      return receiver ? 519018 : 218159;
+    },
     $isbool: 1
   };
   J.JSNull.prototype = {
+    $eq(receiver, other) {
+      return null == other;
+    },
     toString$0(receiver) {
       return "null";
+    },
+    get$hashCode(receiver) {
+      return 0;
     }
   };
   J.JavaScriptObject.prototype = {};
   J.LegacyJavaScriptObject.prototype = {
+    get$hashCode(receiver) {
+      return 0;
+    },
     toString$0(receiver) {
       return String(receiver);
     }
@@ -2498,16 +2849,55 @@
         A.throwExpression(A.UnsupportedError$("add"));
       receiver.push(value);
     },
+    reduce$1(receiver, combine) {
+      var $length, value, i;
+      A._arrayInstanceType(receiver)._eval$1("1(1,1)")._as(combine);
+      $length = receiver.length;
+      if ($length === 0)
+        throw A.wrapException(A.IterableElementError_noElement());
+      if (0 >= $length)
+        return A.ioore(receiver, 0);
+      value = receiver[0];
+      for (i = 1; i < $length; ++i) {
+        value = combine.call$2(value, receiver[i]);
+        if ($length !== receiver.length)
+          throw A.wrapException(A.ConcurrentModificationError$(receiver));
+      }
+      return value;
+    },
     toString$0(receiver) {
       return A.IterableBase_iterableToFullString(receiver, "[", "]");
+    },
+    get$iterator(receiver) {
+      return new J.ArrayIterator(receiver, receiver.length, A._arrayInstanceType(receiver)._eval$1("ArrayIterator<1>"));
+    },
+    get$hashCode(receiver) {
+      return A.Primitives_objectHashCode(receiver);
     },
     get$length(receiver) {
       return receiver.length;
     },
-    $isIterable: 1
+    $index(receiver, index) {
+      if (!(index >= 0 && index < receiver.length))
+        throw A.wrapException(A.diagnoseIndexError(receiver, index));
+      return receiver[index];
+    },
+    $indexSet(receiver, index, value) {
+      A._arrayInstanceType(receiver)._precomputed1._as(value);
+      if (!!receiver.immutable$list)
+        A.throwExpression(A.UnsupportedError$("indexed set"));
+      if (!(index >= 0 && index < receiver.length))
+        throw A.wrapException(A.diagnoseIndexError(receiver, index));
+      receiver[index] = value;
+    },
+    $isIterable: 1,
+    $isList: 1
   };
   J.JSUnmodifiableArray.prototype = {};
   J.ArrayIterator.prototype = {
+    get$current() {
+      return this.$ti._precomputed1._as(this._current);
+    },
     moveNext$0() {
       var t2, _this = this,
         t1 = _this._iterable,
@@ -2528,12 +2918,73 @@
     }
   };
   J.JSNumber.prototype = {
+    toInt$0(receiver) {
+      var t1;
+      if (receiver >= -2147483648 && receiver <= 2147483647)
+        return receiver | 0;
+      if (isFinite(receiver)) {
+        t1 = receiver < 0 ? Math.ceil(receiver) : Math.floor(receiver);
+        return t1 + 0;
+      }
+      throw A.wrapException(A.UnsupportedError$("" + receiver + ".toInt()"));
+    },
+    round$0(receiver) {
+      if (receiver > 0) {
+        if (receiver !== 1 / 0)
+          return Math.round(receiver);
+      } else if (receiver > -1 / 0)
+        return 0 - Math.round(0 - receiver);
+      throw A.wrapException(A.UnsupportedError$("" + receiver + ".round()"));
+    },
     toString$0(receiver) {
       if (receiver === 0 && 1 / receiver < 0)
         return "-0.0";
       else
         return "" + receiver;
-    }
+    },
+    get$hashCode(receiver) {
+      var absolute, floorLog2, factor, scaled,
+        intValue = receiver | 0;
+      if (receiver === intValue)
+        return intValue & 536870911;
+      absolute = Math.abs(receiver);
+      floorLog2 = Math.log(absolute) / 0.6931471805599453 | 0;
+      factor = Math.pow(2, floorLog2);
+      scaled = absolute < 1 ? absolute / factor : factor / absolute;
+      return ((scaled * 9007199254740992 | 0) + (scaled * 3542243181176521 | 0)) * 599197 + floorLog2 * 1259 & 536870911;
+    },
+    $mod(receiver, other) {
+      var result = receiver % other;
+      if (result === 0)
+        return 0;
+      if (result > 0)
+        return result;
+      if (other < 0)
+        return result - other;
+      else
+        return result + other;
+    },
+    $tdiv(receiver, other) {
+      if ((receiver | 0) === receiver)
+        if (other >= 1 || other < -1)
+          return receiver / other | 0;
+      return this._tdivSlow$1(receiver, other);
+    },
+    _tdivFast$1(receiver, other) {
+      return (receiver | 0) === receiver ? receiver / other | 0 : this._tdivSlow$1(receiver, other);
+    },
+    _tdivSlow$1(receiver, other) {
+      var quotient = receiver / other;
+      if (quotient >= -2147483648 && quotient <= 2147483647)
+        return quotient | 0;
+      if (quotient > 0) {
+        if (quotient !== 1 / 0)
+          return Math.floor(quotient);
+      } else if (quotient > -1 / 0)
+        return Math.ceil(quotient);
+      throw A.wrapException(A.UnsupportedError$("Result of truncating division is " + A.S(quotient) + ": " + A.S(receiver) + " ~/ " + other));
+    },
+    $isnum: 1
   };
   J.JSInt.prototype = {$isint: 1};
   J.JSNumNotInt.prototype = {};
@@ -2543,6 +2994,17 @@
     },
     toString$0(receiver) {
       return receiver;
+    },
+    get$hashCode(receiver) {
+      var t1, hash, i;
+      for (t1 = receiver.length, hash = 0, i = 0; i < t1; ++i) {
+        hash = hash + receiver.charCodeAt(i) & 536870911;
+        hash = hash + ((hash & 524287) << 10) & 536870911;
+        hash ^= hash >> 6;
+      }
+      hash = hash + ((hash & 67108863) << 3) & 536870911;
+      hash ^= hash >> 11;
+      return hash + ((hash & 16383) << 15) & 536870911;
     },
     get$length(receiver) {
       return receiver.length;
@@ -2555,6 +3017,31 @@
       return t1;
     }
   };
+  A.ListIterator.prototype = {
+    get$current() {
+      return this.$ti._precomputed1._as(this.__internal$_current);
+    },
+    moveNext$0() {
+      var t3, _this = this,
+        t1 = _this.__internal$_iterable,
+        t2 = J.getInterceptor$asx(t1),
+        $length = t2.get$length(t1);
+      if (_this.__internal$_length !== $length)
+        throw A.wrapException(A.ConcurrentModificationError$(t1));
+      t3 = _this.__internal$_index;
+      if (t3 >= $length) {
+        _this.set$__internal$_current(null);
+        return false;
+      }
+      _this.set$__internal$_current(t2.elementAt$1(t1, t3));
+      ++_this.__internal$_index;
+      return true;
+    },
+    set$__internal$_current(_current) {
+      this.__internal$_current = this.$ti._eval$1("1?")._as(_current);
+    }
+  };
+  A.FixedLengthListMixin.prototype = {};
   A.Closure.prototype = {
     toString$0(_) {
       var $constructor = this.constructor,
@@ -2579,6 +3066,18 @@
     }
   };
   A.BoundClosure.prototype = {
+    $eq(_, other) {
+      if (other == null)
+        return false;
+      if (this === other)
+        return true;
+      if (!(other instanceof A.BoundClosure))
+        return false;
+      return this.$_target === other.$_target && this._receiver === other._receiver;
+    },
+    get$hashCode(_) {
+      return (A.objectHashCode(this._receiver) ^ A.Primitives_objectHashCode(this.$_target)) >>> 0;
+    },
     toString$0(_) {
       return "Closure '" + this.$_name + "' of " + ("Instance of '" + A.Primitives_objectTypeName(type$.Object._as(this._receiver)) + "'");
     }
@@ -2588,21 +3087,137 @@
       return "RuntimeError: " + this.message;
     }
   };
+  A.JsLinkedHashMap.prototype = {
+    get$length(_) {
+      return this.__js_helper$_length;
+    },
+    $index(_, key) {
+      var strings, cell, t1, nums, _this = this, _null = null;
+      if (typeof key == "string") {
+        strings = _this._strings;
+        if (strings == null)
+          return _null;
+        cell = _this._getTableCell$2(strings, key);
+        t1 = cell == null ? _null : cell.hashMapCellValue;
+        return t1;
+      } else if (typeof key == "number" && (key & 0x3ffffff) === key) {
+        nums = _this._nums;
+        if (nums == null)
+          return _null;
+        cell = _this._getTableCell$2(nums, key);
+        t1 = cell == null ? _null : cell.hashMapCellValue;
+        return t1;
+      } else
+        return _this.internalGet$1(key);
+    },
+    internalGet$1(key) {
+      var bucket, index,
+        rest = this.__js_helper$_rest;
+      if (rest == null)
+        return null;
+      bucket = this._getTableBucket$2(rest, J.get$hashCode$(key) & 0x3ffffff);
+      index = this.internalFindBucketIndex$2(bucket, key);
+      if (index < 0)
+        return null;
+      return bucket[index].hashMapCellValue;
+    },
+    forEach$1(_, action) {
+      var cell, modifications, _this = this;
+      A._instanceType(_this)._eval$1("~(1,2)")._as(action);
+      cell = _this._first;
+      modifications = _this._modifications;
+      for (; cell != null;) {
+        action.call$2(cell.hashMapCellKey, cell.hashMapCellValue);
+        if (modifications !== _this._modifications)
+          throw A.wrapException(A.ConcurrentModificationError$(_this));
+        cell = cell._next;
+      }
+    },
+    _newLinkedCell$2(key, value) {
+      var _this = this,
+        t1 = A._instanceType(_this),
+        cell = new A.LinkedHashMapCell(t1._precomputed1._as(key), t1._rest[1]._as(value));
+      if (_this._first == null)
+        _this._first = _this._last = cell;
+      else
+        _this._last = _this._last._next = cell;
+      ++_this.__js_helper$_length;
+      _this._modifications = _this._modifications + 1 & 67108863;
+      return cell;
+    },
+    internalFindBucketIndex$2(bucket, key) {
+      var $length, i;
+      if (bucket == null)
+        return -1;
+      $length = bucket.length;
+      for (i = 0; i < $length; ++i)
+        if (J.$eq$(bucket[i].hashMapCellKey, key))
+          return i;
+      return -1;
+    },
+    toString$0(_) {
+      return A.MapBase_mapToString(this);
+    },
+    _getTableCell$2(table, key) {
+      return table[key];
+    },
+    _getTableBucket$2(table, key) {
+      return table[key];
+    },
+    _setTableEntry$3(table, key, value) {
+      table[key] = value;
+    },
+    _deleteTableEntry$2(table, key) {
+      delete table[key];
+    },
+    _newHashTable$0() {
+      var _s20_ = "<non-identifier-key>",
+        table = Object.create(null);
+      this._setTableEntry$3(table, _s20_, table);
+      this._deleteTableEntry$2(table, _s20_);
+      return table;
+    },
+    $isLinkedHashMap: 1
+  };
+  A.LinkedHashMapCell.prototype = {};
   A.initHooks_closure.prototype = {
     call$1(o) {
       return this.getTag(o);
-    }
+    },
+    $signature: 0
   };
   A.initHooks_closure0.prototype = {
     call$2(o, tag) {
       return this.getUnknownTag(o, tag);
-    }
+    },
+    $signature: 1
   };
   A.initHooks_closure1.prototype = {
     call$1(tag) {
       return this.prototypeForTag(A._asString(tag));
-    }
+    },
+    $signature: 2
   };
+  A.NativeTypedData.prototype = {};
+  A.NativeTypedArray.prototype = {
+    get$length(receiver) {
+      return receiver.length;
+    },
+    $isJavaScriptIndexingBehavior: 1
+  };
+  A.NativeTypedArrayOfInt.prototype = {$isIterable: 1, $isList: 1};
+  A.NativeUint8ClampedList.prototype = {
+    get$length(receiver) {
+      return receiver.length;
+    },
+    $index(receiver, index) {
+      A._checkValidIndex(index, receiver, receiver.length);
+      return receiver[index];
+    },
+    $isUint8ClampedList: 1
+  };
+  A._NativeTypedArrayOfInt_NativeTypedArray_ListMixin.prototype = {};
+  A._NativeTypedArrayOfInt_NativeTypedArray_ListMixin_FixedLengthListMixin.prototype = {};
   A.Rti.prototype = {
     _eval$1(recipe) {
       return A._Universe_evalInEnvironment(init.typeUniverse, this, recipe);
@@ -2618,6 +3233,43 @@
     }
   };
   A._TypeError.prototype = {};
+  A.ListMixin.prototype = {
+    get$iterator(receiver) {
+      return new A.ListIterator(receiver, receiver.length, A.instanceType(receiver)._eval$1("ListIterator<ListMixin.E>"));
+    },
+    elementAt$1(receiver, index) {
+      if (!(index < receiver.length))
+        return A.ioore(receiver, index);
+      return receiver[index];
+    },
+    toString$0(receiver) {
+      return A.IterableBase_iterableToFullString(receiver, "[", "]");
+    }
+  };
+  A.MapBase.prototype = {};
+  A.MapBase_mapToString_closure.prototype = {
+    call$2(k, v) {
+      var t2,
+        t1 = this._box_0;
+      if (!t1.first)
+        this.result._contents += ", ";
+      t1.first = false;
+      t1 = this.result;
+      t2 = t1._contents += A.S(k);
+      t1._contents = t2 + ": ";
+      t1._contents += A.S(v);
+    },
+    $signature: 3
+  };
+  A.MapMixin.prototype = {
+    get$length(_) {
+      return this.__js_helper$_length;
+    },
+    toString$0(_) {
+      return A.MapBase_mapToString(this);
+    },
+    $isMap: 1
+  };
   A.Error.prototype = {};
   A.AssertionError.prototype = {
     toString$0(_) {
@@ -2658,7 +3310,18 @@
       return "RangeError";
     },
     get$_errorExplanation() {
-      return "";
+      var explanation,
+        start = this.start,
+        end = this.end;
+      if (start == null)
+        explanation = end != null ? ": Not less than or equal to " + A.S(end) : "";
+      else if (end == null)
+        explanation = ": Not greater than or equal to " + A.S(start);
+      else if (end > start)
+        explanation = ": Not in inclusive range " + A.S(start) + ".." + A.S(end);
+      else
+        explanation = end < start ? ": Valid value range is empty" : ": Only valid value is " + A.S(start);
+      return explanation;
     }
   };
   A.IndexError.prototype = {
@@ -2688,9 +3351,17 @@
       return t1;
     }
   };
+  A.StateError.prototype = {
+    toString$0(_) {
+      return "Bad state: " + this.message;
+    }
+  };
   A.ConcurrentModificationError.prototype = {
     toString$0(_) {
-      return "Concurrent modification during iteration: " + A.Error_safeToString(this.modifiedObject) + ".";
+      var t1 = this.modifiedObject;
+      if (t1 == null)
+        return "Concurrent modification during iteration.";
+      return "Concurrent modification during iteration: " + A.Error_safeToString(t1) + ".";
     }
   };
   A.CyclicInitializationError.prototype = {
@@ -2700,11 +3371,20 @@
     }
   };
   A.Null.prototype = {
+    get$hashCode(_) {
+      return A.Object.prototype.get$hashCode.call(this, this);
+    },
     toString$0(_) {
       return "null";
     }
   };
   A.Object.prototype = {$isObject: 1,
+    $eq(_, other) {
+      return this === other;
+    },
+    get$hashCode(_) {
+      return A.Primitives_objectHashCode(this);
+    },
     toString$0(_) {
       return "Instance of '" + A.Primitives_objectTypeName(this) + "'";
     },
@@ -2732,6 +3412,19 @@
       return String(receiver);
     }
   };
+  A.CanvasElement.prototype = {
+    getContext$1(receiver, contextId) {
+      return receiver.getContext(contextId);
+    },
+    $isCanvasElement: 1
+  };
+  A.CanvasRenderingContext2D.prototype = {
+    putImageData$3(receiver, imagedata, dx, dy) {
+      receiver.putImageData(A.convertDartToNative_ImageData(imagedata), dx, dy);
+      return;
+    },
+    $isCanvasRenderingContext2D: 1
+  };
   A.DomException.prototype = {
     toString$0(receiver) {
       return String(receiver);
@@ -2748,6 +3441,15 @@
       return receiver.length;
     }
   };
+  A.ImageData.prototype = {
+    get$data(receiver) {
+      return receiver.data;
+    },
+    get$width(receiver) {
+      return receiver.width;
+    },
+    $isImageData: 1
+  };
   A.Node.prototype = {
     toString$0(receiver) {
       var value = receiver.nodeValue;
@@ -2762,51 +3464,266 @@
       return receiver.length;
     }
   };
+  A._TypedImageData.prototype = {$isImageData: 1,
+    get$data(receiver) {
+      return this.data;
+    },
+    get$width(receiver) {
+      return this.width;
+    }
+  };
+  A._JSRandom.prototype = {
+    nextInt$1(max) {
+      if (max <= 0 || max > 4294967296)
+        throw A.wrapException(A.RangeError$("max must be in range 0 < max \u2264 2^32, was " + max));
+      return Math.random() * max >>> 0;
+    },
+    nextDouble$0() {
+      return Math.random();
+    }
+  };
+  A.CellularAutomata.prototype = {
+    CellularAutomata$1(_shape, $T) {
+      var t2, i, j, j0, tmp,
+        t1 = this._shape;
+      this.set$num_cells(B.JSArray_methods.reduce$1(t1, new A.CellularAutomata_closure()));
+      for (t2 = this._shape_dimensions, i = 0; false; i = j) {
+        for (j = i + 1, j0 = j, tmp = 1; false; ++j0) {
+          if (!(j0 < 1))
+            return A.ioore(t1, j0);
+          tmp *= t1[j0];
+        }
+        B.JSArray_methods.add$1(t2, tmp);
+      }
+    },
+    initialize$0() {
+      var i, _this = this,
+        t1 = A._instanceType(_this)._eval$1("JSArray<CellularAutomata.T>");
+      _this.set$_grid_current(A._setArrayType([], t1));
+      _this.set$_grid_working(A._setArrayType([], t1));
+      for (i = 0; i < _this.num_cells; ++i)
+        B.JSArray_methods.add$1(_this._grid_current, $.$get$_random0().nextInt$1(2));
+    },
+    isValidGridIndex$1(index) {
+      var t1, di, t2;
+      type$.List_int._as(index);
+      for (t1 = this._shape, di = 0; di < 1; ++di) {
+        if (!(di < index.length))
+          return A.ioore(index, di);
+        t2 = index[di];
+        if (typeof t2 !== "number")
+          return t2.$lt();
+        if (t2 < 0 || t2 === t1[di])
+          return false;
+      }
+      return true;
+    },
+    gridIndex$1(list_index) {
+      var t1, tmp, i,
+        index = A._setArrayType([], type$.JSArray_int);
+      for (t1 = this._shape_dimensions, tmp = list_index, i = 0; false; ++i) {
+        if (!(i < t1.length))
+          return A.ioore(t1, i);
+        B.JSArray_methods.add$1(index, B.JSInt_methods.$tdiv(tmp, t1[i]));
+        if (!(i < t1.length))
+          return A.ioore(t1, i);
+        tmp = B.JSInt_methods.$mod(tmp, t1[i]);
+      }
+      B.JSArray_methods.add$1(index, tmp);
+      return index;
+    },
+    listIndex$1(grid_index) {
+      var t1, t2, index, i, i0, t3, t4;
+      type$.List_int._as(grid_index);
+      for (t1 = J.getInterceptor$ax(grid_index), t2 = this._shape_dimensions, index = 0, i = 0; false; i = i0) {
+        i0 = i + 1;
+        t3 = t1.$index(grid_index, i0);
+        if (!(i < t2.length))
+          return A.ioore(t2, i);
+        t4 = t2[i];
+        if (typeof t3 !== "number")
+          return t3.$mul();
+        index += t3 * t4;
+      }
+      t1 = t1.$index(grid_index, 0);
+      if (typeof t1 !== "number")
+        return A.iae(t1);
+      return index + t1;
+    },
+    next$0() {
+      var i, _this = this,
+        t1 = _this._grid_current;
+      t1 = A._setArrayType(t1.slice(0), A._arrayInstanceType(t1));
+      _this.set$_grid_working(t1);
+      for (i = 0; i < _this.num_cells; ++i)
+        _this.cellUpdate$1(i);
+      t1 = _this._grid_working;
+      t1 = A._setArrayType(t1.slice(0), A._arrayInstanceType(t1));
+      _this.set$_grid_current(t1);
+      t1 = _this._grid_current;
+      t1 = A._setArrayType(t1.slice(0), A._arrayInstanceType(t1));
+      return t1;
+    },
+    nextDimensionNeighbors$2(dim, grid_index) {
+      var neigh, t1, tmp1, t2, tmp2, neigh2, _i;
+      type$.List_int._as(grid_index);
+      neigh = [];
+      t1 = A._arrayInstanceType(grid_index);
+      tmp1 = A._setArrayType(grid_index.slice(0), t1);
+      if (!(dim >= 0 && dim < tmp1.length))
+        return A.ioore(tmp1, dim);
+      t2 = tmp1[dim];
+      if (typeof t2 !== "number")
+        return t2.$add();
+      B.JSArray_methods.$indexSet(tmp1, dim, t2 + 1);
+      if (this.isValidGridIndex$1(tmp1))
+        neigh.push(tmp1);
+      tmp2 = A._setArrayType(grid_index.slice(0), t1);
+      if (!(dim < tmp2.length))
+        return A.ioore(tmp2, dim);
+      t1 = tmp2[dim];
+      if (typeof t1 !== "number")
+        return t1.$sub();
+      B.JSArray_methods.$indexSet(tmp2, dim, t1 - 1);
+      if (this.isValidGridIndex$1(tmp2)) {
+        neigh.push(tmp2);
+        t1 = dim - 1;
+        if (t1 > 0) {
+          neigh2 = this.nextDimensionNeighbors$2(t1, tmp2);
+          for (t1 = neigh2.length, _i = 0; _i < neigh2.length; neigh2.length === t1 || (0, A.throwConcurrentModificationError)(neigh2), ++_i)
+            neigh.push(neigh2[_i]);
+        }
+      }
+      return neigh;
+    },
+    set$num_cells(num_cells) {
+      this.num_cells = A._asInt(num_cells);
+    },
+    set$_grid_current(_grid_current) {
+      this._grid_current = A._instanceType(this)._eval$1("List<CellularAutomata.T>")._as(_grid_current);
+    },
+    set$_grid_working(_grid_working) {
+      this._grid_working = A._instanceType(this)._eval$1("List<CellularAutomata.T>")._as(_grid_working);
+    }
+  };
+  A.CellularAutomata_closure.prototype = {
+    call$2(i, j) {
+      return A._asInt(i) * A._asInt(j);
+    },
+    $signature: 4
+  };
+  A.BooleanCellularAutomata.prototype = {
+    cellNeighborhood$1(list_index) {
+      var t1, t2, _i,
+        ix_grid = this.nextDimensionNeighbors$2(0, this.gridIndex$1(list_index)),
+        ret = A._setArrayType([], type$.JSArray_int);
+      for (t1 = ix_grid.length, t2 = type$.List_int, _i = 0; _i < ix_grid.length; ix_grid.length === t1 || (0, A.throwConcurrentModificationError)(ix_grid), ++_i)
+        B.JSArray_methods.add$1(ret, this.listIndex$1(t2._as(ix_grid[_i])));
+      return ret;
+    }
+  };
+  A.SierpinskiTriangle.prototype = {
+    initialize$0() {
+      var i, t1, _this = this;
+      _this.super$CellularAutomata$initialize();
+      for (i = 0; t1 = B.JSInt_methods._tdivFast$1(_this.num_cells, 2), i < t1; ++i)
+        B.JSArray_methods.$indexSet(_this._grid_current, i, 0);
+      B.JSArray_methods.$indexSet(_this._grid_current, t1, 1);
+      for (i = B.JSInt_methods._tdivFast$1(_this.num_cells, 2) + 1; i < _this.num_cells; ++i)
+        B.JSArray_methods.$indexSet(_this._grid_current, i, 0);
+    },
+    cellUpdate$1(list_index) {
+      var t1, i, t2, t3, _this = this,
+        neighbors = _this.cellNeighborhood$1(list_index);
+      if (neighbors.length > 1) {
+        t1 = A._setArrayType([], type$.JSArray_int);
+        for (i = 0; i <= neighbors.length - 1; ++i) {
+          t2 = _this._grid_current;
+          t3 = neighbors[i];
+          if (!(t3 >= 0 && t3 < t2.length))
+            return A.ioore(t2, t3);
+          t1.push(t2[t3]);
+        }
+        t2 = _this._grid_current;
+        if (!(list_index < t2.length))
+          return A.ioore(t2, list_index);
+        t2 = A._asInt(t2[list_index]);
+        if (!!t1.fixed$length)
+          A.throwExpression(A.UnsupportedError$("insert"));
+        t3 = t1.length;
+        if (1 > t3)
+          A.throwExpression(A.RangeError$value(1, null));
+        t1.splice(1, 0, t2);
+        t2 = _this._grid_working;
+        t1 = _this.rules.$index(0, A.IterableBase_iterableToFullString(t1, "[", "]"));
+        B.JSArray_methods.$indexSet(t2, list_index, t1 == null ? 0 : t1);
+      }
+    }
+  };
   (function aliases() {
     var _ = J.Interceptor.prototype;
     _.super$Interceptor$toString = _.toString$0;
     _ = J.LegacyJavaScriptObject.prototype;
     _.super$LegacyJavaScriptObject$toString = _.toString$0;
+    _ = A.CellularAutomata.prototype;
+    _.super$CellularAutomata$initialize = _.initialize$0;
   })();
   (function inheritance() {
-    var _inherit = hunkHelpers.inherit,
+    var _mixin = hunkHelpers.mixin,
+      _inherit = hunkHelpers.inherit,
       _inheritMany = hunkHelpers.inheritMany;
     _inherit(A.Object, null);
-    _inheritMany(A.Object, [A.JS_CONST, J.Interceptor, J.ArrayIterator, A.Error, A.Closure, A.Rti, A._FunctionParameters, A.Null, A.StringBuffer]);
-    _inheritMany(J.Interceptor, [J.JSBool, J.JSNull, J.JavaScriptObject, J.JSArray, J.JSNumber, J.JSString]);
-    _inheritMany(J.JavaScriptObject, [J.LegacyJavaScriptObject, A.EventTarget, A.DomException]);
+    _inheritMany(A.Object, [A.JS_CONST, J.Interceptor, J.ArrayIterator, A.Error, A.ListIterator, A.FixedLengthListMixin, A.Closure, A.MapMixin, A.LinkedHashMapCell, A.Rti, A._FunctionParameters, A.ListMixin, A.Null, A.StringBuffer, A._TypedImageData, A._JSRandom, A.CellularAutomata]);
+    _inheritMany(J.Interceptor, [J.JSBool, J.JSNull, J.JavaScriptObject, J.JSArray, J.JSNumber, J.JSString, A.NativeTypedData]);
+    _inheritMany(J.JavaScriptObject, [J.LegacyJavaScriptObject, A.EventTarget, A.CanvasRenderingContext2D, A.DomException, A.ImageData]);
     _inheritMany(J.LegacyJavaScriptObject, [J.PlainJavaScriptObject, J.UnknownJavaScriptObject, J.JavaScriptFunction]);
     _inherit(J.JSUnmodifiableArray, J.JSArray);
     _inheritMany(J.JSNumber, [J.JSInt, J.JSNumNotInt]);
-    _inheritMany(A.Error, [A.LateError, A.RuntimeError, A._Error, A.AssertionError, A.NullThrownError, A.ArgumentError, A.UnsupportedError, A.UnimplementedError, A.ConcurrentModificationError, A.CyclicInitializationError]);
+    _inheritMany(A.Error, [A.LateError, A.RuntimeError, A._Error, A.AssertionError, A.NullThrownError, A.ArgumentError, A.UnsupportedError, A.UnimplementedError, A.StateError, A.ConcurrentModificationError, A.CyclicInitializationError]);
     _inheritMany(A.Closure, [A.Closure2Args, A.TearOffClosure, A.initHooks_closure, A.initHooks_closure1]);
     _inheritMany(A.TearOffClosure, [A.StaticClosure, A.BoundClosure]);
-    _inherit(A.initHooks_closure0, A.Closure2Args);
+    _inherit(A.MapBase, A.MapMixin);
+    _inherit(A.JsLinkedHashMap, A.MapBase);
+    _inheritMany(A.Closure2Args, [A.initHooks_closure0, A.MapBase_mapToString_closure, A.CellularAutomata_closure]);
+    _inherit(A.NativeTypedArray, A.NativeTypedData);
+    _inherit(A._NativeTypedArrayOfInt_NativeTypedArray_ListMixin, A.NativeTypedArray);
+    _inherit(A._NativeTypedArrayOfInt_NativeTypedArray_ListMixin_FixedLengthListMixin, A._NativeTypedArrayOfInt_NativeTypedArray_ListMixin);
+    _inherit(A.NativeTypedArrayOfInt, A._NativeTypedArrayOfInt_NativeTypedArray_ListMixin_FixedLengthListMixin);
+    _inherit(A.NativeUint8ClampedList, A.NativeTypedArrayOfInt);
     _inherit(A._TypeError, A._Error);
     _inheritMany(A.ArgumentError, [A.RangeError, A.IndexError]);
     _inherit(A.Node, A.EventTarget);
     _inherit(A.Element, A.Node);
     _inherit(A.HtmlElement, A.Element);
-    _inheritMany(A.HtmlElement, [A.AnchorElement, A.AreaElement, A.FormElement, A.SelectElement]);
+    _inheritMany(A.HtmlElement, [A.AnchorElement, A.AreaElement, A.CanvasElement, A.FormElement, A.SelectElement]);
+    _inherit(A.BooleanCellularAutomata, A.CellularAutomata);
+    _inherit(A.SierpinskiTriangle, A.BooleanCellularAutomata);
+    _mixin(A._NativeTypedArrayOfInt_NativeTypedArray_ListMixin, A.ListMixin);
+    _mixin(A._NativeTypedArrayOfInt_NativeTypedArray_ListMixin_FixedLengthListMixin, A.FixedLengthListMixin);
   })();
   var init = {
     typeUniverse: {eC: new Map(), tR: {}, eT: {}, tPV: {}, sEA: []},
     mangledGlobalNames: {int: "int", double: "double", num: "num", String: "String", bool: "bool", Null: "Null", List: "List"},
     mangledNames: {},
-    types: [],
+    types: ["@(@)", "@(@,String)", "@(String)", "~(Object?,Object?)", "int(int,int)"],
     interceptorsByTag: null,
     leafTags: null,
     arrayRti: Symbol("$ti")
   };
-  A._Universe_addRules(init.typeUniverse, JSON.parse('{"PlainJavaScriptObject":"LegacyJavaScriptObject","UnknownJavaScriptObject":"LegacyJavaScriptObject","JavaScriptFunction":"LegacyJavaScriptObject","JSBool":{"bool":[]},"JSArray":{"Iterable":["1"]},"JSUnmodifiableArray":{"JSArray":["1"],"Iterable":["1"]},"JSInt":{"int":[]},"JSString":{"String":[]}}'));
+  A._Universe_addRules(init.typeUniverse, JSON.parse('{"PlainJavaScriptObject":"LegacyJavaScriptObject","UnknownJavaScriptObject":"LegacyJavaScriptObject","JavaScriptFunction":"LegacyJavaScriptObject","JSBool":{"bool":[]},"JSArray":{"List":["1"],"Iterable":["1"]},"JSUnmodifiableArray":{"JSArray":["1"],"List":["1"],"Iterable":["1"]},"JSNumber":{"num":[]},"JSInt":{"int":[],"num":[]},"JSNumNotInt":{"num":[]},"JSString":{"String":[]},"JsLinkedHashMap":{"MapMixin":["1","2"],"LinkedHashMap":["1","2"],"Map":["1","2"]},"NativeTypedArray":{"JavaScriptIndexingBehavior":["1"]},"NativeTypedArrayOfInt":{"ListMixin":["int"],"JavaScriptIndexingBehavior":["int"],"List":["int"],"Iterable":["int"],"FixedLengthListMixin":["int"]},"NativeUint8ClampedList":{"ListMixin":["int"],"Uint8ClampedList":[],"JavaScriptIndexingBehavior":["int"],"List":["int"],"Iterable":["int"],"FixedLengthListMixin":["int"],"ListMixin.E":"int"},"MapBase":{"MapMixin":["1","2"],"Map":["1","2"]},"MapMixin":{"Map":["1","2"]},"int":{"num":[]},"_TypedImageData":{"ImageData":[]},"BooleanCellularAutomata":{"CellularAutomata":["int"]},"SierpinskiTriangle":{"CellularAutomata":["int"],"CellularAutomata.T":"int"}}'));
+  A._Universe_addErasedTypes(init.typeUniverse, JSON.parse('{"NativeTypedArray":1,"MapBase":2}'));
   var type$ = (function rtii() {
     var findType = A.findType;
     return {
       Function: findType("Function"),
+      ImageData: findType("ImageData"),
       JSArray_String: findType("JSArray<String>"),
       JSArray_dynamic: findType("JSArray<@>"),
+      JSArray_int: findType("JSArray<int>"),
       JSNull: findType("JSNull"),
       JavaScriptFunction: findType("JavaScriptFunction"),
+      JavaScriptIndexingBehavior_dynamic: findType("JavaScriptIndexingBehavior<@>"),
+      List_int: findType("List<int>"),
       Null: findType("Null"),
       Object: findType("Object"),
       String: findType("String"),
@@ -2816,14 +3733,20 @@
       int: findType("int"),
       legacy_Never: findType("0&*"),
       legacy_Object: findType("Object*"),
+      nullable_CanvasElement: findType("CanvasElement?"),
+      nullable_CanvasRenderingContext2D: findType("CanvasRenderingContext2D?"),
       nullable_Future_Null: findType("Future<Null>?"),
       nullable_Object: findType("Object?"),
       num: findType("num")
     };
   })();
   (function constants() {
+    B.CanvasElement_methods = A.CanvasElement.prototype;
+    B.CanvasRenderingContext2D_methods = A.CanvasRenderingContext2D.prototype;
     B.Interceptor_methods = J.Interceptor.prototype;
     B.JSArray_methods = J.JSArray.prototype;
+    B.JSInt_methods = J.JSInt.prototype;
+    B.JSNumber_methods = J.JSNumber.prototype;
     B.JSString_methods = J.JSString.prototype;
     B.JavaScriptFunction_methods = J.JavaScriptFunction.prototype;
     B.JavaScriptObject_methods = J.JavaScriptObject.prototype;
@@ -2949,9 +3872,11 @@
 };
     B.C_JS_CONST3 = function(hooks) { return hooks; }
 ;
+    B.C__JSRandom = new A._JSRandom();
   })();
   (function staticFields() {
     $._JS_INTEROP_INTERCEPTOR_TAG = null;
+    $.Primitives__identityHashCodeProperty = null;
     $.BoundClosure__receiverFieldNameCache = null;
     $.BoundClosure__interceptorFieldNameCache = null;
     $.getTagFunction = null;
@@ -2965,6 +3890,8 @@
   (function lazyInitializers() {
     var _lazyFinal = hunkHelpers.lazyFinal;
     _lazyFinal($, "DART_CLOSURE_PROPERTY_NAME", "$get$DART_CLOSURE_PROPERTY_NAME", () => A.getIsolateAffinityTag("_$dart_dartClosure"));
+    _lazyFinal($, "_random", "$get$_random0", () => A.Random_Random());
+    _lazyFinal($, "_random0", "$get$_random", () => A.Random_Random());
   })();
   (function nativeSupport() {
     !function() {
@@ -2989,8 +3916,12 @@
       }
       init.dispatchPropertyName = init.getIsolateTag("dispatch_record");
     }();
-    hunkHelpers.setOrUpdateInterceptorsByTag({ApplicationCacheErrorEvent: J.JavaScriptObject, DOMError: J.JavaScriptObject, ErrorEvent: J.JavaScriptObject, Event: J.JavaScriptObject, InputEvent: J.JavaScriptObject, SubmitEvent: J.JavaScriptObject, MediaError: J.JavaScriptObject, NavigatorUserMediaError: J.JavaScriptObject, OverconstrainedError: J.JavaScriptObject, PositionError: J.JavaScriptObject, GeolocationPositionError: J.JavaScriptObject, SensorErrorEvent: J.JavaScriptObject, SpeechRecognitionError: J.JavaScriptObject, HTMLAudioElement: A.HtmlElement, HTMLBRElement: A.HtmlElement, HTMLBaseElement: A.HtmlElement, HTMLBodyElement: A.HtmlElement, HTMLButtonElement: A.HtmlElement, HTMLCanvasElement: A.HtmlElement, HTMLContentElement: A.HtmlElement, HTMLDListElement: A.HtmlElement, HTMLDataElement: A.HtmlElement, HTMLDataListElement: A.HtmlElement, HTMLDetailsElement: A.HtmlElement, HTMLDialogElement: A.HtmlElement, HTMLDivElement: A.HtmlElement, HTMLEmbedElement: A.HtmlElement, HTMLFieldSetElement: A.HtmlElement, HTMLHRElement: A.HtmlElement, HTMLHeadElement: A.HtmlElement, HTMLHeadingElement: A.HtmlElement, HTMLHtmlElement: A.HtmlElement, HTMLIFrameElement: A.HtmlElement, HTMLImageElement: A.HtmlElement, HTMLInputElement: A.HtmlElement, HTMLLIElement: A.HtmlElement, HTMLLabelElement: A.HtmlElement, HTMLLegendElement: A.HtmlElement, HTMLLinkElement: A.HtmlElement, HTMLMapElement: A.HtmlElement, HTMLMediaElement: A.HtmlElement, HTMLMenuElement: A.HtmlElement, HTMLMetaElement: A.HtmlElement, HTMLMeterElement: A.HtmlElement, HTMLModElement: A.HtmlElement, HTMLOListElement: A.HtmlElement, HTMLObjectElement: A.HtmlElement, HTMLOptGroupElement: A.HtmlElement, HTMLOptionElement: A.HtmlElement, HTMLOutputElement: A.HtmlElement, HTMLParagraphElement: A.HtmlElement, HTMLParamElement: A.HtmlElement, HTMLPictureElement: A.HtmlElement, HTMLPreElement: A.HtmlElement, HTMLProgressElement: A.HtmlElement, HTMLQuoteElement: A.HtmlElement, HTMLScriptElement: A.HtmlElement, HTMLShadowElement: A.HtmlElement, HTMLSlotElement: A.HtmlElement, HTMLSourceElement: A.HtmlElement, HTMLSpanElement: A.HtmlElement, HTMLStyleElement: A.HtmlElement, HTMLTableCaptionElement: A.HtmlElement, HTMLTableCellElement: A.HtmlElement, HTMLTableDataCellElement: A.HtmlElement, HTMLTableHeaderCellElement: A.HtmlElement, HTMLTableColElement: A.HtmlElement, HTMLTableElement: A.HtmlElement, HTMLTableRowElement: A.HtmlElement, HTMLTableSectionElement: A.HtmlElement, HTMLTemplateElement: A.HtmlElement, HTMLTextAreaElement: A.HtmlElement, HTMLTimeElement: A.HtmlElement, HTMLTitleElement: A.HtmlElement, HTMLTrackElement: A.HtmlElement, HTMLUListElement: A.HtmlElement, HTMLUnknownElement: A.HtmlElement, HTMLVideoElement: A.HtmlElement, HTMLDirectoryElement: A.HtmlElement, HTMLFontElement: A.HtmlElement, HTMLFrameElement: A.HtmlElement, HTMLFrameSetElement: A.HtmlElement, HTMLMarqueeElement: A.HtmlElement, HTMLElement: A.HtmlElement, HTMLAnchorElement: A.AnchorElement, HTMLAreaElement: A.AreaElement, DOMException: A.DomException, SVGAElement: A.Element, SVGAnimateElement: A.Element, SVGAnimateMotionElement: A.Element, SVGAnimateTransformElement: A.Element, SVGAnimationElement: A.Element, SVGCircleElement: A.Element, SVGClipPathElement: A.Element, SVGDefsElement: A.Element, SVGDescElement: A.Element, SVGDiscardElement: A.Element, SVGEllipseElement: A.Element, SVGFEBlendElement: A.Element, SVGFEColorMatrixElement: A.Element, SVGFEComponentTransferElement: A.Element, SVGFECompositeElement: A.Element, SVGFEConvolveMatrixElement: A.Element, SVGFEDiffuseLightingElement: A.Element, SVGFEDisplacementMapElement: A.Element, SVGFEDistantLightElement: A.Element, SVGFEFloodElement: A.Element, SVGFEFuncAElement: A.Element, SVGFEFuncBElement: A.Element, SVGFEFuncGElement: A.Element, SVGFEFuncRElement: A.Element, SVGFEGaussianBlurElement: A.Element, SVGFEImageElement: A.Element, SVGFEMergeElement: A.Element, SVGFEMergeNodeElement: A.Element, SVGFEMorphologyElement: A.Element, SVGFEOffsetElement: A.Element, SVGFEPointLightElement: A.Element, SVGFESpecularLightingElement: A.Element, SVGFESpotLightElement: A.Element, SVGFETileElement: A.Element, SVGFETurbulenceElement: A.Element, SVGFilterElement: A.Element, SVGForeignObjectElement: A.Element, SVGGElement: A.Element, SVGGeometryElement: A.Element, SVGGraphicsElement: A.Element, SVGImageElement: A.Element, SVGLineElement: A.Element, SVGLinearGradientElement: A.Element, SVGMarkerElement: A.Element, SVGMaskElement: A.Element, SVGMetadataElement: A.Element, SVGPathElement: A.Element, SVGPatternElement: A.Element, SVGPolygonElement: A.Element, SVGPolylineElement: A.Element, SVGRadialGradientElement: A.Element, SVGRectElement: A.Element, SVGScriptElement: A.Element, SVGSetElement: A.Element, SVGStopElement: A.Element, SVGStyleElement: A.Element, SVGElement: A.Element, SVGSVGElement: A.Element, SVGSwitchElement: A.Element, SVGSymbolElement: A.Element, SVGTSpanElement: A.Element, SVGTextContentElement: A.Element, SVGTextElement: A.Element, SVGTextPathElement: A.Element, SVGTextPositioningElement: A.Element, SVGTitleElement: A.Element, SVGUseElement: A.Element, SVGViewElement: A.Element, SVGGradientElement: A.Element, SVGComponentTransferFunctionElement: A.Element, SVGFEDropShadowElement: A.Element, SVGMPathElement: A.Element, Element: A.Element, EventTarget: A.EventTarget, HTMLFormElement: A.FormElement, Document: A.Node, HTMLDocument: A.Node, Node: A.Node, HTMLSelectElement: A.SelectElement});
-    hunkHelpers.setOrUpdateLeafTags({ApplicationCacheErrorEvent: true, DOMError: true, ErrorEvent: true, Event: true, InputEvent: true, SubmitEvent: true, MediaError: true, NavigatorUserMediaError: true, OverconstrainedError: true, PositionError: true, GeolocationPositionError: true, SensorErrorEvent: true, SpeechRecognitionError: true, HTMLAudioElement: true, HTMLBRElement: true, HTMLBaseElement: true, HTMLBodyElement: true, HTMLButtonElement: true, HTMLCanvasElement: true, HTMLContentElement: true, HTMLDListElement: true, HTMLDataElement: true, HTMLDataListElement: true, HTMLDetailsElement: true, HTMLDialogElement: true, HTMLDivElement: true, HTMLEmbedElement: true, HTMLFieldSetElement: true, HTMLHRElement: true, HTMLHeadElement: true, HTMLHeadingElement: true, HTMLHtmlElement: true, HTMLIFrameElement: true, HTMLImageElement: true, HTMLInputElement: true, HTMLLIElement: true, HTMLLabelElement: true, HTMLLegendElement: true, HTMLLinkElement: true, HTMLMapElement: true, HTMLMediaElement: true, HTMLMenuElement: true, HTMLMetaElement: true, HTMLMeterElement: true, HTMLModElement: true, HTMLOListElement: true, HTMLObjectElement: true, HTMLOptGroupElement: true, HTMLOptionElement: true, HTMLOutputElement: true, HTMLParagraphElement: true, HTMLParamElement: true, HTMLPictureElement: true, HTMLPreElement: true, HTMLProgressElement: true, HTMLQuoteElement: true, HTMLScriptElement: true, HTMLShadowElement: true, HTMLSlotElement: true, HTMLSourceElement: true, HTMLSpanElement: true, HTMLStyleElement: true, HTMLTableCaptionElement: true, HTMLTableCellElement: true, HTMLTableDataCellElement: true, HTMLTableHeaderCellElement: true, HTMLTableColElement: true, HTMLTableElement: true, HTMLTableRowElement: true, HTMLTableSectionElement: true, HTMLTemplateElement: true, HTMLTextAreaElement: true, HTMLTimeElement: true, HTMLTitleElement: true, HTMLTrackElement: true, HTMLUListElement: true, HTMLUnknownElement: true, HTMLVideoElement: true, HTMLDirectoryElement: true, HTMLFontElement: true, HTMLFrameElement: true, HTMLFrameSetElement: true, HTMLMarqueeElement: true, HTMLElement: false, HTMLAnchorElement: true, HTMLAreaElement: true, DOMException: true, SVGAElement: true, SVGAnimateElement: true, SVGAnimateMotionElement: true, SVGAnimateTransformElement: true, SVGAnimationElement: true, SVGCircleElement: true, SVGClipPathElement: true, SVGDefsElement: true, SVGDescElement: true, SVGDiscardElement: true, SVGEllipseElement: true, SVGFEBlendElement: true, SVGFEColorMatrixElement: true, SVGFEComponentTransferElement: true, SVGFECompositeElement: true, SVGFEConvolveMatrixElement: true, SVGFEDiffuseLightingElement: true, SVGFEDisplacementMapElement: true, SVGFEDistantLightElement: true, SVGFEFloodElement: true, SVGFEFuncAElement: true, SVGFEFuncBElement: true, SVGFEFuncGElement: true, SVGFEFuncRElement: true, SVGFEGaussianBlurElement: true, SVGFEImageElement: true, SVGFEMergeElement: true, SVGFEMergeNodeElement: true, SVGFEMorphologyElement: true, SVGFEOffsetElement: true, SVGFEPointLightElement: true, SVGFESpecularLightingElement: true, SVGFESpotLightElement: true, SVGFETileElement: true, SVGFETurbulenceElement: true, SVGFilterElement: true, SVGForeignObjectElement: true, SVGGElement: true, SVGGeometryElement: true, SVGGraphicsElement: true, SVGImageElement: true, SVGLineElement: true, SVGLinearGradientElement: true, SVGMarkerElement: true, SVGMaskElement: true, SVGMetadataElement: true, SVGPathElement: true, SVGPatternElement: true, SVGPolygonElement: true, SVGPolylineElement: true, SVGRadialGradientElement: true, SVGRectElement: true, SVGScriptElement: true, SVGSetElement: true, SVGStopElement: true, SVGStyleElement: true, SVGElement: true, SVGSVGElement: true, SVGSwitchElement: true, SVGSymbolElement: true, SVGTSpanElement: true, SVGTextContentElement: true, SVGTextElement: true, SVGTextPathElement: true, SVGTextPositioningElement: true, SVGTitleElement: true, SVGUseElement: true, SVGViewElement: true, SVGGradientElement: true, SVGComponentTransferFunctionElement: true, SVGFEDropShadowElement: true, SVGMPathElement: true, Element: false, EventTarget: false, HTMLFormElement: true, Document: true, HTMLDocument: true, Node: false, HTMLSelectElement: true});
+    hunkHelpers.setOrUpdateInterceptorsByTag({ApplicationCacheErrorEvent: J.JavaScriptObject, DOMError: J.JavaScriptObject, ErrorEvent: J.JavaScriptObject, Event: J.JavaScriptObject, InputEvent: J.JavaScriptObject, SubmitEvent: J.JavaScriptObject, MediaError: J.JavaScriptObject, NavigatorUserMediaError: J.JavaScriptObject, OverconstrainedError: J.JavaScriptObject, PositionError: J.JavaScriptObject, GeolocationPositionError: J.JavaScriptObject, SensorErrorEvent: J.JavaScriptObject, SpeechRecognitionError: J.JavaScriptObject, WebGLRenderingContext: J.JavaScriptObject, WebGL2RenderingContext: J.JavaScriptObject, ArrayBufferView: A.NativeTypedData, Uint8ClampedArray: A.NativeUint8ClampedList, CanvasPixelArray: A.NativeUint8ClampedList, HTMLAudioElement: A.HtmlElement, HTMLBRElement: A.HtmlElement, HTMLBaseElement: A.HtmlElement, HTMLBodyElement: A.HtmlElement, HTMLButtonElement: A.HtmlElement, HTMLContentElement: A.HtmlElement, HTMLDListElement: A.HtmlElement, HTMLDataElement: A.HtmlElement, HTMLDataListElement: A.HtmlElement, HTMLDetailsElement: A.HtmlElement, HTMLDialogElement: A.HtmlElement, HTMLDivElement: A.HtmlElement, HTMLEmbedElement: A.HtmlElement, HTMLFieldSetElement: A.HtmlElement, HTMLHRElement: A.HtmlElement, HTMLHeadElement: A.HtmlElement, HTMLHeadingElement: A.HtmlElement, HTMLHtmlElement: A.HtmlElement, HTMLIFrameElement: A.HtmlElement, HTMLImageElement: A.HtmlElement, HTMLInputElement: A.HtmlElement, HTMLLIElement: A.HtmlElement, HTMLLabelElement: A.HtmlElement, HTMLLegendElement: A.HtmlElement, HTMLLinkElement: A.HtmlElement, HTMLMapElement: A.HtmlElement, HTMLMediaElement: A.HtmlElement, HTMLMenuElement: A.HtmlElement, HTMLMetaElement: A.HtmlElement, HTMLMeterElement: A.HtmlElement, HTMLModElement: A.HtmlElement, HTMLOListElement: A.HtmlElement, HTMLObjectElement: A.HtmlElement, HTMLOptGroupElement: A.HtmlElement, HTMLOptionElement: A.HtmlElement, HTMLOutputElement: A.HtmlElement, HTMLParagraphElement: A.HtmlElement, HTMLParamElement: A.HtmlElement, HTMLPictureElement: A.HtmlElement, HTMLPreElement: A.HtmlElement, HTMLProgressElement: A.HtmlElement, HTMLQuoteElement: A.HtmlElement, HTMLScriptElement: A.HtmlElement, HTMLShadowElement: A.HtmlElement, HTMLSlotElement: A.HtmlElement, HTMLSourceElement: A.HtmlElement, HTMLSpanElement: A.HtmlElement, HTMLStyleElement: A.HtmlElement, HTMLTableCaptionElement: A.HtmlElement, HTMLTableCellElement: A.HtmlElement, HTMLTableDataCellElement: A.HtmlElement, HTMLTableHeaderCellElement: A.HtmlElement, HTMLTableColElement: A.HtmlElement, HTMLTableElement: A.HtmlElement, HTMLTableRowElement: A.HtmlElement, HTMLTableSectionElement: A.HtmlElement, HTMLTemplateElement: A.HtmlElement, HTMLTextAreaElement: A.HtmlElement, HTMLTimeElement: A.HtmlElement, HTMLTitleElement: A.HtmlElement, HTMLTrackElement: A.HtmlElement, HTMLUListElement: A.HtmlElement, HTMLUnknownElement: A.HtmlElement, HTMLVideoElement: A.HtmlElement, HTMLDirectoryElement: A.HtmlElement, HTMLFontElement: A.HtmlElement, HTMLFrameElement: A.HtmlElement, HTMLFrameSetElement: A.HtmlElement, HTMLMarqueeElement: A.HtmlElement, HTMLElement: A.HtmlElement, HTMLAnchorElement: A.AnchorElement, HTMLAreaElement: A.AreaElement, HTMLCanvasElement: A.CanvasElement, CanvasRenderingContext2D: A.CanvasRenderingContext2D, DOMException: A.DomException, SVGAElement: A.Element, SVGAnimateElement: A.Element, SVGAnimateMotionElement: A.Element, SVGAnimateTransformElement: A.Element, SVGAnimationElement: A.Element, SVGCircleElement: A.Element, SVGClipPathElement: A.Element, SVGDefsElement: A.Element, SVGDescElement: A.Element, SVGDiscardElement: A.Element, SVGEllipseElement: A.Element, SVGFEBlendElement: A.Element, SVGFEColorMatrixElement: A.Element, SVGFEComponentTransferElement: A.Element, SVGFECompositeElement: A.Element, SVGFEConvolveMatrixElement: A.Element, SVGFEDiffuseLightingElement: A.Element, SVGFEDisplacementMapElement: A.Element, SVGFEDistantLightElement: A.Element, SVGFEFloodElement: A.Element, SVGFEFuncAElement: A.Element, SVGFEFuncBElement: A.Element, SVGFEFuncGElement: A.Element, SVGFEFuncRElement: A.Element, SVGFEGaussianBlurElement: A.Element, SVGFEImageElement: A.Element, SVGFEMergeElement: A.Element, SVGFEMergeNodeElement: A.Element, SVGFEMorphologyElement: A.Element, SVGFEOffsetElement: A.Element, SVGFEPointLightElement: A.Element, SVGFESpecularLightingElement: A.Element, SVGFESpotLightElement: A.Element, SVGFETileElement: A.Element, SVGFETurbulenceElement: A.Element, SVGFilterElement: A.Element, SVGForeignObjectElement: A.Element, SVGGElement: A.Element, SVGGeometryElement: A.Element, SVGGraphicsElement: A.Element, SVGImageElement: A.Element, SVGLineElement: A.Element, SVGLinearGradientElement: A.Element, SVGMarkerElement: A.Element, SVGMaskElement: A.Element, SVGMetadataElement: A.Element, SVGPathElement: A.Element, SVGPatternElement: A.Element, SVGPolygonElement: A.Element, SVGPolylineElement: A.Element, SVGRadialGradientElement: A.Element, SVGRectElement: A.Element, SVGScriptElement: A.Element, SVGSetElement: A.Element, SVGStopElement: A.Element, SVGStyleElement: A.Element, SVGElement: A.Element, SVGSVGElement: A.Element, SVGSwitchElement: A.Element, SVGSymbolElement: A.Element, SVGTSpanElement: A.Element, SVGTextContentElement: A.Element, SVGTextElement: A.Element, SVGTextPathElement: A.Element, SVGTextPositioningElement: A.Element, SVGTitleElement: A.Element, SVGUseElement: A.Element, SVGViewElement: A.Element, SVGGradientElement: A.Element, SVGComponentTransferFunctionElement: A.Element, SVGFEDropShadowElement: A.Element, SVGMPathElement: A.Element, Element: A.Element, EventTarget: A.EventTarget, HTMLFormElement: A.FormElement, ImageData: A.ImageData, Document: A.Node, HTMLDocument: A.Node, Node: A.Node, HTMLSelectElement: A.SelectElement});
+    hunkHelpers.setOrUpdateLeafTags({ApplicationCacheErrorEvent: true, DOMError: true, ErrorEvent: true, Event: true, InputEvent: true, SubmitEvent: true, MediaError: true, NavigatorUserMediaError: true, OverconstrainedError: true, PositionError: true, GeolocationPositionError: true, SensorErrorEvent: true, SpeechRecognitionError: true, WebGLRenderingContext: true, WebGL2RenderingContext: true, ArrayBufferView: false, Uint8ClampedArray: true, CanvasPixelArray: true, HTMLAudioElement: true, HTMLBRElement: true, HTMLBaseElement: true, HTMLBodyElement: true, HTMLButtonElement: true, HTMLContentElement: true, HTMLDListElement: true, HTMLDataElement: true, HTMLDataListElement: true, HTMLDetailsElement: true, HTMLDialogElement: true, HTMLDivElement: true, HTMLEmbedElement: true, HTMLFieldSetElement: true, HTMLHRElement: true, HTMLHeadElement: true, HTMLHeadingElement: true, HTMLHtmlElement: true, HTMLIFrameElement: true, HTMLImageElement: true, HTMLInputElement: true, HTMLLIElement: true, HTMLLabelElement: true, HTMLLegendElement: true, HTMLLinkElement: true, HTMLMapElement: true, HTMLMediaElement: true, HTMLMenuElement: true, HTMLMetaElement: true, HTMLMeterElement: true, HTMLModElement: true, HTMLOListElement: true, HTMLObjectElement: true, HTMLOptGroupElement: true, HTMLOptionElement: true, HTMLOutputElement: true, HTMLParagraphElement: true, HTMLParamElement: true, HTMLPictureElement: true, HTMLPreElement: true, HTMLProgressElement: true, HTMLQuoteElement: true, HTMLScriptElement: true, HTMLShadowElement: true, HTMLSlotElement: true, HTMLSourceElement: true, HTMLSpanElement: true, HTMLStyleElement: true, HTMLTableCaptionElement: true, HTMLTableCellElement: true, HTMLTableDataCellElement: true, HTMLTableHeaderCellElement: true, HTMLTableColElement: true, HTMLTableElement: true, HTMLTableRowElement: true, HTMLTableSectionElement: true, HTMLTemplateElement: true, HTMLTextAreaElement: true, HTMLTimeElement: true, HTMLTitleElement: true, HTMLTrackElement: true, HTMLUListElement: true, HTMLUnknownElement: true, HTMLVideoElement: true, HTMLDirectoryElement: true, HTMLFontElement: true, HTMLFrameElement: true, HTMLFrameSetElement: true, HTMLMarqueeElement: true, HTMLElement: false, HTMLAnchorElement: true, HTMLAreaElement: true, HTMLCanvasElement: true, CanvasRenderingContext2D: true, DOMException: true, SVGAElement: true, SVGAnimateElement: true, SVGAnimateMotionElement: true, SVGAnimateTransformElement: true, SVGAnimationElement: true, SVGCircleElement: true, SVGClipPathElement: true, SVGDefsElement: true, SVGDescElement: true, SVGDiscardElement: true, SVGEllipseElement: true, SVGFEBlendElement: true, SVGFEColorMatrixElement: true, SVGFEComponentTransferElement: true, SVGFECompositeElement: true, SVGFEConvolveMatrixElement: true, SVGFEDiffuseLightingElement: true, SVGFEDisplacementMapElement: true, SVGFEDistantLightElement: true, SVGFEFloodElement: true, SVGFEFuncAElement: true, SVGFEFuncBElement: true, SVGFEFuncGElement: true, SVGFEFuncRElement: true, SVGFEGaussianBlurElement: true, SVGFEImageElement: true, SVGFEMergeElement: true, SVGFEMergeNodeElement: true, SVGFEMorphologyElement: true, SVGFEOffsetElement: true, SVGFEPointLightElement: true, SVGFESpecularLightingElement: true, SVGFESpotLightElement: true, SVGFETileElement: true, SVGFETurbulenceElement: true, SVGFilterElement: true, SVGForeignObjectElement: true, SVGGElement: true, SVGGeometryElement: true, SVGGraphicsElement: true, SVGImageElement: true, SVGLineElement: true, SVGLinearGradientElement: true, SVGMarkerElement: true, SVGMaskElement: true, SVGMetadataElement: true, SVGPathElement: true, SVGPatternElement: true, SVGPolygonElement: true, SVGPolylineElement: true, SVGRadialGradientElement: true, SVGRectElement: true, SVGScriptElement: true, SVGSetElement: true, SVGStopElement: true, SVGStyleElement: true, SVGElement: true, SVGSVGElement: true, SVGSwitchElement: true, SVGSymbolElement: true, SVGTSpanElement: true, SVGTextContentElement: true, SVGTextElement: true, SVGTextPathElement: true, SVGTextPositioningElement: true, SVGTitleElement: true, SVGUseElement: true, SVGViewElement: true, SVGGradientElement: true, SVGComponentTransferFunctionElement: true, SVGFEDropShadowElement: true, SVGMPathElement: true, Element: false, EventTarget: false, HTMLFormElement: true, ImageData: true, Document: true, HTMLDocument: true, Node: false, HTMLSelectElement: true});
+    A.NativeTypedArray.$nativeSuperclassTag = "ArrayBufferView";
+    A._NativeTypedArrayOfInt_NativeTypedArray_ListMixin.$nativeSuperclassTag = "ArrayBufferView";
+    A._NativeTypedArrayOfInt_NativeTypedArray_ListMixin_FixedLengthListMixin.$nativeSuperclassTag = "ArrayBufferView";
+    A.NativeTypedArrayOfInt.$nativeSuperclassTag = "ArrayBufferView";
   })();
   convertAllToFastObject(holders);
   convertToFastObject($);
