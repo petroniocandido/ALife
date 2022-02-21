@@ -7,7 +7,7 @@ import 'SierpinskiTriangle.dart';
 final _random = Random();
 
 void main() {
-  querySelector("#paragrafo")?.text = "Hello world!";
+  //querySelector("#paragrafo")?.text = "Hello world!";
 
   var canvas = querySelector("#canvas") as CanvasElement?;
   var context = canvas?.getContext('2d') as CanvasRenderingContext2D?;

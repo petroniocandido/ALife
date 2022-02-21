@@ -2531,14 +2531,10 @@
       return A.throwExpression(new A.LateError("Field '" + fieldName + "' has been assigned during initialization."));
     },
     main() {
-      var canvas, canvasWidth, canvasHeight, t3, t4, pixels, ca, t5, y, line, x, t6, t7, t8, t9, t10, t11, off, t12, _null = null,
-        t1 = document,
-        t2 = t1.querySelector("#paragrafo");
-      if (t2 != null)
-        J.set$text$x(t2, "Hello world!");
-      canvas = type$.nullable_CanvasElement._as(t1.querySelector("#canvas"));
-      t1 = canvas == null;
-      t2 = t1 ? _null : B.CanvasElement_methods.getContext$1(canvas, "2d");
+      var canvasWidth, canvasHeight, t3, t4, pixels, ca, t5, y, line, x, t6, t7, t8, t9, t10, t11, off, t12, _null = null,
+        canvas = type$.nullable_CanvasElement._as(document.querySelector("#canvas")),
+        t1 = canvas == null,
+        t2 = t1 ? _null : B.CanvasElement_methods.getContext$1(canvas, "2d");
       type$.nullable_CanvasRenderingContext2D._as(t2);
       canvasWidth = t1 ? _null : canvas.width;
       if (canvasWidth == null)
@@ -2722,9 +2718,6 @@
       if (receiver instanceof A.Object)
         return receiver;
       return J.getNativeInterceptor(receiver);
-    },
-    set$text$x(receiver, value) {
-      return J.getInterceptor$x(receiver).set$text(receiver, value);
     },
     get$data$x(receiver) {
       return J.getInterceptor$x(receiver).get$data(receiver);
@@ -3454,9 +3447,6 @@
     toString$0(receiver) {
       var value = receiver.nodeValue;
       return value == null ? this.super$Interceptor$toString(receiver) : value;
-    },
-    set$text(receiver, value) {
-      receiver.textContent = value;
     }
   };
   A.SelectElement.prototype = {
