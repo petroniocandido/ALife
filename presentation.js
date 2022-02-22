@@ -2507,8 +2507,6 @@
     },
     CellularAutomata_closure: function CellularAutomata_closure() {
     },
-    BooleanCellularAutomata: function BooleanCellularAutomata() {
-    },
     SierpinskiTriangle$(shape) {
       var t1 = type$.int,
         t2 = A.LinkedHashMap_LinkedHashMap$_literal(["[0, 0, 0]", 0, "[0, 0, 1]", 1, "[0, 1, 0]", 0, "[0, 1, 1]", 1, "[1, 0, 0]", 1, "[1, 0, 1]", 0, "[1, 1, 0]", 1, "[1, 1, 1]", 0], type$.String, t1),
@@ -2517,6 +2515,8 @@
       t3 = new A.SierpinskiTriangle(t2, t4, A._setArrayType([], t3), A._setArrayType([], t3), A._setArrayType([], t3));
       t3.CellularAutomata$1(t4, t1);
       return t3;
+    },
+    BooleanCellularAutomata: function BooleanCellularAutomata() {
     },
     SierpinskiTriangle: function SierpinskiTriangle(t0, t1, t2, t3, t4) {
       var _ = this;
@@ -3523,11 +3523,10 @@
       return index;
     },
     listIndex$1(grid_index) {
-      var t1, t2, index, i, i0, t3, t4;
+      var t1, t2, index, i, t3, t4;
       type$.List_int._as(grid_index);
-      for (t1 = J.getInterceptor$ax(grid_index), t2 = this._shape_dimensions, index = 0, i = 0; false; i = i0) {
-        i0 = i + 1;
-        t3 = t1.$index(grid_index, i0);
+      for (t1 = J.getInterceptor$ax(grid_index), t2 = this._shape_dimensions, index = 0, i = 0; false; ++i) {
+        t3 = t1.$index(grid_index, i);
         if (!(i < t2.length))
           return A.ioore(t2, i);
         t4 = t2[i];
@@ -3555,31 +3554,45 @@
       return t1;
     },
     nextDimensionNeighbors$2(dim, grid_index) {
-      var neigh, t1, tmp1, t2, tmp2, neigh2, _i;
+      var neigh, t1, t2, t3, neigh2, _i, tmp1, t4, tmp2, _this = this;
       type$.List_int._as(grid_index);
       neigh = [];
-      t1 = A._arrayInstanceType(grid_index);
-      tmp1 = A._setArrayType(grid_index.slice(0), t1);
+      t1 = dim + 1;
+      t2 = t1 < 1;
+      if (t2) {
+        t3 = A._setArrayType(grid_index.slice(0), A._arrayInstanceType(grid_index));
+        neigh2 = _this.nextDimensionNeighbors$2(t1, t3);
+        for (t3 = neigh2.length, _i = 0; _i < neigh2.length; neigh2.length === t3 || (0, A.throwConcurrentModificationError)(neigh2), ++_i)
+          neigh.push(neigh2[_i]);
+      }
+      t3 = A._arrayInstanceType(grid_index);
+      tmp1 = A._setArrayType(grid_index.slice(0), t3);
       if (!(dim >= 0 && dim < tmp1.length))
         return A.ioore(tmp1, dim);
-      t2 = tmp1[dim];
-      if (typeof t2 !== "number")
-        return t2.$add();
-      B.JSArray_methods.$indexSet(tmp1, dim, t2 + 1);
-      if (this.isValidGridIndex$1(tmp1))
+      t4 = tmp1[dim];
+      if (typeof t4 !== "number")
+        return t4.$add();
+      B.JSArray_methods.$indexSet(tmp1, dim, t4 + 1);
+      if (_this.isValidGridIndex$1(tmp1)) {
         neigh.push(tmp1);
-      tmp2 = A._setArrayType(grid_index.slice(0), t1);
+        if (t2) {
+          neigh2 = _this.nextDimensionNeighbors$2(t1, tmp1);
+          for (t1 = neigh2.length, _i = 0; _i < neigh2.length; neigh2.length === t1 || (0, A.throwConcurrentModificationError)(neigh2), ++_i)
+            neigh.push(neigh2[_i]);
+        }
+      }
+      tmp2 = A._setArrayType(grid_index.slice(0), t3);
       if (!(dim < tmp2.length))
         return A.ioore(tmp2, dim);
       t1 = tmp2[dim];
       if (typeof t1 !== "number")
         return t1.$sub();
       B.JSArray_methods.$indexSet(tmp2, dim, t1 - 1);
-      if (this.isValidGridIndex$1(tmp2)) {
+      if (_this.isValidGridIndex$1(tmp2)) {
         neigh.push(tmp2);
         t1 = dim - 1;
         if (t1 > 0) {
-          neigh2 = this.nextDimensionNeighbors$2(t1, tmp2);
+          neigh2 = _this.nextDimensionNeighbors$2(t1, tmp2);
           for (t1 = neigh2.length, _i = 0; _i < neigh2.length; neigh2.length === t1 || (0, A.throwConcurrentModificationError)(neigh2), ++_i)
             neigh.push(neigh2[_i]);
         }

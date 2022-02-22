@@ -1,7 +1,3 @@
-import 'dart:math';
-
-final _random = Random();
-
 abstract class CellularAutomata<T> {
   final List<int> _shape;
   List<int> get shape => _shape;
@@ -84,7 +80,7 @@ abstract class CellularAutomata<T> {
   int listIndex(List<int> grid_index) {
     int index = 0;
     for (int i = 0; i < _shape.length - 1; i++) {
-      index += grid_index[i + 1] * _shape_dimensions[i];
+      index += grid_index[i] * _shape_dimensions[i];
     }
     index += grid_index[_shape.length - 1];
     return index;
@@ -113,6 +109,15 @@ abstract class CellularAutomata<T> {
   List nextDimensionNeighbors(int dim, List<int> grid_index) {
     List neigh = [];
 
+    // Keep the dimension as is
+    if (dim + 1 < _shape.length) {
+      var neigh2 = nextDimensionNeighbors(dim + 1, grid_index.toList());
+      for (var v in neigh2) {
+        neigh.add(v);
+      }
+    }
+
+    // Move one cell to the right
     List<int> tmp1 = grid_index.toList();
     tmp1[dim] += 1;
     if (isValidGridIndex(tmp1)) {
@@ -125,12 +130,13 @@ abstract class CellularAutomata<T> {
       }
     }
 
+    // Move one cell to the left
     List<int> tmp2 = grid_index.toList();
     tmp2[dim] -= 1;
     if (isValidGridIndex(tmp2)) {
       neigh.add(tmp2);
-      if (dim - 1 > 0) {
-        var neigh2 = nextDimensionNeighbors(dim - 1, tmp2);
+      if (dim + 1 < _shape.length) {
+        var neigh2 = nextDimensionNeighbors(dim + 1, tmp2);
         for (var v in neigh2) {
           neigh.add(v);
         }
@@ -138,42 +144,6 @@ abstract class CellularAutomata<T> {
     }
 
     return neigh;
-  }
-}
-
-class BooleanCellularAutomata extends CellularAutomata<int> {
-  BooleanCellularAutomata(List<int> shape) : super(shape);
-
-  @override
-  int cellCreate() {
-    return _random.nextInt(2);
-  }
-
-  @override
-  void cellUpdate(int list_index) {
-    List<int> neighbors = cellNeighborhood(list_index);
-
-    if (neighbors.length > 0) {
-      var list = [
-        for (var i = 0; i <= neighbors.length - 1; i++)
-          _grid_current[neighbors[i]]
-      ];
-
-      int num = list.reduce((i, j) => i + j);
-
-      _grid_working[list_index] = num % 2;
-    }
-  }
-
-  @override
-  List<int> cellNeighborhood(int list_index) {
-    var gix = gridIndex(list_index);
-    List ix_grid = nextDimensionNeighbors(0, gix);
-    var ret = <int>[];
-    for (List<int> ix in ix_grid) {
-      ret.add(listIndex(ix));
-    }
-    return ret;
   }
 }
 
@@ -186,25 +156,4 @@ void printGrid(CellularAutomata ca) {
   }
 }
 
-void main() {
-  print("Inicio");
-  var ca = BooleanCellularAutomata([5, 5]);
-  ca.initialize();
-  //print(ca.listIndex([5]));
-  //print(ca.nextDimensionNeighbors(0,[5]));
-  //print(ca.shape_dimensions);
-
-  /*print(ca.grid);
-  for (int i = 0; i < ca.grid.length; i++) {
-    print(i);
-    print(ca.cellNeighborhood(i));
-  }*/
-
-  for (int i = 0; i < 10; i++) {
-    ca.next();
-    //print(tmp);
-    print('Iteracao');
-    printGrid(ca);
-  }
-  print("Fim");
-}
+void main() {}
