@@ -259,9 +259,6 @@
     IterableElementError_noElement() {
       return new A.StateError("No element");
     },
-    Sort_sort(a, compare, $E) {
-      A.Sort__doSort(a, 0, a.length - 1, compare, $E);
-    },
     Sort__doSort(a, left, right, compare, $E) {
       if (right - left <= 32)
         A.Sort__insertionSort(a, left, right, compare, $E);
@@ -269,36 +266,36 @@
         A.Sort__dualPivotQuicksort(a, left, right, compare, $E);
     },
     Sort__insertionSort(a, left, right, compare, $E) {
-      var i, t1, el, j, t2, j0;
-      for (i = left + 1, t1 = J.getInterceptor$ax(a); i <= right; ++i) {
+      var i, el, j, t1, j0;
+      for (i = left + 1; i <= right; ++i) {
         if (!(i >= 0 && i < a.length))
           return A.ioore(a, i);
         el = a[i];
         j = i;
         while (true) {
           if (j > left) {
-            t2 = j - 1;
-            if (!(t2 >= 0 && t2 < a.length))
-              return A.ioore(a, t2);
-            t2 = compare.call$2(a[t2], el);
-            if (typeof t2 !== "number")
-              return t2.$gt();
-            t2 = t2 > 0;
+            t1 = j - 1;
+            if (!(t1 >= 0 && t1 < a.length))
+              return A.ioore(a, t1);
+            t1 = compare.call$2(a[t1], el);
+            if (typeof t1 !== "number")
+              return t1.$gt();
+            t1 = t1 > 0;
           } else
-            t2 = false;
-          if (!t2)
+            t1 = false;
+          if (!t1)
             break;
           j0 = j - 1;
           if (!(j0 >= 0 && j0 < a.length))
             return A.ioore(a, j0);
-          t1.$indexSet(a, j, a[j0]);
+          B.JSArray_methods.$indexSet(a, j, a[j0]);
           j = j0;
         }
-        t1.$indexSet(a, j, el);
+        B.JSArray_methods.$indexSet(a, j, el);
       }
     },
     Sort__dualPivotQuicksort(a, left, right, compare, $E) {
-      var el1, el2, el3, el4, el5, t0, less, great, k, ak, comp, t2, great0, less0, pivots_are_equal,
+      var el1, el2, el3, el4, el5, t0, less, great, k, ak, comp, great0, less0, pivots_are_equal,
         sixth = B.JSInt_methods._tdivFast$1(right - left + 1, 6),
         index1 = left + sixth,
         index5 = right - sixth,
@@ -393,16 +390,15 @@
         el5 = el4;
         el4 = t0;
       }
-      t1 = J.getInterceptor$ax(a);
-      t1.$indexSet(a, index1, el1);
-      t1.$indexSet(a, index3, el3);
-      t1.$indexSet(a, index5, el5);
+      B.JSArray_methods.$indexSet(a, index1, el1);
+      B.JSArray_methods.$indexSet(a, index3, el3);
+      B.JSArray_methods.$indexSet(a, index5, el5);
       if (!(left >= 0 && left < a.length))
         return A.ioore(a, left);
-      t1.$indexSet(a, index2, a[left]);
+      B.JSArray_methods.$indexSet(a, index2, a[left]);
       if (!(right >= 0 && right < a.length))
         return A.ioore(a, right);
-      t1.$indexSet(a, index4, a[right]);
+      B.JSArray_methods.$indexSet(a, index4, a[right]);
       less = left + 1;
       great = right - 1;
       if (J.$eq$(compare.call$2(el2, el4), 0)) {
@@ -417,8 +413,8 @@
             if (k !== less) {
               if (!(less < a.length))
                 return A.ioore(a, less);
-              t1.$indexSet(a, k, a[less]);
-              t1.$indexSet(a, less, ak);
+              B.JSArray_methods.$indexSet(a, k, a[less]);
+              B.JSArray_methods.$indexSet(a, less, ak);
             }
             ++less;
           } else
@@ -430,25 +426,25 @@
                 --great;
                 continue;
               } else {
-                t2 = a.length;
+                t1 = a.length;
                 great0 = great - 1;
                 if (comp < 0) {
-                  if (!(less < t2))
+                  if (!(less < t1))
                     return A.ioore(a, less);
-                  t1.$indexSet(a, k, a[less]);
+                  B.JSArray_methods.$indexSet(a, k, a[less]);
                   less0 = less + 1;
                   if (!(great < a.length))
                     return A.ioore(a, great);
-                  t1.$indexSet(a, less, a[great]);
-                  t1.$indexSet(a, great, ak);
+                  B.JSArray_methods.$indexSet(a, less, a[great]);
+                  B.JSArray_methods.$indexSet(a, great, ak);
                   great = great0;
                   less = less0;
                   break;
                 } else {
-                  if (!(great < t2))
+                  if (!(great < t1))
                     return A.ioore(a, great);
-                  t1.$indexSet(a, k, a[great]);
-                  t1.$indexSet(a, great, ak);
+                  B.JSArray_methods.$indexSet(a, k, a[great]);
+                  B.JSArray_methods.$indexSet(a, great, ak);
                   great = great0;
                   break;
                 }
@@ -465,8 +461,8 @@
             if (k !== less) {
               if (!(less < a.length))
                 return A.ioore(a, less);
-              t1.$indexSet(a, k, a[less]);
-              t1.$indexSet(a, less, ak);
+              B.JSArray_methods.$indexSet(a, k, a[less]);
+              B.JSArray_methods.$indexSet(a, less, ak);
             }
             ++less;
           } else if (compare.call$2(ak, el4) > 0)
@@ -482,23 +478,23 @@
                 if (!(great < a.length))
                   return A.ioore(a, great);
                 comp = compare.call$2(a[great], el2);
-                t2 = a.length;
+                t1 = a.length;
                 great0 = great - 1;
                 if (comp < 0) {
-                  if (!(less < t2))
+                  if (!(less < t1))
                     return A.ioore(a, less);
-                  t1.$indexSet(a, k, a[less]);
+                  B.JSArray_methods.$indexSet(a, k, a[less]);
                   less0 = less + 1;
                   if (!(great < a.length))
                     return A.ioore(a, great);
-                  t1.$indexSet(a, less, a[great]);
-                  t1.$indexSet(a, great, ak);
+                  B.JSArray_methods.$indexSet(a, less, a[great]);
+                  B.JSArray_methods.$indexSet(a, great, ak);
                   less = less0;
                 } else {
-                  if (!(great < t2))
+                  if (!(great < t1))
                     return A.ioore(a, great);
-                  t1.$indexSet(a, k, a[great]);
-                  t1.$indexSet(a, great, ak);
+                  B.JSArray_methods.$indexSet(a, k, a[great]);
+                  B.JSArray_methods.$indexSet(a, great, ak);
                 }
                 great = great0;
                 break;
@@ -507,16 +503,16 @@
         }
         pivots_are_equal = false;
       }
-      t2 = less - 1;
-      if (!(t2 < a.length))
-        return A.ioore(a, t2);
-      t1.$indexSet(a, left, a[t2]);
-      t1.$indexSet(a, t2, el2);
-      t2 = great + 1;
-      if (!(t2 >= 0 && t2 < a.length))
-        return A.ioore(a, t2);
-      t1.$indexSet(a, right, a[t2]);
-      t1.$indexSet(a, t2, el4);
+      t1 = less - 1;
+      if (!(t1 < a.length))
+        return A.ioore(a, t1);
+      B.JSArray_methods.$indexSet(a, left, a[t1]);
+      B.JSArray_methods.$indexSet(a, t1, el2);
+      t1 = great + 1;
+      if (!(t1 >= 0 && t1 < a.length))
+        return A.ioore(a, t1);
+      B.JSArray_methods.$indexSet(a, right, a[t1]);
+      B.JSArray_methods.$indexSet(a, t1, el4);
       A.Sort__doSort(a, left, less - 2, compare, $E);
       A.Sort__doSort(a, great + 2, right, compare, $E);
       if (pivots_are_equal)
@@ -544,8 +540,8 @@
             if (k !== less) {
               if (!(less < a.length))
                 return A.ioore(a, less);
-              t1.$indexSet(a, k, a[less]);
-              t1.$indexSet(a, less, ak);
+              B.JSArray_methods.$indexSet(a, k, a[less]);
+              B.JSArray_methods.$indexSet(a, less, ak);
             }
             ++less;
           } else if (compare.call$2(ak, el4) === 0)
@@ -561,23 +557,23 @@
                 if (!(great < a.length))
                   return A.ioore(a, great);
                 comp = compare.call$2(a[great], el2);
-                t2 = a.length;
+                t1 = a.length;
                 great0 = great - 1;
                 if (comp < 0) {
-                  if (!(less < t2))
+                  if (!(less < t1))
                     return A.ioore(a, less);
-                  t1.$indexSet(a, k, a[less]);
+                  B.JSArray_methods.$indexSet(a, k, a[less]);
                   less0 = less + 1;
                   if (!(great < a.length))
                     return A.ioore(a, great);
-                  t1.$indexSet(a, less, a[great]);
-                  t1.$indexSet(a, great, ak);
+                  B.JSArray_methods.$indexSet(a, less, a[great]);
+                  B.JSArray_methods.$indexSet(a, great, ak);
                   less = less0;
                 } else {
-                  if (!(great < t2))
+                  if (!(great < t1))
                     return A.ioore(a, great);
-                  t1.$indexSet(a, k, a[great]);
-                  t1.$indexSet(a, great, ak);
+                  B.JSArray_methods.$indexSet(a, k, a[great]);
+                  B.JSArray_methods.$indexSet(a, great, ak);
                 }
                 great = great0;
                 break;
@@ -591,30 +587,11 @@
     LateError: function LateError(t0) {
       this._message = t0;
     },
-    ListIterator: function ListIterator(t0, t1, t2) {
-      var _ = this;
-      _.__internal$_iterable = t0;
-      _.__internal$_length = t1;
-      _.__internal$_index = 0;
-      _.__internal$_current = null;
-      _.$ti = t2;
-    },
-    FixedLengthListMixin: function FixedLengthListMixin() {
-    },
     unminifyOrTag(rawClassName) {
       var preserved = init.mangledGlobalNames[rawClassName];
       if (preserved != null)
         return preserved;
       return rawClassName;
-    },
-    isJsIndexable(object, record) {
-      var result;
-      if (record != null) {
-        result = record.x;
-        if (result != null)
-          return result;
-      }
-      return type$.JavaScriptIndexingBehavior_dynamic._is(object);
     },
     S(value) {
       var result;
@@ -631,6 +608,20 @@
         return "null";
       result = J.toString$0$(value);
       return result;
+    },
+    Primitives_parseInt(source, radix) {
+      var decimalMatch,
+        match = /^\s*[+-]?((0x[a-f0-9]+)|(\d+)|([a-z0-9]+))\s*$/i.exec(source);
+      if (match == null)
+        return null;
+      if (3 >= match.length)
+        return A.ioore(match, 3);
+      decimalMatch = match[3];
+      if (decimalMatch != null)
+        return parseInt(source, 10);
+      if (match[2] != null)
+        return parseInt(source, 16);
+      return null;
     },
     Primitives_objectTypeName(object) {
       return A.Primitives__objectTypeNameNewRti(object);
@@ -1097,7 +1088,7 @@
         if (template[$name] === fieldName)
           return $name;
       }
-      throw A.wrapException(A.ArgumentError$("Field name " + fieldName + " not found."));
+      throw A.wrapException(A.ArgumentError$("Field name " + fieldName + " not found.", null));
     },
     throwCyclicInit(staticName) {
       throw A.wrapException(new A.CyclicInitializationError(staticName));
@@ -1304,22 +1295,6 @@
     },
     initHooks_closure1: function initHooks_closure1(t0) {
       this.prototypeForTag = t0;
-    },
-    _checkValidIndex(index, list, $length) {
-      if (index >>> 0 !== index || index >= $length)
-        throw A.wrapException(A.diagnoseIndexError(list, index));
-    },
-    NativeTypedData: function NativeTypedData() {
-    },
-    NativeTypedArray: function NativeTypedArray() {
-    },
-    NativeTypedArrayOfInt: function NativeTypedArrayOfInt() {
-    },
-    NativeUint8ClampedList: function NativeUint8ClampedList() {
-    },
-    _NativeTypedArrayOfInt_NativeTypedArray_ListMixin: function _NativeTypedArrayOfInt_NativeTypedArray_ListMixin() {
-    },
-    _NativeTypedArrayOfInt_NativeTypedArray_ListMixin_FixedLengthListMixin: function _NativeTypedArrayOfInt_NativeTypedArray_ListMixin_FixedLengthListMixin() {
     },
     Rti__getQuestionFromStar(universe, rti) {
       var question = rti._precomputed1;
@@ -2790,6 +2765,143 @@
       t1._TimerImpl$2(milliseconds, callback);
       return t1;
     },
+    AsyncError$(error, stackTrace) {
+      var t1 = A.checkNotNullable(error, "error", type$.Object);
+      return new A.AsyncError(t1, stackTrace == null ? A.AsyncError_defaultStackTrace(error) : stackTrace);
+    },
+    AsyncError_defaultStackTrace(error) {
+      var stackTrace;
+      if (type$.Error._is(error)) {
+        stackTrace = error.get$stackTrace();
+        if (stackTrace != null)
+          return stackTrace;
+      }
+      return B.C__StringStackTrace;
+    },
+    _Future__chainCoreFuture(source, target) {
+      var t1, t2, listeners;
+      for (t1 = type$._Future_dynamic; t2 = source._state, (t2 & 4) !== 0;)
+        source = t1._as(source._resultOrListeners);
+      if ((t2 & 24) !== 0) {
+        listeners = target._removeListeners$0();
+        target._cloneResult$1(source);
+        A._Future__propagateToListeners(target, listeners);
+      } else {
+        listeners = type$.nullable__FutureListener_dynamic_dynamic._as(target._resultOrListeners);
+        target._state = target._state & 1 | 4;
+        target._resultOrListeners = source;
+        source._prependListeners$1(listeners);
+      }
+    },
+    _Future__propagateToListeners(source, listeners) {
+      var t2, t3, t4, _box_0, t5, t6, hasError, asyncError, nextListener, nextListener0, sourceResult, t7, zone, oldZone, result, current, _box_1 = {},
+        t1 = _box_1.source = source;
+      for (t2 = type$.AsyncError, t3 = type$.nullable__FutureListener_dynamic_dynamic, t4 = type$.Future_dynamic; true;) {
+        _box_0 = {};
+        t5 = t1._state;
+        t6 = (t5 & 16) === 0;
+        hasError = !t6;
+        if (listeners == null) {
+          if (hasError && (t5 & 1) === 0) {
+            asyncError = t2._as(t1._resultOrListeners);
+            A._rootHandleError(asyncError.error, asyncError.stackTrace);
+          }
+          return;
+        }
+        _box_0.listener = listeners;
+        nextListener = listeners._nextListener;
+        for (t1 = listeners; nextListener != null; t1 = nextListener, nextListener = nextListener0) {
+          t1._nextListener = null;
+          A._Future__propagateToListeners(_box_1.source, t1);
+          _box_0.listener = nextListener;
+          nextListener0 = nextListener._nextListener;
+        }
+        t5 = _box_1.source;
+        sourceResult = t5._resultOrListeners;
+        _box_0.listenerHasError = hasError;
+        _box_0.listenerValueOrError = sourceResult;
+        if (t6) {
+          t7 = t1.state;
+          t7 = (t7 & 1) !== 0 || (t7 & 15) === 8;
+        } else
+          t7 = true;
+        if (t7) {
+          zone = t1.result._zone;
+          if (hasError) {
+            t5 = t5._zone === zone;
+            t5 = !(t5 || t5);
+          } else
+            t5 = false;
+          if (t5) {
+            t2._as(sourceResult);
+            A._rootHandleError(sourceResult.error, sourceResult.stackTrace);
+            return;
+          }
+          oldZone = $.Zone__current;
+          if (oldZone !== zone)
+            $.Zone__current = zone;
+          else
+            oldZone = null;
+          t1 = t1.state;
+          if ((t1 & 15) === 8)
+            new A._Future__propagateToListeners_handleWhenCompleteCallback(_box_0, _box_1, hasError).call$0();
+          else if (t6) {
+            if ((t1 & 1) !== 0)
+              new A._Future__propagateToListeners_handleValueCallback(_box_0, sourceResult).call$0();
+          } else if ((t1 & 2) !== 0)
+            new A._Future__propagateToListeners_handleError(_box_1, _box_0).call$0();
+          if (oldZone != null)
+            $.Zone__current = oldZone;
+          t1 = _box_0.listenerValueOrError;
+          if (t4._is(t1)) {
+            t5 = _box_0.listener.$ti;
+            t5 = t5._eval$1("Future<2>")._is(t1) || !t5._rest[1]._is(t1);
+          } else
+            t5 = false;
+          if (t5) {
+            t4._as(t1);
+            result = _box_0.listener.result;
+            if ((t1._state & 24) !== 0) {
+              current = t3._as(result._resultOrListeners);
+              result._resultOrListeners = null;
+              listeners = result._reverseListeners$1(current);
+              result._state = t1._state & 30 | result._state & 1;
+              result._resultOrListeners = t1._resultOrListeners;
+              _box_1.source = t1;
+              continue;
+            } else
+              A._Future__chainCoreFuture(t1, result);
+            return;
+          }
+        }
+        result = _box_0.listener.result;
+        current = t3._as(result._resultOrListeners);
+        result._resultOrListeners = null;
+        listeners = result._reverseListeners$1(current);
+        t1 = _box_0.listenerHasError;
+        t5 = _box_0.listenerValueOrError;
+        if (!t1) {
+          result.$ti._precomputed1._as(t5);
+          result._state = 8;
+          result._resultOrListeners = t5;
+        } else {
+          t2._as(t5);
+          result._state = result._state & 1 | 16;
+          result._resultOrListeners = t5;
+        }
+        _box_1.source = result;
+        t1 = result;
+      }
+    },
+    _registerErrorHandler(errorHandler, zone) {
+      var t1 = type$.dynamic_Function_Object_StackTrace;
+      if (t1._is(errorHandler))
+        return t1._as(errorHandler);
+      t1 = type$.dynamic_Function_Object;
+      if (t1._is(errorHandler))
+        return t1._as(errorHandler);
+      throw A.wrapException(A.ArgumentError$value(errorHandler, "onError", string$.Error_));
+    },
     _microtaskLoop() {
       var entry, next;
       for (entry = $._nextCallback; entry != null; entry = $._nextCallback) {
@@ -2812,18 +2924,21 @@
           $.$get$_AsyncRun__scheduleImmediateClosure().call$1(A.async___startMicrotaskLoop$closure());
       }
     },
+    _scheduleAsyncCallback(callback) {
+      var newEntry = new A._AsyncCallbackEntry(callback),
+        lastCallback = $._lastCallback;
+      if (lastCallback == null) {
+        $._nextCallback = $._lastCallback = newEntry;
+        if (!$._isInCallbackLoop)
+          $.$get$_AsyncRun__scheduleImmediateClosure().call$1(A.async___startMicrotaskLoop$closure());
+      } else
+        $._lastCallback = lastCallback.next = newEntry;
+    },
     _schedulePriorityAsyncCallback(callback) {
-      var newEntry, lastCallback, entry, lastPriorityCallback, next,
+      var entry, lastPriorityCallback, next,
         t1 = $._nextCallback;
       if (t1 == null) {
-        newEntry = new A._AsyncCallbackEntry(callback);
-        lastCallback = $._lastCallback;
-        if (lastCallback == null) {
-          $._nextCallback = $._lastCallback = newEntry;
-          if (!$._isInCallbackLoop)
-            $.$get$_AsyncRun__scheduleImmediateClosure().call$1(A.async___startMicrotaskLoop$closure());
-        } else
-          $._lastCallback = lastCallback.next = newEntry;
+        A._scheduleAsyncCallback(callback);
         $._lastPriorityCallback = $._lastCallback;
         return;
       }
@@ -2843,6 +2958,20 @@
     _rootHandleError(error, stackTrace) {
       A._schedulePriorityAsyncCallback(new A._rootHandleError_closure(error, stackTrace));
     },
+    _rootRun($self, $parent, zone, f, $R) {
+      var old,
+        t1 = $.Zone__current;
+      if (t1 === zone)
+        return f.call$0();
+      $.Zone__current = zone;
+      old = t1;
+      try {
+        t1 = f.call$0();
+        return t1;
+      } finally {
+        $.Zone__current = old;
+      }
+    },
     _rootRunUnary($self, $parent, zone, f, arg, $R, $T) {
       var old,
         t1 = $.Zone__current;
@@ -2856,6 +2985,26 @@
       } finally {
         $.Zone__current = old;
       }
+    },
+    _rootRunBinary($self, $parent, zone, f, arg1, arg2, $R, T1, T2) {
+      var old,
+        t1 = $.Zone__current;
+      if (t1 === zone)
+        return f.call$2(arg1, arg2);
+      $.Zone__current = zone;
+      old = t1;
+      try {
+        t1 = f.call$2(arg1, arg2);
+        return t1;
+      } finally {
+        $.Zone__current = old;
+      }
+    },
+    _rootScheduleMicrotask($self, $parent, zone, f) {
+      type$.void_Function._as(f);
+      if (B.C__RootZone !== zone)
+        f = zone.bindCallbackGuarded$1(f);
+      A._scheduleAsyncCallback(f);
     },
     _AsyncRun__initializeScheduleImmediate_internalCallback: function _AsyncRun__initializeScheduleImmediate_internalCallback(t0) {
       this._box_0 = t0;
@@ -2877,9 +3026,65 @@
       this.$this = t0;
       this.callback = t1;
     },
+    AsyncError: function AsyncError(t0, t1) {
+      this.error = t0;
+      this.stackTrace = t1;
+    },
+    _FutureListener: function _FutureListener(t0, t1, t2, t3, t4) {
+      var _ = this;
+      _._nextListener = null;
+      _.result = t0;
+      _.state = t1;
+      _.callback = t2;
+      _.errorCallback = t3;
+      _.$ti = t4;
+    },
+    _Future: function _Future(t0, t1) {
+      var _ = this;
+      _._state = 0;
+      _._zone = t0;
+      _._resultOrListeners = null;
+      _.$ti = t1;
+    },
+    _Future__addListener_closure: function _Future__addListener_closure(t0, t1) {
+      this.$this = t0;
+      this.listener = t1;
+    },
+    _Future__prependListeners_closure: function _Future__prependListeners_closure(t0, t1) {
+      this._box_0 = t0;
+      this.$this = t1;
+    },
+    _Future__propagateToListeners_handleWhenCompleteCallback: function _Future__propagateToListeners_handleWhenCompleteCallback(t0, t1, t2) {
+      this._box_0 = t0;
+      this._box_1 = t1;
+      this.hasError = t2;
+    },
+    _Future__propagateToListeners_handleWhenCompleteCallback_closure: function _Future__propagateToListeners_handleWhenCompleteCallback_closure(t0) {
+      this.originalSource = t0;
+    },
+    _Future__propagateToListeners_handleValueCallback: function _Future__propagateToListeners_handleValueCallback(t0, t1) {
+      this._box_0 = t0;
+      this.sourceResult = t1;
+    },
+    _Future__propagateToListeners_handleError: function _Future__propagateToListeners_handleError(t0, t1) {
+      this._box_1 = t0;
+      this._box_0 = t1;
+    },
     _AsyncCallbackEntry: function _AsyncCallbackEntry(t0) {
       this.callback = t0;
       this.next = null;
+    },
+    Stream: function Stream() {
+    },
+    Stream_length_closure: function Stream_length_closure(t0, t1) {
+      this._box_0 = t0;
+      this.$this = t1;
+    },
+    Stream_length_closure0: function Stream_length_closure0(t0, t1) {
+      this._box_0 = t0;
+      this.future = t1;
+    },
+    StreamSubscription: function StreamSubscription() {
     },
     _Zone: function _Zone() {
     },
@@ -2889,37 +3094,20 @@
     },
     _RootZone: function _RootZone() {
     },
+    _RootZone_bindCallbackGuarded_closure: function _RootZone_bindCallbackGuarded_closure(t0, t1) {
+      this.$this = t0;
+      this.f = t1;
+    },
     _RootZone_bindUnaryCallbackGuarded_closure: function _RootZone_bindUnaryCallbackGuarded_closure(t0, t1, t2) {
       this.$this = t0;
       this.f = t1;
       this.T = t2;
     },
-    IterableBase_iterableToFullString(iterable, leftDelimiter, rightDelimiter) {
-      var buffer, t1;
-      if (A._isToStringVisiting(iterable))
-        return leftDelimiter + "..." + rightDelimiter;
-      buffer = new A.StringBuffer(leftDelimiter);
-      B.JSArray_methods.add$1($._toStringVisiting, iterable);
-      try {
-        t1 = buffer;
-        t1._contents = A.StringBuffer__writeAll(t1._contents, iterable, ", ");
-      } finally {
-        if (0 >= $._toStringVisiting.length)
-          return A.ioore($._toStringVisiting, -1);
-        $._toStringVisiting.pop();
-      }
-      buffer._contents += rightDelimiter;
-      t1 = buffer._contents;
-      return t1.charCodeAt(0) == 0 ? t1 : t1;
-    },
-    _isToStringVisiting(o) {
-      var t1, i;
-      for (t1 = $._toStringVisiting.length, i = 0; i < t1; ++i)
-        if (o === $._toStringVisiting[i])
-          return true;
-      return false;
-    },
-    ListMixin: function ListMixin() {
+    int_parse(source) {
+      var value = A.Primitives_parseInt(source, null);
+      if (value != null)
+        return value;
+      throw A.wrapException(new A.FormatException(source));
     },
     Error__objectToString(object) {
       if (object instanceof A.Closure)
@@ -2933,17 +3121,19 @@
       throw A.wrapException("unreachable");
     },
     StringBuffer__writeAll(string, objects, separator) {
-      var iterator = J.get$iterator$ax(objects);
+      var t1 = A._arrayInstanceType(objects),
+        iterator = new J.ArrayIterator(objects, objects.length, t1._eval$1("ArrayIterator<1>"));
       if (!iterator.moveNext$0())
         return string;
+      t1 = t1._precomputed1;
       if (separator.length === 0) {
         do
-          string += A.S(iterator.get$current());
+          string += A.S(t1._as(iterator._current));
         while (iterator.moveNext$0());
       } else {
-        string += A.S(iterator.get$current());
+        string += A.S(t1._as(iterator._current));
         for (; iterator.moveNext$0();)
-          string = string + separator + A.S(iterator.get$current());
+          string = string + separator + A.S(t1._as(iterator._current));
       }
       return string;
     },
@@ -2957,8 +3147,11 @@
     AssertionError$(message) {
       return new A.AssertionError(message);
     },
-    ArgumentError$(message) {
-      return new A.ArgumentError(false, null, null, message);
+    ArgumentError$(message, $name) {
+      return new A.ArgumentError(false, null, $name, message);
+    },
+    ArgumentError$value(value, $name, message) {
+      return new A.ArgumentError(true, value, $name, message);
     },
     RangeError$(message) {
       var _null = null;
@@ -3026,12 +3219,27 @@
     _Exception: function _Exception(t0) {
       this.message = t0;
     },
+    FormatException: function FormatException(t0) {
+      this.message = t0;
+    },
     Null: function Null() {
     },
     Object: function Object() {
     },
+    _StringStackTrace: function _StringStackTrace() {
+    },
     StringBuffer: function StringBuffer(t0) {
       this._contents = t0;
+    },
+    _EventStreamSubscription$(_target, _eventType, onData, _useCapture, $T) {
+      var t1 = A._wrapZone(new A._EventStreamSubscription_closure(onData), type$.Event),
+        t2 = t1 != null;
+      if (t2 && true) {
+        type$.nullable_dynamic_Function_Event._as(t1);
+        if (t2)
+          J._addEventListener$3$x(_target, _eventType, t1, false);
+      }
+      return new A._EventStreamSubscription(_target, _eventType, t1, false, $T._eval$1("_EventStreamSubscription<0>"));
     },
     _wrapZone(callback, $T) {
       var t1 = $.Zone__current;
@@ -3053,45 +3261,51 @@
     },
     Element: function Element() {
     },
+    Event: function Event() {
+    },
     EventTarget: function EventTarget() {
     },
     FormElement: function FormElement() {
     },
-    ImageData: function ImageData() {
+    InputElement: function InputElement() {
+    },
+    MouseEvent: function MouseEvent() {
     },
     Node: function Node() {
     },
     SelectElement: function SelectElement() {
     },
+    UIEvent: function UIEvent() {
+    },
     Window: function Window() {
     },
-    convertNativeToDart_ImageData(nativeImageData) {
-      var data;
-      if (type$.ImageData._is(nativeImageData)) {
-        data = J.get$data$x(nativeImageData);
-        if (data.constructor === Array)
-          if (typeof CanvasPixelArray !== "undefined") {
-            data.constructor = CanvasPixelArray;
-            data.BYTES_PER_ELEMENT = 1;
-          }
-        return nativeImageData;
-      }
-      return new A._TypedImageData(nativeImageData.data, nativeImageData.height, nativeImageData.width);
+    EventStreamProvider: function EventStreamProvider(t0, t1) {
+      this._eventType = t0;
+      this.$ti = t1;
     },
-    convertDartToNative_ImageData(imageData) {
-      if (imageData instanceof A._TypedImageData)
-        return {data: imageData.data, height: imageData.height, width: imageData.width};
-      return imageData;
+    _EventStream: function _EventStream() {
     },
-    _TypedImageData: function _TypedImageData(t0, t1, t2) {
-      this.data = t0;
-      this.height = t1;
-      this.width = t2;
+    _ElementEventStreamImpl: function _ElementEventStreamImpl(t0, t1, t2, t3) {
+      var _ = this;
+      _._target = t0;
+      _._eventType = t1;
+      _._useCapture = t2;
+      _.$ti = t3;
     },
-    Random_Random() {
-      return B.C__JSRandom;
+    _EventStreamSubscription: function _EventStreamSubscription(t0, t1, t2, t3, t4) {
+      var _ = this;
+      _._target = t0;
+      _._eventType = t1;
+      _._onData = t2;
+      _._useCapture = t3;
+      _.$ti = t4;
+    },
+    _EventStreamSubscription_closure: function _EventStreamSubscription_closure(t0) {
+      this.onData = t0;
     },
     _JSRandom: function _JSRandom() {
+    },
+    SvgElement: function SvgElement() {
     },
     CellularAutomata: function CellularAutomata() {
     },
@@ -3114,90 +3328,112 @@
     },
     GameOfLife_cellUpdate_closure: function GameOfLife_cellUpdate_closure() {
     },
-    throwLateFieldADI(fieldName) {
-      return A.throwExpression(new A.LateError("Field '" + fieldName + "' has been assigned during initialization."));
-    },
     main() {
-      var canvasWidth, canvasHeight,
-        canvas = type$.nullable_CanvasElement._as(document.querySelector("#canvas")),
-        t1 = canvas == null,
-        t2 = t1 ? null : B.CanvasElement_methods.getContext$1(canvas, "2d");
+      var t3, t4,
+        t1 = document,
+        t2 = t1.querySelector("#caWidth");
+      if (t2 != null) {
+        t2 = J.get$onChange$x(t2);
+        t3 = t2.$ti;
+        t4 = t3._eval$1("~(1)?")._as(new A.main_closure());
+        type$.nullable_void_Function._as(null);
+        A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
+      }
+      t2 = t1.querySelector("#caHeight");
+      if (t2 != null) {
+        t2 = J.get$onChange$x(t2);
+        t3 = t2.$ti;
+        t4 = t3._eval$1("~(1)?")._as(new A.main_closure0());
+        type$.nullable_void_Function._as(null);
+        A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
+      }
+      t1 = t1.querySelector("#run_conway");
+      if (t1 != null) {
+        t1 = J.get$onClick$x(t1);
+        t2 = t1.$ti;
+        t3 = t2._eval$1("~(1)?")._as(new A.main_closure1());
+        type$.nullable_void_Function._as(null);
+        A._EventStreamSubscription$(t1._target, t1._eventType, t3, false, t2._precomputed1);
+      }
+    },
+    changeLabel(id_input, id_output) {
+      var t1 = "#" + id_output,
+        t2 = document;
+      t1 = t2.querySelector(t1);
+      if (t1 != null) {
+        t2 = type$.nullable_InputElement._as(t2.querySelector("#" + id_input));
+        J.set$text$x(t1, t2 == null ? null : t2.value);
+      }
+    },
+    conway_animation_boxes(timestamp) {
+      var canvas, t1, t2, canvasWidth, canvasHeight, t3, t4, boxW, boxH, img, y, x, t5, state;
+      A._asNum(timestamp);
+      canvas = type$.nullable_CanvasElement._as(document.querySelector("#canvas"));
+      t1 = canvas == null;
+      t2 = t1 ? null : B.CanvasElement_methods.getContext$1(canvas, "2d");
       type$.nullable_CanvasRenderingContext2D._as(t2);
       canvasWidth = t1 ? null : canvas.width;
       if (canvasWidth == null)
         canvasWidth = 100;
       canvasHeight = t1 ? null : canvas.height;
-      t1 = A.GameOfLife$(canvasWidth, canvasHeight == null ? 100 : canvasHeight);
-      $.ca = t1;
-      t1.initialize$0();
-      B.Window_methods.requestAnimationFrame$1(window, A.presentation__animation$closure());
-    },
-    animation(timestamp) {
-      var canvas, t1, t2, canvasWidth, canvasHeight, t3, t4, pixels, img, t5, y, x, t6, t7, t8, t9, t10, t11, off, t12, _null = null;
-      A._asNum(timestamp);
-      canvas = type$.nullable_CanvasElement._as(document.querySelector("#canvas"));
-      t1 = canvas == null;
-      t2 = t1 ? _null : B.CanvasElement_methods.getContext$1(canvas, "2d");
-      type$.nullable_CanvasRenderingContext2D._as(t2);
-      canvasWidth = t1 ? _null : canvas.width;
-      if (canvasWidth == null)
-        canvasWidth = 100;
-      canvasHeight = t1 ? _null : canvas.height;
       if (canvasHeight == null)
         canvasHeight = 100;
       t1 = t2 == null;
       if (!t1)
         t2.clearRect(0, 0, canvasWidth, canvasHeight);
-      t3 = t1 ? _null : A.convertNativeToDart_ImageData(t2.getImageData(0, 0, canvasWidth, canvasHeight));
-      type$.ImageData._as(t3);
-      t4 = J.getInterceptor$x(t3);
-      pixels = t4.get$data(t3);
-      img = $.$get$ca().next$0();
-      for (t5 = pixels.length, y = 0; y < $.$get$ca()._shape[0]; ++y)
-        for (x = 0; t6 = $.$get$ca()._shape, x < t6[1]; ++x) {
-          t6 = x * t6[0] + y;
-          if (!(t6 >= 0 && t6 < img.length))
-            return A.ioore(img, t6);
-          t6 = img[t6];
-          t7 = $.$get$_random();
-          t8 = B.JSNumber_methods.round$0(t7.nextDouble$0() * 256);
-          if (typeof t6 !== "number")
-            return t6.$mul();
-          t9 = x * $.$get$ca()._shape[0] + y;
-          if (!(t9 >= 0 && t9 < img.length))
-            return A.ioore(img, t9);
-          t9 = img[t9];
-          t10 = B.JSNumber_methods.round$0(t7.nextDouble$0() * 256);
-          if (typeof t9 !== "number")
-            return t9.$mul();
-          t11 = x * $.$get$ca()._shape[0] + y;
-          if (!(t11 >= 0 && t11 < img.length))
-            return A.ioore(img, t11);
-          t11 = img[t11];
-          t7 = B.JSNumber_methods.round$0(t7.nextDouble$0() * 256);
-          if (typeof t11 !== "number")
-            return t11.$mul();
-          off = (y * t4.get$width(t3) + x) * 4;
-          t12 = B.JSInt_methods.toInt$0(off);
-          if (!(t12 >= 0 && t12 < t5))
-            return A.ioore(pixels, t12);
-          pixels[t12] = t6 * t8;
-          t8 = B.JSInt_methods.toInt$0(off + 1);
-          if (!(t8 >= 0 && t8 < t5))
-            return A.ioore(pixels, t8);
-          pixels[t8] = t9 * t10;
-          t10 = B.JSInt_methods.toInt$0(off + 2);
-          if (!(t10 >= 0 && t10 < t5))
-            return A.ioore(pixels, t10);
-          pixels[t10] = t11 * t7;
-          t7 = B.JSInt_methods.toInt$0(off + 3);
-          if (!(t7 >= 0 && t7 < t5))
-            return A.ioore(pixels, t7);
-          pixels[t7] = 255;
+      t3 = $.$get$ca();
+      t4 = t3._shape;
+      boxW = canvasWidth / t4[0];
+      boxH = canvasHeight / t4[1];
+      img = t3.next$0();
+      for (t3 = type$.JSArray_int, y = 0; y < $.$get$ca()._shape[1]; ++y)
+        for (t4 = y * boxH, x = 0; t5 = $.$get$ca(), x < t5._shape[0]; ++x) {
+          t5 = t5.listIndex$1(A._setArrayType([x, y], t3));
+          if (!(t5 >= 0 && t5 < img.length))
+            return A.ioore(img, t5);
+          state = img[t5];
+          if (!t1) {
+            t5 = state * 255;
+            B.CanvasRenderingContext2D_methods.set$fillStyle(t2, "rgba(" + t5 + ", " + t5 + ", " + t5 + ", 1)");
+          }
+          if (!t1)
+            t2.fillRect(x * boxW, t4, boxW, boxH);
         }
-      if (!t1)
-        B.CanvasRenderingContext2D_methods.putImageData$3(t2, t3, 0, 0);
-      B.Window_methods.requestAnimationFrame$1(window, A.presentation__animation$closure());
+      B.Window_methods.requestAnimationFrame$1(window, A.presentation__conway_animation_boxes$closure());
+    },
+    main_closure: function main_closure() {
+    },
+    main_closure0: function main_closure0() {
+    },
+    main_closure1: function main_closure1() {
+    },
+    throwLateFieldADI(fieldName) {
+      return A.throwExpression(new A.LateError("Field '" + fieldName + "' has been assigned during initialization."));
+    },
+    IterableBase_iterableToFullString(iterable, leftDelimiter, rightDelimiter) {
+      var buffer, t1;
+      if (A._isToStringVisiting(iterable))
+        return leftDelimiter + "..." + rightDelimiter;
+      buffer = new A.StringBuffer(leftDelimiter);
+      B.JSArray_methods.add$1($._toStringVisiting, iterable);
+      try {
+        t1 = buffer;
+        t1._contents = A.StringBuffer__writeAll(t1._contents, iterable, ", ");
+      } finally {
+        if (0 >= $._toStringVisiting.length)
+          return A.ioore($._toStringVisiting, -1);
+        $._toStringVisiting.pop();
+      }
+      buffer._contents += rightDelimiter;
+      t1 = buffer._contents;
+      return t1.charCodeAt(0) == 0 ? t1 : t1;
+    },
+    _isToStringVisiting(o) {
+      var t1, i;
+      for (t1 = $._toStringVisiting.length, i = 0; i < t1; ++i)
+        if (o === $._toStringVisiting[i])
+          return true;
+      return false;
     }
   },
   J = {
@@ -3301,20 +3537,6 @@
         return receiver;
       return J.getNativeInterceptor(receiver);
     },
-    getInterceptor$ax(receiver) {
-      if (receiver == null)
-        return receiver;
-      if (receiver.constructor == Array)
-        return J.JSArray.prototype;
-      if (typeof receiver != "object") {
-        if (typeof receiver == "function")
-          return J.JavaScriptFunction.prototype;
-        return receiver;
-      }
-      if (receiver instanceof A.Object)
-        return receiver;
-      return J.getNativeInterceptor(receiver);
-    },
     getInterceptor$ns(receiver) {
       if (typeof receiver == "number")
         return J.JSNumber.prototype;
@@ -3338,14 +3560,17 @@
         return receiver;
       return J.getNativeInterceptor(receiver);
     },
-    get$data$x(receiver) {
-      return J.getInterceptor$x(receiver).get$data(receiver);
-    },
-    get$iterator$ax(receiver) {
-      return J.getInterceptor$ax(receiver).get$iterator(receiver);
+    set$text$x(receiver, value) {
+      return J.getInterceptor$x(receiver).set$text(receiver, value);
     },
     get$length$asx(receiver) {
       return J.getInterceptor$asx(receiver).get$length(receiver);
+    },
+    get$onChange$x(receiver) {
+      return J.getInterceptor$x(receiver).get$onChange(receiver);
+    },
+    get$onClick$x(receiver) {
+      return J.getInterceptor$x(receiver).get$onClick(receiver);
     },
     $eq$(receiver, a0) {
       if (receiver == null)
@@ -3353,6 +3578,9 @@
       if (typeof receiver != "object")
         return a0 != null && receiver === a0;
       return J.getInterceptor$(receiver).$eq(receiver, a0);
+    },
+    _addEventListener$3$x(receiver, a0, a1, a2) {
+      return J.getInterceptor$x(receiver)._addEventListener$3(receiver, a0, a1, a2);
     },
     compareTo$1$ns(receiver, a0) {
       return J.getInterceptor$ns(receiver).compareTo$1(receiver, a0);
@@ -3466,16 +3694,8 @@
     toString$0(receiver) {
       return A.IterableBase_iterableToFullString(receiver, "[", "]");
     },
-    get$iterator(receiver) {
-      return new J.ArrayIterator(receiver, receiver.length, A._arrayInstanceType(receiver)._eval$1("ArrayIterator<1>"));
-    },
     get$length(receiver) {
       return receiver.length;
-    },
-    $index(receiver, index) {
-      if (!(index >= 0 && index < receiver.length))
-        throw A.wrapException(A.diagnoseIndexError(receiver, index));
-      return receiver[index];
     },
     $indexSet(receiver, index, value) {
       A._arrayInstanceType(receiver)._precomputed1._as(value);
@@ -3490,9 +3710,6 @@
   };
   J.JSUnmodifiableArray.prototype = {};
   J.ArrayIterator.prototype = {
-    get$current() {
-      return this.$ti._precomputed1._as(this._current);
-    },
     moveNext$0() {
       var t2, _this = this,
         t1 = _this._iterable,
@@ -3539,24 +3756,6 @@
     },
     get$isNegative(receiver) {
       return receiver === 0 ? 1 / receiver < 0 : receiver < 0;
-    },
-    toInt$0(receiver) {
-      var t1;
-      if (receiver >= -2147483648 && receiver <= 2147483647)
-        return receiver | 0;
-      if (isFinite(receiver)) {
-        t1 = receiver < 0 ? Math.ceil(receiver) : Math.floor(receiver);
-        return t1 + 0;
-      }
-      throw A.wrapException(A.UnsupportedError$("" + receiver + ".toInt()"));
-    },
-    round$0(receiver) {
-      if (receiver > 0) {
-        if (receiver !== 1 / 0)
-          return Math.round(receiver);
-      } else if (receiver > -1 / 0)
-        return 0 - Math.round(0 - receiver);
-      throw A.wrapException(A.UnsupportedError$("" + receiver + ".round()"));
     },
     toString$0(receiver) {
       if (receiver === 0 && 1 / receiver < 0)
@@ -3641,30 +3840,6 @@
       return t1;
     }
   };
-  A.ListIterator.prototype = {
-    get$current() {
-      return this.$ti._precomputed1._as(this.__internal$_current);
-    },
-    moveNext$0() {
-      var t2, _this = this,
-        t1 = _this.__internal$_iterable,
-        $length = t1.length;
-      if (_this.__internal$_length !== $length)
-        throw A.wrapException(A.ConcurrentModificationError$(t1));
-      t2 = _this.__internal$_index;
-      if (t2 >= $length) {
-        _this.set$__internal$_current(null);
-        return false;
-      }
-      _this.set$__internal$_current(t1[t2]);
-      ++_this.__internal$_index;
-      return true;
-    },
-    set$__internal$_current(_current) {
-      this.__internal$_current = this.$ti._eval$1("1?")._as(_current);
-    }
-  };
-  A.FixedLengthListMixin.prototype = {};
   A.TypeErrorDecoder.prototype = {
     matchTypeError$1(message) {
       var result, t1, _this = this,
@@ -3773,48 +3948,20 @@
     call$1(o) {
       return this.getTag(o);
     },
-    $signature: 4
+    $signature: 5
   };
   A.initHooks_closure0.prototype = {
     call$2(o, tag) {
       return this.getUnknownTag(o, tag);
     },
-    $signature: 5
+    $signature: 6
   };
   A.initHooks_closure1.prototype = {
     call$1(tag) {
       return this.prototypeForTag(A._asString(tag));
     },
-    $signature: 6
+    $signature: 7
   };
-  A.NativeTypedData.prototype = {};
-  A.NativeTypedArray.prototype = {
-    get$length(receiver) {
-      return receiver.length;
-    },
-    $isJavaScriptIndexingBehavior: 1
-  };
-  A.NativeTypedArrayOfInt.prototype = {
-    $indexSet(receiver, index, value) {
-      A._asInt(value);
-      A._checkValidIndex(index, receiver, receiver.length);
-      receiver[index] = value;
-    },
-    $isIterable: 1,
-    $isList: 1
-  };
-  A.NativeUint8ClampedList.prototype = {
-    get$length(receiver) {
-      return receiver.length;
-    },
-    $index(receiver, index) {
-      A._checkValidIndex(index, receiver, receiver.length);
-      return receiver[index];
-    },
-    $isUint8ClampedList: 1
-  };
-  A._NativeTypedArrayOfInt_NativeTypedArray_ListMixin.prototype = {};
-  A._NativeTypedArrayOfInt_NativeTypedArray_ListMixin_FixedLengthListMixin.prototype = {};
   A.Rti.prototype = {
     _eval$1(recipe) {
       return A._Universe_evalInEnvironment(init.typeUniverse, this, recipe);
@@ -3829,7 +3976,7 @@
       return this.__rti$_message;
     }
   };
-  A._TypeError.prototype = {};
+  A._TypeError.prototype = {$isTypeError: 1};
   A._AsyncRun__initializeScheduleImmediate_internalCallback.prototype = {
     call$1(_) {
       var t1 = this._box_0,
@@ -3837,7 +3984,7 @@
       t1.storedCallback = null;
       f.call$0();
     },
-    $signature: 7
+    $signature: 8
   };
   A._AsyncRun__initializeScheduleImmediate_closure.prototype = {
     call$1(callback) {
@@ -3847,19 +3994,19 @@
       t2 = this.span;
       t1.firstChild ? t1.removeChild(t2) : t1.appendChild(t2);
     },
-    $signature: 8
+    $signature: 9
   };
   A._AsyncRun__scheduleImmediateJsOverride_internalCallback.prototype = {
     call$0() {
       this.callback.call$0();
     },
-    $signature: 2
+    $signature: 3
   };
   A._AsyncRun__scheduleImmediateWithSetImmediate_internalCallback.prototype = {
     call$0() {
       this.callback.call$0();
     },
-    $signature: 2
+    $signature: 3
   };
   A._TimerImpl.prototype = {
     _TimerImpl$2(milliseconds, callback) {
@@ -3875,8 +4022,267 @@
     },
     $signature: 0
   };
+  A.AsyncError.prototype = {
+    toString$0(_) {
+      return A.S(this.error);
+    },
+    $isError: 1,
+    get$stackTrace() {
+      return this.stackTrace;
+    }
+  };
+  A._FutureListener.prototype = {
+    matchesErrorTest$1(asyncError) {
+      if ((this.state & 15) !== 6)
+        return true;
+      return this.result._zone.runUnary$2$2(type$.bool_Function_Object._as(this.callback), asyncError.error, type$.bool, type$.Object);
+    },
+    handleError$1(asyncError) {
+      var exception, _this = this,
+        errorCallback = _this.errorCallback,
+        result = null,
+        t1 = type$.dynamic,
+        t2 = type$.Object,
+        t3 = asyncError.error,
+        t4 = _this.result._zone;
+      if (type$.dynamic_Function_Object_StackTrace._is(errorCallback))
+        result = t4.runBinary$3$3(errorCallback, t3, asyncError.stackTrace, t1, t2, type$.StackTrace);
+      else
+        result = t4.runUnary$2$2(type$.dynamic_Function_Object._as(errorCallback), t3, t1, t2);
+      try {
+        t1 = _this.$ti._eval$1("2/")._as(result);
+        return t1;
+      } catch (exception) {
+        if (type$.TypeError._is(A.unwrapException(exception))) {
+          if ((_this.state & 1) !== 0)
+            throw A.wrapException(A.ArgumentError$("The error handler of Future.then must return a value of the returned future's type", "onError"));
+          throw A.wrapException(A.ArgumentError$("The error handler of Future.catchError must return a value of the future's type", "onError"));
+        } else
+          throw exception;
+      }
+    }
+  };
+  A._Future.prototype = {
+    then$1$2$onError(f, onError, $R) {
+      var currentZone, result, t2,
+        t1 = this.$ti;
+      t1._bind$1($R)._eval$1("1/(2)")._as(f);
+      currentZone = $.Zone__current;
+      if (currentZone === B.C__RootZone) {
+        if (onError != null && !type$.dynamic_Function_Object_StackTrace._is(onError) && !type$.dynamic_Function_Object._is(onError))
+          throw A.wrapException(A.ArgumentError$value(onError, "onError", string$.Error_));
+      } else {
+        $R._eval$1("@<0/>")._bind$1(t1._precomputed1)._eval$1("1(2)")._as(f);
+        if (onError != null)
+          onError = A._registerErrorHandler(onError, currentZone);
+      }
+      result = new A._Future(currentZone, $R._eval$1("_Future<0>"));
+      t2 = onError == null ? 1 : 3;
+      this._addListener$1(new A._FutureListener(result, t2, f, onError, t1._eval$1("@<1>")._bind$1($R)._eval$1("_FutureListener<1,2>")));
+      return result;
+    },
+    then$1$1(f, $R) {
+      return this.then$1$2$onError(f, null, $R);
+    },
+    _cloneResult$1(source) {
+      this._state = source._state & 30 | this._state & 1;
+      this._resultOrListeners = source._resultOrListeners;
+    },
+    _addListener$1(listener) {
+      var source, _this = this,
+        t1 = _this._state;
+      if (t1 <= 3) {
+        listener._nextListener = type$.nullable__FutureListener_dynamic_dynamic._as(_this._resultOrListeners);
+        _this._resultOrListeners = listener;
+      } else {
+        if ((t1 & 4) !== 0) {
+          source = type$._Future_dynamic._as(_this._resultOrListeners);
+          if ((source._state & 24) === 0) {
+            source._addListener$1(listener);
+            return;
+          }
+          _this._cloneResult$1(source);
+        }
+        A._rootScheduleMicrotask(null, null, _this._zone, type$.void_Function._as(new A._Future__addListener_closure(_this, listener)));
+      }
+    },
+    _prependListeners$1(listeners) {
+      var t1, existingListeners, next, cursor, next0, source, _this = this, _box_0 = {};
+      _box_0.listeners = listeners;
+      if (listeners == null)
+        return;
+      t1 = _this._state;
+      if (t1 <= 3) {
+        existingListeners = type$.nullable__FutureListener_dynamic_dynamic._as(_this._resultOrListeners);
+        _this._resultOrListeners = listeners;
+        if (existingListeners != null) {
+          next = listeners._nextListener;
+          for (cursor = listeners; next != null; cursor = next, next = next0)
+            next0 = next._nextListener;
+          cursor._nextListener = existingListeners;
+        }
+      } else {
+        if ((t1 & 4) !== 0) {
+          source = type$._Future_dynamic._as(_this._resultOrListeners);
+          if ((source._state & 24) === 0) {
+            source._prependListeners$1(listeners);
+            return;
+          }
+          _this._cloneResult$1(source);
+        }
+        _box_0.listeners = _this._reverseListeners$1(listeners);
+        A._rootScheduleMicrotask(null, null, _this._zone, type$.void_Function._as(new A._Future__prependListeners_closure(_box_0, _this)));
+      }
+    },
+    _removeListeners$0() {
+      var current = type$.nullable__FutureListener_dynamic_dynamic._as(this._resultOrListeners);
+      this._resultOrListeners = null;
+      return this._reverseListeners$1(current);
+    },
+    _reverseListeners$1(listeners) {
+      var current, prev, next;
+      for (current = listeners, prev = null; current != null; prev = current, current = next) {
+        next = current._nextListener;
+        current._nextListener = prev;
+      }
+      return prev;
+    },
+    $isFuture: 1
+  };
+  A._Future__addListener_closure.prototype = {
+    call$0() {
+      A._Future__propagateToListeners(this.$this, this.listener);
+    },
+    $signature: 0
+  };
+  A._Future__prependListeners_closure.prototype = {
+    call$0() {
+      A._Future__propagateToListeners(this.$this, this._box_0.listeners);
+    },
+    $signature: 0
+  };
+  A._Future__propagateToListeners_handleWhenCompleteCallback.prototype = {
+    call$0() {
+      var e, s, t1, exception, t2, originalSource, _this = this, completeResult = null;
+      try {
+        t1 = _this._box_0.listener;
+        completeResult = t1.result._zone.run$1$1(type$.dynamic_Function._as(t1.callback), type$.dynamic);
+      } catch (exception) {
+        e = A.unwrapException(exception);
+        s = A.getTraceFromException(exception);
+        t1 = _this.hasError && type$.AsyncError._as(_this._box_1.source._resultOrListeners).error === e;
+        t2 = _this._box_0;
+        if (t1)
+          t2.listenerValueOrError = type$.AsyncError._as(_this._box_1.source._resultOrListeners);
+        else
+          t2.listenerValueOrError = A.AsyncError$(e, s);
+        t2.listenerHasError = true;
+        return;
+      }
+      if (completeResult instanceof A._Future && (completeResult._state & 24) !== 0) {
+        if ((completeResult._state & 16) !== 0) {
+          t1 = _this._box_0;
+          t1.listenerValueOrError = type$.AsyncError._as(completeResult._resultOrListeners);
+          t1.listenerHasError = true;
+        }
+        return;
+      }
+      if (type$.Future_dynamic._is(completeResult)) {
+        originalSource = _this._box_1.source;
+        t1 = _this._box_0;
+        t1.listenerValueOrError = completeResult.then$1$1(new A._Future__propagateToListeners_handleWhenCompleteCallback_closure(originalSource), type$.dynamic);
+        t1.listenerHasError = false;
+      }
+    },
+    $signature: 0
+  };
+  A._Future__propagateToListeners_handleWhenCompleteCallback_closure.prototype = {
+    call$1(_) {
+      return this.originalSource;
+    },
+    $signature: 10
+  };
+  A._Future__propagateToListeners_handleValueCallback.prototype = {
+    call$0() {
+      var e, s, t1, t2, t3, t4, t5, exception;
+      try {
+        t1 = this._box_0;
+        t2 = t1.listener;
+        t3 = t2.$ti;
+        t4 = t3._precomputed1;
+        t5 = t4._as(this.sourceResult);
+        t1.listenerValueOrError = t2.result._zone.runUnary$2$2(t3._eval$1("2/(1)")._as(t2.callback), t5, t3._eval$1("2/"), t4);
+      } catch (exception) {
+        e = A.unwrapException(exception);
+        s = A.getTraceFromException(exception);
+        t1 = this._box_0;
+        t1.listenerValueOrError = A.AsyncError$(e, s);
+        t1.listenerHasError = true;
+      }
+    },
+    $signature: 0
+  };
+  A._Future__propagateToListeners_handleError.prototype = {
+    call$0() {
+      var asyncError, e, s, t1, exception, t2, _this = this;
+      try {
+        asyncError = type$.AsyncError._as(_this._box_1.source._resultOrListeners);
+        t1 = _this._box_0;
+        if (t1.listener.matchesErrorTest$1(asyncError) && t1.listener.errorCallback != null) {
+          t1.listenerValueOrError = t1.listener.handleError$1(asyncError);
+          t1.listenerHasError = false;
+        }
+      } catch (exception) {
+        e = A.unwrapException(exception);
+        s = A.getTraceFromException(exception);
+        t1 = type$.AsyncError._as(_this._box_1.source._resultOrListeners);
+        t2 = _this._box_0;
+        if (t1.error === e)
+          t2.listenerValueOrError = t1;
+        else
+          t2.listenerValueOrError = A.AsyncError$(e, s);
+        t2.listenerHasError = true;
+      }
+    },
+    $signature: 0
+  };
   A._AsyncCallbackEntry.prototype = {};
-  A._Zone.prototype = {};
+  A.Stream.prototype = {
+    get$length(_) {
+      var t2, t3, _this = this, t1 = {},
+        future = new A._Future($.Zone__current, type$._Future_int);
+      t1.count = 0;
+      t2 = _this.$ti;
+      t3 = t2._eval$1("~(1)?")._as(new A.Stream_length_closure(t1, _this));
+      type$.nullable_void_Function._as(new A.Stream_length_closure0(t1, future));
+      A._EventStreamSubscription$(_this._target, _this._eventType, t3, false, t2._precomputed1);
+      return future;
+    }
+  };
+  A.Stream_length_closure.prototype = {
+    call$1(_) {
+      this.$this.$ti._precomputed1._as(_);
+      ++this._box_0.count;
+    },
+    $signature() {
+      return this.$this.$ti._eval$1("~(1)");
+    }
+  };
+  A.Stream_length_closure0.prototype = {
+    call$0() {
+      var t1 = this.future,
+        t2 = t1.$ti,
+        t3 = t2._eval$1("1/")._as(this._box_0.count),
+        listeners = t1._removeListeners$0();
+      t2._precomputed1._as(t3);
+      t1._state = 8;
+      t1._resultOrListeners = t3;
+      A._Future__propagateToListeners(t1, listeners);
+    },
+    $signature: 0
+  };
+  A.StreamSubscription.prototype = {};
+  A._Zone.prototype = {$isZone: 1};
   A._rootHandleError_closure.prototype = {
     call$0() {
       var t1 = this.error,
@@ -3888,6 +4294,21 @@
     $signature: 0
   };
   A._RootZone.prototype = {
+    runGuarded$1(f) {
+      var e, s, exception;
+      type$.void_Function._as(f);
+      try {
+        if (B.C__RootZone === $.Zone__current) {
+          f.call$0();
+          return;
+        }
+        A._rootRun(null, null, this, f, type$.void);
+      } catch (exception) {
+        e = A.unwrapException(exception);
+        s = A.getTraceFromException(exception);
+        A._rootHandleError(type$.Object._as(e), type$.StackTrace._as(s));
+      }
+    },
     runUnaryGuarded$1$2(f, arg, $T) {
       var e, s, exception;
       $T._eval$1("~(0)")._as(f);
@@ -3904,9 +4325,39 @@
         A._rootHandleError(type$.Object._as(e), type$.StackTrace._as(s));
       }
     },
+    bindCallbackGuarded$1(f) {
+      return new A._RootZone_bindCallbackGuarded_closure(this, type$.void_Function._as(f));
+    },
     bindUnaryCallbackGuarded$1$1(f, $T) {
       return new A._RootZone_bindUnaryCallbackGuarded_closure(this, $T._eval$1("~(0)")._as(f), $T);
+    },
+    run$1$1(f, $R) {
+      $R._eval$1("0()")._as(f);
+      if ($.Zone__current === B.C__RootZone)
+        return f.call$0();
+      return A._rootRun(null, null, this, f, $R);
+    },
+    runUnary$2$2(f, arg, $R, $T) {
+      $R._eval$1("@<0>")._bind$1($T)._eval$1("1(2)")._as(f);
+      $T._as(arg);
+      if ($.Zone__current === B.C__RootZone)
+        return f.call$1(arg);
+      return A._rootRunUnary(null, null, this, f, arg, $R, $T);
+    },
+    runBinary$3$3(f, arg1, arg2, $R, T1, T2) {
+      $R._eval$1("@<0>")._bind$1(T1)._bind$1(T2)._eval$1("1(2,3)")._as(f);
+      T1._as(arg1);
+      T2._as(arg2);
+      if ($.Zone__current === B.C__RootZone)
+        return f.call$2(arg1, arg2);
+      return A._rootRunBinary(null, null, this, f, arg1, arg2, $R, T1, T2);
     }
+  };
+  A._RootZone_bindCallbackGuarded_closure.prototype = {
+    call$0() {
+      return this.$this.runGuarded$1(this.f);
+    },
+    $signature: 0
   };
   A._RootZone_bindUnaryCallbackGuarded_closure.prototype = {
     call$1(arg) {
@@ -3917,15 +4368,11 @@
       return this.T._eval$1("~(0)");
     }
   };
-  A.ListMixin.prototype = {
-    get$iterator(receiver) {
-      return new A.ListIterator(receiver, receiver.length, A.instanceType(receiver)._eval$1("ListIterator<ListMixin.E>"));
-    },
-    toString$0(receiver) {
-      return A.IterableBase_iterableToFullString(receiver, "[", "]");
+  A.Error.prototype = {
+    get$stackTrace() {
+      return A.getTraceFromException(this.$thrownJsError);
     }
   };
-  A.Error.prototype = {};
   A.AssertionError.prototype = {
     toString$0(_) {
       var t1 = this.message;
@@ -4024,6 +4471,9 @@
     toString$0(_) {
       return "Stack Overflow";
     },
+    get$stackTrace() {
+      return null;
+    },
     $isError: 1
   };
   A.CyclicInitializationError.prototype = {
@@ -4035,6 +4485,13 @@
   A._Exception.prototype = {
     toString$0(_) {
       return "Exception: " + this.message;
+    }
+  };
+  A.FormatException.prototype = {
+    toString$0(_) {
+      var message = this.message,
+        report = "" !== message ? "FormatException: " + message : "FormatException";
+      return report;
     }
   };
   A.Null.prototype = {
@@ -4049,6 +4506,12 @@
     toString() {
       return this.toString$0(this);
     }
+  };
+  A._StringStackTrace.prototype = {
+    toString$0(_) {
+      return "";
+    },
+    $isStackTrace: 1
   };
   A.StringBuffer.prototype = {
     get$length(_) {
@@ -4077,9 +4540,8 @@
     $isCanvasElement: 1
   };
   A.CanvasRenderingContext2D.prototype = {
-    putImageData$3(receiver, imagedata, dx, dy) {
-      receiver.putImageData(A.convertDartToNative_ImageData(imagedata), dx, dy);
-      return;
+    set$fillStyle(receiver, value) {
+      receiver.fillStyle = value;
     },
     $isCanvasRenderingContext2D: 1
   };
@@ -4091,27 +4553,36 @@
   A.Element.prototype = {
     toString$0(receiver) {
       return receiver.localName;
-    }
+    },
+    get$onChange(receiver) {
+      return new A._ElementEventStreamImpl(receiver, "change", false, type$._ElementEventStreamImpl_Event);
+    },
+    get$onClick(receiver) {
+      return new A._ElementEventStreamImpl(receiver, "click", false, type$._ElementEventStreamImpl_MouseEvent);
+    },
+    $isElement: 1
   };
-  A.EventTarget.prototype = {};
+  A.Event.prototype = {$isEvent: 1};
+  A.EventTarget.prototype = {
+    _addEventListener$3(receiver, type, listener, options) {
+      return receiver.addEventListener(type, A.convertDartClosureToJS(type$.nullable_dynamic_Function_Event._as(listener), 1), false);
+    },
+    $isEventTarget: 1
+  };
   A.FormElement.prototype = {
     get$length(receiver) {
       return receiver.length;
     }
   };
-  A.ImageData.prototype = {
-    get$data(receiver) {
-      return receiver.data;
-    },
-    get$width(receiver) {
-      return receiver.width;
-    },
-    $isImageData: 1
-  };
+  A.InputElement.prototype = {$isInputElement: 1};
+  A.MouseEvent.prototype = {$isMouseEvent: 1};
   A.Node.prototype = {
     toString$0(receiver) {
       var value = receiver.nodeValue;
       return value == null ? this.super$Interceptor$toString(receiver) : value;
+    },
+    set$text(receiver, value) {
+      receiver.textContent = value;
     }
   };
   A.SelectElement.prototype = {
@@ -4119,6 +4590,7 @@
       return receiver.length;
     }
   };
+  A.UIEvent.prototype = {};
   A.Window.prototype = {
     requestAnimationFrame$1(receiver, callback) {
       var t1;
@@ -4153,22 +4625,29 @@
       })(receiver);
     }
   };
-  A._TypedImageData.prototype = {$isImageData: 1,
-    get$data(receiver) {
-      return this.data;
+  A.EventStreamProvider.prototype = {};
+  A._EventStream.prototype = {};
+  A._ElementEventStreamImpl.prototype = {};
+  A._EventStreamSubscription.prototype = {};
+  A._EventStreamSubscription_closure.prototype = {
+    call$1(e) {
+      return this.onData.call$1(type$.Event._as(e));
     },
-    get$width(receiver) {
-      return this.width;
-    }
+    $signature: 1
   };
   A._JSRandom.prototype = {
     nextInt$1(max) {
       if (max <= 0 || max > 4294967296)
         throw A.wrapException(A.RangeError$("max must be in range 0 < max \u2264 2^32, was " + max));
       return Math.random() * max >>> 0;
+    }
+  };
+  A.SvgElement.prototype = {
+    get$onChange(receiver) {
+      return new A._ElementEventStreamImpl(receiver, "change", false, type$._ElementEventStreamImpl_Event);
     },
-    nextDouble$0() {
-      return Math.random();
+    get$onClick(receiver) {
+      return new A._ElementEventStreamImpl(receiver, "click", false, type$._ElementEventStreamImpl_MouseEvent);
     }
   };
   A.CellularAutomata.prototype = {
@@ -4188,7 +4667,7 @@
       _this.set$_grid_current(A._setArrayType([], t1));
       _this.set$_grid_working(A._setArrayType([], t1));
       for (i = 0; i < _this.num_cells; ++i)
-        B.JSArray_methods.add$1(_this._grid_current, $.$get$_random0().nextInt$1(2));
+        B.JSArray_methods.add$1(_this._grid_current, $.$get$_random().nextInt$1(2));
     },
     isValidGridIndex$1(index) {
       var t1, di, t2;
@@ -4219,18 +4698,22 @@
       return index;
     },
     listIndex$1(grid_index) {
-      var t1, t2, index, i, t3, t4;
+      var t1, t2, t3, index, i, t4, t5;
       type$.List_int._as(grid_index);
-      for (t1 = J.getInterceptor$ax(grid_index), t2 = this._shape_dimensions, index = 0, i = 0; i < 1; ++i) {
-        t3 = t1.$index(grid_index, i);
-        if (!(i < t2.length))
+      for (t1 = grid_index.length, t2 = this._shape_dimensions, t3 = t2.length, index = 0, i = 0; i < 1; ++i) {
+        if (!(i < t1))
+          return A.ioore(grid_index, i);
+        t4 = grid_index[i];
+        if (!(i < t3))
           return A.ioore(t2, i);
-        t4 = t2[i];
-        if (typeof t3 !== "number")
-          return t3.$mul();
-        index += t3 * t4;
+        t5 = t2[i];
+        if (typeof t4 !== "number")
+          return t4.$mul();
+        index += t4 * t5;
       }
-      t1 = t1.$index(grid_index, 1);
+      if (1 >= t1)
+        return A.ioore(grid_index, 1);
+      t1 = grid_index[1];
       if (typeof t1 !== "number")
         return A.iae(t1);
       return index + t1;
@@ -4308,7 +4791,7 @@
     call$2(i, j) {
       return A._asInt(i) * A._asInt(j);
     },
-    $signature: 3
+    $signature: 4
   };
   A.GameOfLife.prototype = {
     cellNeighborhood$1(list_index) {
@@ -4320,7 +4803,7 @@
       type$.nullable_int_Function_int_int._as(null);
       if (!!ret.immutable$list)
         A.throwExpression(A.UnsupportedError$("sort"));
-      A.Sort_sort(ret, J._interceptors_JSArray__compareAny$closure(), type$.int);
+      A.Sort__doSort(ret, 0, ret.length - 1, J._interceptors_JSArray__compareAny$closure(), type$.int);
       return ret;
     },
     cellUpdate$1(list_index) {
@@ -4349,7 +4832,37 @@
     call$2(i, j) {
       return A._asInt(i) + A._asInt(j);
     },
-    $signature: 3
+    $signature: 4
+  };
+  A.main_closure.prototype = {
+    call$1($event) {
+      A.changeLabel("caWidth", "lblcaWidth");
+    },
+    $signature: 1
+  };
+  A.main_closure0.prototype = {
+    call$1($event) {
+      A.changeLabel("caHeight", "lblcaHeight");
+    },
+    $signature: 1
+  };
+  A.main_closure1.prototype = {
+    call$1($event) {
+      var t1, t2, w_ele, h_ele, w;
+      type$.MouseEvent._as($event);
+      t1 = document;
+      t2 = type$.nullable_InputElement;
+      w_ele = t2._as(t1.querySelector("#caWidth"));
+      h_ele = t2._as(t1.querySelector("#caHeight"));
+      t1 = w_ele == null ? null : w_ele.value;
+      w = A.int_parse(t1 == null ? "0" : t1);
+      t1 = h_ele == null ? null : h_ele.value;
+      t1 = A.GameOfLife$(w, A.int_parse(t1 == null ? "0" : t1));
+      $.ca = t1;
+      t1.initialize$0();
+      B.Window_methods.requestAnimationFrame$1(window, A.presentation__conway_animation_boxes$closure());
+    },
+    $signature: 11
   };
   (function aliases() {
     var _ = J.Interceptor.prototype;
@@ -4361,86 +4874,102 @@
     var _static_2 = hunkHelpers._static_2,
       _static_1 = hunkHelpers._static_1,
       _static_0 = hunkHelpers._static_0;
-    _static_2(J, "_interceptors_JSArray__compareAny$closure", "JSArray__compareAny", 9);
-    _static_1(A, "async__AsyncRun__scheduleImmediateJsOverride$closure", "_AsyncRun__scheduleImmediateJsOverride", 1);
-    _static_1(A, "async__AsyncRun__scheduleImmediateWithSetImmediate$closure", "_AsyncRun__scheduleImmediateWithSetImmediate", 1);
-    _static_1(A, "async__AsyncRun__scheduleImmediateWithTimer$closure", "_AsyncRun__scheduleImmediateWithTimer", 1);
+    _static_2(J, "_interceptors_JSArray__compareAny$closure", "JSArray__compareAny", 12);
+    _static_1(A, "async__AsyncRun__scheduleImmediateJsOverride$closure", "_AsyncRun__scheduleImmediateJsOverride", 2);
+    _static_1(A, "async__AsyncRun__scheduleImmediateWithSetImmediate$closure", "_AsyncRun__scheduleImmediateWithSetImmediate", 2);
+    _static_1(A, "async__AsyncRun__scheduleImmediateWithTimer$closure", "_AsyncRun__scheduleImmediateWithTimer", 2);
     _static_0(A, "async___startMicrotaskLoop$closure", "_startMicrotaskLoop", 0);
-    _static_1(A, "presentation__animation$closure", "animation", 10);
+    _static_1(A, "presentation__conway_animation_boxes$closure", "conway_animation_boxes", 13);
   })();
   (function inheritance() {
-    var _mixin = hunkHelpers.mixin,
-      _inherit = hunkHelpers.inherit,
+    var _inherit = hunkHelpers.inherit,
       _inheritMany = hunkHelpers.inheritMany;
     _inherit(A.Object, null);
-    _inheritMany(A.Object, [A.JS_CONST, J.Interceptor, J.ArrayIterator, A.Error, A.ListIterator, A.FixedLengthListMixin, A.TypeErrorDecoder, A.NullThrownFromJavaScriptException, A._StackTrace, A.Closure, A.Rti, A._FunctionParameters, A._TimerImpl, A._AsyncCallbackEntry, A._Zone, A.ListMixin, A.StackOverflowError, A._Exception, A.Null, A.StringBuffer, A._TypedImageData, A._JSRandom, A.CellularAutomata]);
-    _inheritMany(J.Interceptor, [J.JSBool, J.JSNull, J.JavaScriptObject, J.JSArray, J.JSNumber, J.JSString, A.NativeTypedData]);
-    _inheritMany(J.JavaScriptObject, [J.LegacyJavaScriptObject, A.EventTarget, A.CanvasRenderingContext2D, A.DomException, A.ImageData]);
+    _inheritMany(A.Object, [A.JS_CONST, J.Interceptor, J.ArrayIterator, A.Error, A.TypeErrorDecoder, A.NullThrownFromJavaScriptException, A._StackTrace, A.Closure, A.Rti, A._FunctionParameters, A._TimerImpl, A.AsyncError, A._FutureListener, A._Future, A._AsyncCallbackEntry, A.Stream, A.StreamSubscription, A._Zone, A.StackOverflowError, A._Exception, A.FormatException, A.Null, A._StringStackTrace, A.StringBuffer, A.EventStreamProvider, A._JSRandom, A.CellularAutomata]);
+    _inheritMany(J.Interceptor, [J.JSBool, J.JSNull, J.JavaScriptObject, J.JSArray, J.JSNumber, J.JSString]);
+    _inheritMany(J.JavaScriptObject, [J.LegacyJavaScriptObject, A.EventTarget, A.CanvasRenderingContext2D, A.DomException, A.Event]);
     _inheritMany(J.LegacyJavaScriptObject, [J.PlainJavaScriptObject, J.UnknownJavaScriptObject, J.JavaScriptFunction]);
     _inherit(J.JSUnmodifiableArray, J.JSArray);
     _inheritMany(J.JSNumber, [J.JSInt, J.JSNumNotInt]);
     _inheritMany(A.Error, [A.LateError, A.TypeError, A.JsNoSuchMethodError, A.UnknownJsTypeError, A.RuntimeError, A._Error, A.AssertionError, A.NullThrownError, A.ArgumentError, A.UnsupportedError, A.UnimplementedError, A.StateError, A.ConcurrentModificationError, A.CyclicInitializationError]);
     _inherit(A.NullError, A.TypeError);
-    _inheritMany(A.Closure, [A.Closure0Args, A.Closure2Args, A.TearOffClosure, A.initHooks_closure, A.initHooks_closure1, A._AsyncRun__initializeScheduleImmediate_internalCallback, A._AsyncRun__initializeScheduleImmediate_closure, A._RootZone_bindUnaryCallbackGuarded_closure]);
+    _inheritMany(A.Closure, [A.Closure0Args, A.Closure2Args, A.TearOffClosure, A.initHooks_closure, A.initHooks_closure1, A._AsyncRun__initializeScheduleImmediate_internalCallback, A._AsyncRun__initializeScheduleImmediate_closure, A._Future__propagateToListeners_handleWhenCompleteCallback_closure, A.Stream_length_closure, A._RootZone_bindUnaryCallbackGuarded_closure, A._EventStreamSubscription_closure, A.main_closure, A.main_closure0, A.main_closure1]);
     _inheritMany(A.TearOffClosure, [A.StaticClosure, A.BoundClosure]);
     _inheritMany(A.Closure2Args, [A.initHooks_closure0, A.CellularAutomata_closure, A.GameOfLife_cellUpdate_closure]);
-    _inherit(A.NativeTypedArray, A.NativeTypedData);
-    _inherit(A._NativeTypedArrayOfInt_NativeTypedArray_ListMixin, A.NativeTypedArray);
-    _inherit(A._NativeTypedArrayOfInt_NativeTypedArray_ListMixin_FixedLengthListMixin, A._NativeTypedArrayOfInt_NativeTypedArray_ListMixin);
-    _inherit(A.NativeTypedArrayOfInt, A._NativeTypedArrayOfInt_NativeTypedArray_ListMixin_FixedLengthListMixin);
-    _inherit(A.NativeUint8ClampedList, A.NativeTypedArrayOfInt);
     _inherit(A._TypeError, A._Error);
-    _inheritMany(A.Closure0Args, [A._AsyncRun__scheduleImmediateJsOverride_internalCallback, A._AsyncRun__scheduleImmediateWithSetImmediate_internalCallback, A._TimerImpl_internalCallback, A._rootHandleError_closure]);
+    _inheritMany(A.Closure0Args, [A._AsyncRun__scheduleImmediateJsOverride_internalCallback, A._AsyncRun__scheduleImmediateWithSetImmediate_internalCallback, A._TimerImpl_internalCallback, A._Future__addListener_closure, A._Future__prependListeners_closure, A._Future__propagateToListeners_handleWhenCompleteCallback, A._Future__propagateToListeners_handleValueCallback, A._Future__propagateToListeners_handleError, A.Stream_length_closure0, A._rootHandleError_closure, A._RootZone_bindCallbackGuarded_closure]);
     _inherit(A._RootZone, A._Zone);
     _inheritMany(A.ArgumentError, [A.RangeError, A.IndexError]);
     _inheritMany(A.EventTarget, [A.Node, A.Window]);
     _inherit(A.Element, A.Node);
-    _inherit(A.HtmlElement, A.Element);
-    _inheritMany(A.HtmlElement, [A.AnchorElement, A.AreaElement, A.CanvasElement, A.FormElement, A.SelectElement]);
+    _inheritMany(A.Element, [A.HtmlElement, A.SvgElement]);
+    _inheritMany(A.HtmlElement, [A.AnchorElement, A.AreaElement, A.CanvasElement, A.FormElement, A.InputElement, A.SelectElement]);
+    _inherit(A.UIEvent, A.Event);
+    _inherit(A.MouseEvent, A.UIEvent);
+    _inherit(A._EventStream, A.Stream);
+    _inherit(A._ElementEventStreamImpl, A._EventStream);
+    _inherit(A._EventStreamSubscription, A.StreamSubscription);
     _inherit(A.GameOfLife, A.CellularAutomata);
-    _mixin(A._NativeTypedArrayOfInt_NativeTypedArray_ListMixin, A.ListMixin);
-    _mixin(A._NativeTypedArrayOfInt_NativeTypedArray_ListMixin_FixedLengthListMixin, A.FixedLengthListMixin);
   })();
   var init = {
     typeUniverse: {eC: new Map(), tR: {}, eT: {}, tPV: {}, sEA: []},
     mangledGlobalNames: {int: "int", double: "double", num: "num", String: "String", bool: "bool", Null: "Null", List: "List"},
     mangledNames: {},
-    types: ["~()", "~(~())", "Null()", "int(int,int)", "@(@)", "@(@,String)", "@(String)", "Null(@)", "Null(~())", "int(@,@)", "~(num)"],
+    types: ["~()", "~(Event)", "~(~())", "Null()", "int(int,int)", "@(@)", "@(@,String)", "@(String)", "Null(@)", "Null(~())", "_Future<@>(@)", "~(MouseEvent)", "int(@,@)", "~(num)"],
     interceptorsByTag: null,
     leafTags: null,
     arrayRti: Symbol("$ti")
   };
-  A._Universe_addRules(init.typeUniverse, JSON.parse('{"PlainJavaScriptObject":"LegacyJavaScriptObject","UnknownJavaScriptObject":"LegacyJavaScriptObject","JavaScriptFunction":"LegacyJavaScriptObject","JSBool":{"bool":[]},"JSArray":{"List":["1"],"Iterable":["1"]},"JSUnmodifiableArray":{"JSArray":["1"],"List":["1"],"Iterable":["1"]},"JSNumber":{"num":[],"Comparable":["num"]},"JSInt":{"int":[],"num":[],"Comparable":["num"]},"JSNumNotInt":{"num":[],"Comparable":["num"]},"JSString":{"String":[],"Comparable":["String"]},"LateError":{"Error":[]},"NullError":{"Error":[]},"JsNoSuchMethodError":{"Error":[]},"UnknownJsTypeError":{"Error":[]},"_StackTrace":{"StackTrace":[]},"Closure":{"Function":[]},"Closure0Args":{"Function":[]},"Closure2Args":{"Function":[]},"TearOffClosure":{"Function":[]},"StaticClosure":{"Function":[]},"BoundClosure":{"Function":[]},"RuntimeError":{"Error":[]},"NativeTypedArray":{"JavaScriptIndexingBehavior":["1"]},"NativeTypedArrayOfInt":{"ListMixin":["int"],"JavaScriptIndexingBehavior":["int"],"List":["int"],"Iterable":["int"],"FixedLengthListMixin":["int"]},"NativeUint8ClampedList":{"ListMixin":["int"],"Uint8ClampedList":[],"JavaScriptIndexingBehavior":["int"],"List":["int"],"Iterable":["int"],"FixedLengthListMixin":["int"],"ListMixin.E":"int"},"_Error":{"Error":[]},"_TypeError":{"Error":[]},"int":{"num":[],"Comparable":["num"]},"num":{"Comparable":["num"]},"String":{"Comparable":["String"]},"AssertionError":{"Error":[]},"TypeError":{"Error":[]},"NullThrownError":{"Error":[]},"ArgumentError":{"Error":[]},"RangeError":{"Error":[]},"IndexError":{"Error":[]},"UnsupportedError":{"Error":[]},"UnimplementedError":{"Error":[]},"StateError":{"Error":[]},"ConcurrentModificationError":{"Error":[]},"StackOverflowError":{"Error":[]},"CyclicInitializationError":{"Error":[]},"_TypedImageData":{"ImageData":[]},"GameOfLife":{"CellularAutomata":["int"],"CellularAutomata.T":"int"}}'));
-  A._Universe_addErasedTypes(init.typeUniverse, JSON.parse('{"NativeTypedArray":1}'));
+  A._Universe_addRules(init.typeUniverse, JSON.parse('{"PlainJavaScriptObject":"LegacyJavaScriptObject","UnknownJavaScriptObject":"LegacyJavaScriptObject","JavaScriptFunction":"LegacyJavaScriptObject","AbortPaymentEvent":"Event","ExtendableEvent":"Event","AElement":"SvgElement","GraphicsElement":"SvgElement","AudioElement":"HtmlElement","MediaElement":"HtmlElement","PointerEvent":"MouseEvent","CompositionEvent":"UIEvent","HtmlDocument":"Node","Document":"Node","JSBool":{"bool":[]},"JSArray":{"List":["1"],"Iterable":["1"]},"JSUnmodifiableArray":{"JSArray":["1"],"List":["1"],"Iterable":["1"]},"JSNumber":{"num":[],"Comparable":["num"]},"JSInt":{"int":[],"num":[],"Comparable":["num"]},"JSNumNotInt":{"num":[],"Comparable":["num"]},"JSString":{"String":[],"Comparable":["String"]},"LateError":{"Error":[]},"NullError":{"TypeError":[],"Error":[]},"JsNoSuchMethodError":{"Error":[]},"UnknownJsTypeError":{"Error":[]},"_StackTrace":{"StackTrace":[]},"Closure":{"Function":[]},"Closure0Args":{"Function":[]},"Closure2Args":{"Function":[]},"TearOffClosure":{"Function":[]},"StaticClosure":{"Function":[]},"BoundClosure":{"Function":[]},"RuntimeError":{"Error":[]},"_Error":{"Error":[]},"_TypeError":{"TypeError":[],"Error":[]},"_Future":{"Future":["1"]},"AsyncError":{"Error":[]},"_Zone":{"Zone":[]},"_RootZone":{"_Zone":[],"Zone":[]},"int":{"num":[],"Comparable":["num"]},"num":{"Comparable":["num"]},"String":{"Comparable":["String"]},"AssertionError":{"Error":[]},"TypeError":{"Error":[]},"NullThrownError":{"Error":[]},"ArgumentError":{"Error":[]},"RangeError":{"Error":[]},"IndexError":{"Error":[]},"UnsupportedError":{"Error":[]},"UnimplementedError":{"Error":[]},"StateError":{"Error":[]},"ConcurrentModificationError":{"Error":[]},"StackOverflowError":{"Error":[]},"CyclicInitializationError":{"Error":[]},"_StringStackTrace":{"StackTrace":[]},"MouseEvent":{"Event":[]},"HtmlElement":{"Element":[],"EventTarget":[]},"AnchorElement":{"Element":[],"EventTarget":[]},"AreaElement":{"Element":[],"EventTarget":[]},"CanvasElement":{"Element":[],"EventTarget":[]},"Element":{"EventTarget":[]},"FormElement":{"Element":[],"EventTarget":[]},"InputElement":{"Element":[],"EventTarget":[]},"Node":{"EventTarget":[]},"SelectElement":{"Element":[],"EventTarget":[]},"UIEvent":{"Event":[]},"Window":{"EventTarget":[]},"_EventStream":{"Stream":["1"]},"_ElementEventStreamImpl":{"_EventStream":["1"],"Stream":["1"]},"SvgElement":{"Element":[],"EventTarget":[]},"GameOfLife":{"CellularAutomata":["int"],"CellularAutomata.T":"int"}}'));
+  A._Universe_addErasedTypes(init.typeUniverse, JSON.parse('{"StreamSubscription":1}'));
+  var string$ = {
+    Error_: "Error handler must accept one Object or one Object and a StackTrace as arguments, and return a value of the returned future's type"
+  };
   var type$ = (function rtii() {
     var findType = A.findType;
     return {
+      AsyncError: findType("AsyncError"),
       Comparable_dynamic: findType("Comparable<@>"),
       Error: findType("Error"),
+      Event: findType("Event"),
       Function: findType("Function"),
-      ImageData: findType("ImageData"),
+      Future_dynamic: findType("Future<@>"),
       JSArray_String: findType("JSArray<String>"),
       JSArray_dynamic: findType("JSArray<@>"),
       JSArray_int: findType("JSArray<int>"),
       JSNull: findType("JSNull"),
       JavaScriptFunction: findType("JavaScriptFunction"),
-      JavaScriptIndexingBehavior_dynamic: findType("JavaScriptIndexingBehavior<@>"),
       List_int: findType("List<int>"),
+      MouseEvent: findType("MouseEvent"),
       Null: findType("Null"),
       Object: findType("Object"),
       StackTrace: findType("StackTrace"),
       String: findType("String"),
+      TypeError: findType("TypeError"),
       UnknownJavaScriptObject: findType("UnknownJavaScriptObject"),
+      _ElementEventStreamImpl_Event: findType("_ElementEventStreamImpl<Event>"),
+      _ElementEventStreamImpl_MouseEvent: findType("_ElementEventStreamImpl<MouseEvent>"),
+      _Future_dynamic: findType("_Future<@>"),
+      _Future_int: findType("_Future<int>"),
       bool: findType("bool"),
+      bool_Function_Object: findType("bool(Object)"),
       double: findType("double"),
+      dynamic: findType("@"),
+      dynamic_Function: findType("@()"),
+      dynamic_Function_Object: findType("@(Object)"),
+      dynamic_Function_Object_StackTrace: findType("@(Object,StackTrace)"),
       int: findType("int"),
       legacy_Never: findType("0&*"),
       legacy_Object: findType("Object*"),
       nullable_CanvasElement: findType("CanvasElement?"),
       nullable_CanvasRenderingContext2D: findType("CanvasRenderingContext2D?"),
       nullable_Future_Null: findType("Future<Null>?"),
+      nullable_InputElement: findType("InputElement?"),
       nullable_Object: findType("Object?"),
+      nullable__FutureListener_dynamic_dynamic: findType("_FutureListener<@,@>?"),
+      nullable_dynamic_Function_Event: findType("@(Event)?"),
       nullable_int_Function_int_int: findType("int(int,int)?"),
+      nullable_void_Function: findType("~()?"),
       num: findType("num"),
       void: findType("~"),
       void_Function: findType("~()"),
@@ -4453,7 +4982,6 @@
     B.Interceptor_methods = J.Interceptor.prototype;
     B.JSArray_methods = J.JSArray.prototype;
     B.JSInt_methods = J.JSInt.prototype;
-    B.JSNumber_methods = J.JSNumber.prototype;
     B.JSString_methods = J.JSString.prototype;
     B.JavaScriptFunction_methods = J.JavaScriptFunction.prototype;
     B.JavaScriptObject_methods = J.JavaScriptObject.prototype;
@@ -4582,6 +5110,7 @@
 ;
     B.C__JSRandom = new A._JSRandom();
     B.C__RootZone = new A._RootZone();
+    B.C__StringStackTrace = new A._StringStackTrace();
   })();
   (function staticFields() {
     $._JS_INTEROP_INTERCEPTOR_TAG = null;
@@ -4649,8 +5178,7 @@
       }
     }()));
     _lazyFinal($, "_AsyncRun__scheduleImmediateClosure", "$get$_AsyncRun__scheduleImmediateClosure", () => A._AsyncRun__initializeScheduleImmediate());
-    _lazyFinal($, "_random", "$get$_random0", () => A.Random_Random());
-    _lazyFinal($, "_random0", "$get$_random", () => A.Random_Random());
+    _lazyFinal($, "_random", "$get$_random", () => B.C__JSRandom);
     _lazy($, "ca", "$get$ca", () => A.GameOfLife$(0, 0));
   })();
   (function nativeSupport() {
@@ -4676,12 +5204,8 @@
       }
       init.dispatchPropertyName = init.getIsolateTag("dispatch_record");
     }();
-    hunkHelpers.setOrUpdateInterceptorsByTag({ApplicationCacheErrorEvent: J.JavaScriptObject, DOMError: J.JavaScriptObject, ErrorEvent: J.JavaScriptObject, Event: J.JavaScriptObject, InputEvent: J.JavaScriptObject, SubmitEvent: J.JavaScriptObject, MediaError: J.JavaScriptObject, NavigatorUserMediaError: J.JavaScriptObject, OverconstrainedError: J.JavaScriptObject, PositionError: J.JavaScriptObject, GeolocationPositionError: J.JavaScriptObject, SensorErrorEvent: J.JavaScriptObject, SpeechRecognitionError: J.JavaScriptObject, WebGLRenderingContext: J.JavaScriptObject, WebGL2RenderingContext: J.JavaScriptObject, ArrayBufferView: A.NativeTypedData, Uint8ClampedArray: A.NativeUint8ClampedList, CanvasPixelArray: A.NativeUint8ClampedList, HTMLAudioElement: A.HtmlElement, HTMLBRElement: A.HtmlElement, HTMLBaseElement: A.HtmlElement, HTMLBodyElement: A.HtmlElement, HTMLButtonElement: A.HtmlElement, HTMLContentElement: A.HtmlElement, HTMLDListElement: A.HtmlElement, HTMLDataElement: A.HtmlElement, HTMLDataListElement: A.HtmlElement, HTMLDetailsElement: A.HtmlElement, HTMLDialogElement: A.HtmlElement, HTMLDivElement: A.HtmlElement, HTMLEmbedElement: A.HtmlElement, HTMLFieldSetElement: A.HtmlElement, HTMLHRElement: A.HtmlElement, HTMLHeadElement: A.HtmlElement, HTMLHeadingElement: A.HtmlElement, HTMLHtmlElement: A.HtmlElement, HTMLIFrameElement: A.HtmlElement, HTMLImageElement: A.HtmlElement, HTMLInputElement: A.HtmlElement, HTMLLIElement: A.HtmlElement, HTMLLabelElement: A.HtmlElement, HTMLLegendElement: A.HtmlElement, HTMLLinkElement: A.HtmlElement, HTMLMapElement: A.HtmlElement, HTMLMediaElement: A.HtmlElement, HTMLMenuElement: A.HtmlElement, HTMLMetaElement: A.HtmlElement, HTMLMeterElement: A.HtmlElement, HTMLModElement: A.HtmlElement, HTMLOListElement: A.HtmlElement, HTMLObjectElement: A.HtmlElement, HTMLOptGroupElement: A.HtmlElement, HTMLOptionElement: A.HtmlElement, HTMLOutputElement: A.HtmlElement, HTMLParagraphElement: A.HtmlElement, HTMLParamElement: A.HtmlElement, HTMLPictureElement: A.HtmlElement, HTMLPreElement: A.HtmlElement, HTMLProgressElement: A.HtmlElement, HTMLQuoteElement: A.HtmlElement, HTMLScriptElement: A.HtmlElement, HTMLShadowElement: A.HtmlElement, HTMLSlotElement: A.HtmlElement, HTMLSourceElement: A.HtmlElement, HTMLSpanElement: A.HtmlElement, HTMLStyleElement: A.HtmlElement, HTMLTableCaptionElement: A.HtmlElement, HTMLTableCellElement: A.HtmlElement, HTMLTableDataCellElement: A.HtmlElement, HTMLTableHeaderCellElement: A.HtmlElement, HTMLTableColElement: A.HtmlElement, HTMLTableElement: A.HtmlElement, HTMLTableRowElement: A.HtmlElement, HTMLTableSectionElement: A.HtmlElement, HTMLTemplateElement: A.HtmlElement, HTMLTextAreaElement: A.HtmlElement, HTMLTimeElement: A.HtmlElement, HTMLTitleElement: A.HtmlElement, HTMLTrackElement: A.HtmlElement, HTMLUListElement: A.HtmlElement, HTMLUnknownElement: A.HtmlElement, HTMLVideoElement: A.HtmlElement, HTMLDirectoryElement: A.HtmlElement, HTMLFontElement: A.HtmlElement, HTMLFrameElement: A.HtmlElement, HTMLFrameSetElement: A.HtmlElement, HTMLMarqueeElement: A.HtmlElement, HTMLElement: A.HtmlElement, HTMLAnchorElement: A.AnchorElement, HTMLAreaElement: A.AreaElement, HTMLCanvasElement: A.CanvasElement, CanvasRenderingContext2D: A.CanvasRenderingContext2D, DOMException: A.DomException, SVGAElement: A.Element, SVGAnimateElement: A.Element, SVGAnimateMotionElement: A.Element, SVGAnimateTransformElement: A.Element, SVGAnimationElement: A.Element, SVGCircleElement: A.Element, SVGClipPathElement: A.Element, SVGDefsElement: A.Element, SVGDescElement: A.Element, SVGDiscardElement: A.Element, SVGEllipseElement: A.Element, SVGFEBlendElement: A.Element, SVGFEColorMatrixElement: A.Element, SVGFEComponentTransferElement: A.Element, SVGFECompositeElement: A.Element, SVGFEConvolveMatrixElement: A.Element, SVGFEDiffuseLightingElement: A.Element, SVGFEDisplacementMapElement: A.Element, SVGFEDistantLightElement: A.Element, SVGFEFloodElement: A.Element, SVGFEFuncAElement: A.Element, SVGFEFuncBElement: A.Element, SVGFEFuncGElement: A.Element, SVGFEFuncRElement: A.Element, SVGFEGaussianBlurElement: A.Element, SVGFEImageElement: A.Element, SVGFEMergeElement: A.Element, SVGFEMergeNodeElement: A.Element, SVGFEMorphologyElement: A.Element, SVGFEOffsetElement: A.Element, SVGFEPointLightElement: A.Element, SVGFESpecularLightingElement: A.Element, SVGFESpotLightElement: A.Element, SVGFETileElement: A.Element, SVGFETurbulenceElement: A.Element, SVGFilterElement: A.Element, SVGForeignObjectElement: A.Element, SVGGElement: A.Element, SVGGeometryElement: A.Element, SVGGraphicsElement: A.Element, SVGImageElement: A.Element, SVGLineElement: A.Element, SVGLinearGradientElement: A.Element, SVGMarkerElement: A.Element, SVGMaskElement: A.Element, SVGMetadataElement: A.Element, SVGPathElement: A.Element, SVGPatternElement: A.Element, SVGPolygonElement: A.Element, SVGPolylineElement: A.Element, SVGRadialGradientElement: A.Element, SVGRectElement: A.Element, SVGScriptElement: A.Element, SVGSetElement: A.Element, SVGStopElement: A.Element, SVGStyleElement: A.Element, SVGElement: A.Element, SVGSVGElement: A.Element, SVGSwitchElement: A.Element, SVGSymbolElement: A.Element, SVGTSpanElement: A.Element, SVGTextContentElement: A.Element, SVGTextElement: A.Element, SVGTextPathElement: A.Element, SVGTextPositioningElement: A.Element, SVGTitleElement: A.Element, SVGUseElement: A.Element, SVGViewElement: A.Element, SVGGradientElement: A.Element, SVGComponentTransferFunctionElement: A.Element, SVGFEDropShadowElement: A.Element, SVGMPathElement: A.Element, Element: A.Element, EventTarget: A.EventTarget, HTMLFormElement: A.FormElement, ImageData: A.ImageData, Document: A.Node, HTMLDocument: A.Node, Node: A.Node, HTMLSelectElement: A.SelectElement, Window: A.Window, DOMWindow: A.Window});
-    hunkHelpers.setOrUpdateLeafTags({ApplicationCacheErrorEvent: true, DOMError: true, ErrorEvent: true, Event: true, InputEvent: true, SubmitEvent: true, MediaError: true, NavigatorUserMediaError: true, OverconstrainedError: true, PositionError: true, GeolocationPositionError: true, SensorErrorEvent: true, SpeechRecognitionError: true, WebGLRenderingContext: true, WebGL2RenderingContext: true, ArrayBufferView: false, Uint8ClampedArray: true, CanvasPixelArray: true, HTMLAudioElement: true, HTMLBRElement: true, HTMLBaseElement: true, HTMLBodyElement: true, HTMLButtonElement: true, HTMLContentElement: true, HTMLDListElement: true, HTMLDataElement: true, HTMLDataListElement: true, HTMLDetailsElement: true, HTMLDialogElement: true, HTMLDivElement: true, HTMLEmbedElement: true, HTMLFieldSetElement: true, HTMLHRElement: true, HTMLHeadElement: true, HTMLHeadingElement: true, HTMLHtmlElement: true, HTMLIFrameElement: true, HTMLImageElement: true, HTMLInputElement: true, HTMLLIElement: true, HTMLLabelElement: true, HTMLLegendElement: true, HTMLLinkElement: true, HTMLMapElement: true, HTMLMediaElement: true, HTMLMenuElement: true, HTMLMetaElement: true, HTMLMeterElement: true, HTMLModElement: true, HTMLOListElement: true, HTMLObjectElement: true, HTMLOptGroupElement: true, HTMLOptionElement: true, HTMLOutputElement: true, HTMLParagraphElement: true, HTMLParamElement: true, HTMLPictureElement: true, HTMLPreElement: true, HTMLProgressElement: true, HTMLQuoteElement: true, HTMLScriptElement: true, HTMLShadowElement: true, HTMLSlotElement: true, HTMLSourceElement: true, HTMLSpanElement: true, HTMLStyleElement: true, HTMLTableCaptionElement: true, HTMLTableCellElement: true, HTMLTableDataCellElement: true, HTMLTableHeaderCellElement: true, HTMLTableColElement: true, HTMLTableElement: true, HTMLTableRowElement: true, HTMLTableSectionElement: true, HTMLTemplateElement: true, HTMLTextAreaElement: true, HTMLTimeElement: true, HTMLTitleElement: true, HTMLTrackElement: true, HTMLUListElement: true, HTMLUnknownElement: true, HTMLVideoElement: true, HTMLDirectoryElement: true, HTMLFontElement: true, HTMLFrameElement: true, HTMLFrameSetElement: true, HTMLMarqueeElement: true, HTMLElement: false, HTMLAnchorElement: true, HTMLAreaElement: true, HTMLCanvasElement: true, CanvasRenderingContext2D: true, DOMException: true, SVGAElement: true, SVGAnimateElement: true, SVGAnimateMotionElement: true, SVGAnimateTransformElement: true, SVGAnimationElement: true, SVGCircleElement: true, SVGClipPathElement: true, SVGDefsElement: true, SVGDescElement: true, SVGDiscardElement: true, SVGEllipseElement: true, SVGFEBlendElement: true, SVGFEColorMatrixElement: true, SVGFEComponentTransferElement: true, SVGFECompositeElement: true, SVGFEConvolveMatrixElement: true, SVGFEDiffuseLightingElement: true, SVGFEDisplacementMapElement: true, SVGFEDistantLightElement: true, SVGFEFloodElement: true, SVGFEFuncAElement: true, SVGFEFuncBElement: true, SVGFEFuncGElement: true, SVGFEFuncRElement: true, SVGFEGaussianBlurElement: true, SVGFEImageElement: true, SVGFEMergeElement: true, SVGFEMergeNodeElement: true, SVGFEMorphologyElement: true, SVGFEOffsetElement: true, SVGFEPointLightElement: true, SVGFESpecularLightingElement: true, SVGFESpotLightElement: true, SVGFETileElement: true, SVGFETurbulenceElement: true, SVGFilterElement: true, SVGForeignObjectElement: true, SVGGElement: true, SVGGeometryElement: true, SVGGraphicsElement: true, SVGImageElement: true, SVGLineElement: true, SVGLinearGradientElement: true, SVGMarkerElement: true, SVGMaskElement: true, SVGMetadataElement: true, SVGPathElement: true, SVGPatternElement: true, SVGPolygonElement: true, SVGPolylineElement: true, SVGRadialGradientElement: true, SVGRectElement: true, SVGScriptElement: true, SVGSetElement: true, SVGStopElement: true, SVGStyleElement: true, SVGElement: true, SVGSVGElement: true, SVGSwitchElement: true, SVGSymbolElement: true, SVGTSpanElement: true, SVGTextContentElement: true, SVGTextElement: true, SVGTextPathElement: true, SVGTextPositioningElement: true, SVGTitleElement: true, SVGUseElement: true, SVGViewElement: true, SVGGradientElement: true, SVGComponentTransferFunctionElement: true, SVGFEDropShadowElement: true, SVGMPathElement: true, Element: false, EventTarget: false, HTMLFormElement: true, ImageData: true, Document: true, HTMLDocument: true, Node: false, HTMLSelectElement: true, Window: true, DOMWindow: true});
-    A.NativeTypedArray.$nativeSuperclassTag = "ArrayBufferView";
-    A._NativeTypedArrayOfInt_NativeTypedArray_ListMixin.$nativeSuperclassTag = "ArrayBufferView";
-    A._NativeTypedArrayOfInt_NativeTypedArray_ListMixin_FixedLengthListMixin.$nativeSuperclassTag = "ArrayBufferView";
-    A.NativeTypedArrayOfInt.$nativeSuperclassTag = "ArrayBufferView";
+    hunkHelpers.setOrUpdateInterceptorsByTag({DOMError: J.JavaScriptObject, MediaError: J.JavaScriptObject, NavigatorUserMediaError: J.JavaScriptObject, OverconstrainedError: J.JavaScriptObject, PositionError: J.JavaScriptObject, GeolocationPositionError: J.JavaScriptObject, WebGLRenderingContext: J.JavaScriptObject, WebGL2RenderingContext: J.JavaScriptObject, HTMLAudioElement: A.HtmlElement, HTMLBRElement: A.HtmlElement, HTMLBaseElement: A.HtmlElement, HTMLBodyElement: A.HtmlElement, HTMLButtonElement: A.HtmlElement, HTMLContentElement: A.HtmlElement, HTMLDListElement: A.HtmlElement, HTMLDataElement: A.HtmlElement, HTMLDataListElement: A.HtmlElement, HTMLDetailsElement: A.HtmlElement, HTMLDialogElement: A.HtmlElement, HTMLDivElement: A.HtmlElement, HTMLEmbedElement: A.HtmlElement, HTMLFieldSetElement: A.HtmlElement, HTMLHRElement: A.HtmlElement, HTMLHeadElement: A.HtmlElement, HTMLHeadingElement: A.HtmlElement, HTMLHtmlElement: A.HtmlElement, HTMLIFrameElement: A.HtmlElement, HTMLImageElement: A.HtmlElement, HTMLLIElement: A.HtmlElement, HTMLLabelElement: A.HtmlElement, HTMLLegendElement: A.HtmlElement, HTMLLinkElement: A.HtmlElement, HTMLMapElement: A.HtmlElement, HTMLMediaElement: A.HtmlElement, HTMLMenuElement: A.HtmlElement, HTMLMetaElement: A.HtmlElement, HTMLMeterElement: A.HtmlElement, HTMLModElement: A.HtmlElement, HTMLOListElement: A.HtmlElement, HTMLObjectElement: A.HtmlElement, HTMLOptGroupElement: A.HtmlElement, HTMLOptionElement: A.HtmlElement, HTMLOutputElement: A.HtmlElement, HTMLParagraphElement: A.HtmlElement, HTMLParamElement: A.HtmlElement, HTMLPictureElement: A.HtmlElement, HTMLPreElement: A.HtmlElement, HTMLProgressElement: A.HtmlElement, HTMLQuoteElement: A.HtmlElement, HTMLScriptElement: A.HtmlElement, HTMLShadowElement: A.HtmlElement, HTMLSlotElement: A.HtmlElement, HTMLSourceElement: A.HtmlElement, HTMLSpanElement: A.HtmlElement, HTMLStyleElement: A.HtmlElement, HTMLTableCaptionElement: A.HtmlElement, HTMLTableCellElement: A.HtmlElement, HTMLTableDataCellElement: A.HtmlElement, HTMLTableHeaderCellElement: A.HtmlElement, HTMLTableColElement: A.HtmlElement, HTMLTableElement: A.HtmlElement, HTMLTableRowElement: A.HtmlElement, HTMLTableSectionElement: A.HtmlElement, HTMLTemplateElement: A.HtmlElement, HTMLTextAreaElement: A.HtmlElement, HTMLTimeElement: A.HtmlElement, HTMLTitleElement: A.HtmlElement, HTMLTrackElement: A.HtmlElement, HTMLUListElement: A.HtmlElement, HTMLUnknownElement: A.HtmlElement, HTMLVideoElement: A.HtmlElement, HTMLDirectoryElement: A.HtmlElement, HTMLFontElement: A.HtmlElement, HTMLFrameElement: A.HtmlElement, HTMLFrameSetElement: A.HtmlElement, HTMLMarqueeElement: A.HtmlElement, HTMLElement: A.HtmlElement, HTMLAnchorElement: A.AnchorElement, HTMLAreaElement: A.AreaElement, HTMLCanvasElement: A.CanvasElement, CanvasRenderingContext2D: A.CanvasRenderingContext2D, DOMException: A.DomException, Element: A.Element, AbortPaymentEvent: A.Event, AnimationEvent: A.Event, AnimationPlaybackEvent: A.Event, ApplicationCacheErrorEvent: A.Event, BackgroundFetchClickEvent: A.Event, BackgroundFetchEvent: A.Event, BackgroundFetchFailEvent: A.Event, BackgroundFetchedEvent: A.Event, BeforeInstallPromptEvent: A.Event, BeforeUnloadEvent: A.Event, BlobEvent: A.Event, CanMakePaymentEvent: A.Event, ClipboardEvent: A.Event, CloseEvent: A.Event, CustomEvent: A.Event, DeviceMotionEvent: A.Event, DeviceOrientationEvent: A.Event, ErrorEvent: A.Event, ExtendableEvent: A.Event, ExtendableMessageEvent: A.Event, FetchEvent: A.Event, FontFaceSetLoadEvent: A.Event, ForeignFetchEvent: A.Event, GamepadEvent: A.Event, HashChangeEvent: A.Event, InstallEvent: A.Event, MediaEncryptedEvent: A.Event, MediaKeyMessageEvent: A.Event, MediaQueryListEvent: A.Event, MediaStreamEvent: A.Event, MediaStreamTrackEvent: A.Event, MessageEvent: A.Event, MIDIConnectionEvent: A.Event, MIDIMessageEvent: A.Event, MutationEvent: A.Event, NotificationEvent: A.Event, PageTransitionEvent: A.Event, PaymentRequestEvent: A.Event, PaymentRequestUpdateEvent: A.Event, PopStateEvent: A.Event, PresentationConnectionAvailableEvent: A.Event, PresentationConnectionCloseEvent: A.Event, ProgressEvent: A.Event, PromiseRejectionEvent: A.Event, PushEvent: A.Event, RTCDataChannelEvent: A.Event, RTCDTMFToneChangeEvent: A.Event, RTCPeerConnectionIceEvent: A.Event, RTCTrackEvent: A.Event, SecurityPolicyViolationEvent: A.Event, SensorErrorEvent: A.Event, SpeechRecognitionError: A.Event, SpeechRecognitionEvent: A.Event, SpeechSynthesisEvent: A.Event, StorageEvent: A.Event, SyncEvent: A.Event, TrackEvent: A.Event, TransitionEvent: A.Event, WebKitTransitionEvent: A.Event, VRDeviceEvent: A.Event, VRDisplayEvent: A.Event, VRSessionEvent: A.Event, MojoInterfaceRequestEvent: A.Event, ResourceProgressEvent: A.Event, USBConnectionEvent: A.Event, IDBVersionChangeEvent: A.Event, AudioProcessingEvent: A.Event, OfflineAudioCompletionEvent: A.Event, WebGLContextEvent: A.Event, Event: A.Event, InputEvent: A.Event, SubmitEvent: A.Event, EventTarget: A.EventTarget, HTMLFormElement: A.FormElement, HTMLInputElement: A.InputElement, MouseEvent: A.MouseEvent, DragEvent: A.MouseEvent, PointerEvent: A.MouseEvent, WheelEvent: A.MouseEvent, Document: A.Node, HTMLDocument: A.Node, Node: A.Node, HTMLSelectElement: A.SelectElement, CompositionEvent: A.UIEvent, FocusEvent: A.UIEvent, KeyboardEvent: A.UIEvent, TextEvent: A.UIEvent, TouchEvent: A.UIEvent, UIEvent: A.UIEvent, Window: A.Window, DOMWindow: A.Window, SVGAElement: A.SvgElement, SVGAnimateElement: A.SvgElement, SVGAnimateMotionElement: A.SvgElement, SVGAnimateTransformElement: A.SvgElement, SVGAnimationElement: A.SvgElement, SVGCircleElement: A.SvgElement, SVGClipPathElement: A.SvgElement, SVGDefsElement: A.SvgElement, SVGDescElement: A.SvgElement, SVGDiscardElement: A.SvgElement, SVGEllipseElement: A.SvgElement, SVGFEBlendElement: A.SvgElement, SVGFEColorMatrixElement: A.SvgElement, SVGFEComponentTransferElement: A.SvgElement, SVGFECompositeElement: A.SvgElement, SVGFEConvolveMatrixElement: A.SvgElement, SVGFEDiffuseLightingElement: A.SvgElement, SVGFEDisplacementMapElement: A.SvgElement, SVGFEDistantLightElement: A.SvgElement, SVGFEFloodElement: A.SvgElement, SVGFEFuncAElement: A.SvgElement, SVGFEFuncBElement: A.SvgElement, SVGFEFuncGElement: A.SvgElement, SVGFEFuncRElement: A.SvgElement, SVGFEGaussianBlurElement: A.SvgElement, SVGFEImageElement: A.SvgElement, SVGFEMergeElement: A.SvgElement, SVGFEMergeNodeElement: A.SvgElement, SVGFEMorphologyElement: A.SvgElement, SVGFEOffsetElement: A.SvgElement, SVGFEPointLightElement: A.SvgElement, SVGFESpecularLightingElement: A.SvgElement, SVGFESpotLightElement: A.SvgElement, SVGFETileElement: A.SvgElement, SVGFETurbulenceElement: A.SvgElement, SVGFilterElement: A.SvgElement, SVGForeignObjectElement: A.SvgElement, SVGGElement: A.SvgElement, SVGGeometryElement: A.SvgElement, SVGGraphicsElement: A.SvgElement, SVGImageElement: A.SvgElement, SVGLineElement: A.SvgElement, SVGLinearGradientElement: A.SvgElement, SVGMarkerElement: A.SvgElement, SVGMaskElement: A.SvgElement, SVGMetadataElement: A.SvgElement, SVGPathElement: A.SvgElement, SVGPatternElement: A.SvgElement, SVGPolygonElement: A.SvgElement, SVGPolylineElement: A.SvgElement, SVGRadialGradientElement: A.SvgElement, SVGRectElement: A.SvgElement, SVGScriptElement: A.SvgElement, SVGSetElement: A.SvgElement, SVGStopElement: A.SvgElement, SVGStyleElement: A.SvgElement, SVGElement: A.SvgElement, SVGSVGElement: A.SvgElement, SVGSwitchElement: A.SvgElement, SVGSymbolElement: A.SvgElement, SVGTSpanElement: A.SvgElement, SVGTextContentElement: A.SvgElement, SVGTextElement: A.SvgElement, SVGTextPathElement: A.SvgElement, SVGTextPositioningElement: A.SvgElement, SVGTitleElement: A.SvgElement, SVGUseElement: A.SvgElement, SVGViewElement: A.SvgElement, SVGGradientElement: A.SvgElement, SVGComponentTransferFunctionElement: A.SvgElement, SVGFEDropShadowElement: A.SvgElement, SVGMPathElement: A.SvgElement});
+    hunkHelpers.setOrUpdateLeafTags({DOMError: true, MediaError: true, NavigatorUserMediaError: true, OverconstrainedError: true, PositionError: true, GeolocationPositionError: true, WebGLRenderingContext: true, WebGL2RenderingContext: true, HTMLAudioElement: true, HTMLBRElement: true, HTMLBaseElement: true, HTMLBodyElement: true, HTMLButtonElement: true, HTMLContentElement: true, HTMLDListElement: true, HTMLDataElement: true, HTMLDataListElement: true, HTMLDetailsElement: true, HTMLDialogElement: true, HTMLDivElement: true, HTMLEmbedElement: true, HTMLFieldSetElement: true, HTMLHRElement: true, HTMLHeadElement: true, HTMLHeadingElement: true, HTMLHtmlElement: true, HTMLIFrameElement: true, HTMLImageElement: true, HTMLLIElement: true, HTMLLabelElement: true, HTMLLegendElement: true, HTMLLinkElement: true, HTMLMapElement: true, HTMLMediaElement: true, HTMLMenuElement: true, HTMLMetaElement: true, HTMLMeterElement: true, HTMLModElement: true, HTMLOListElement: true, HTMLObjectElement: true, HTMLOptGroupElement: true, HTMLOptionElement: true, HTMLOutputElement: true, HTMLParagraphElement: true, HTMLParamElement: true, HTMLPictureElement: true, HTMLPreElement: true, HTMLProgressElement: true, HTMLQuoteElement: true, HTMLScriptElement: true, HTMLShadowElement: true, HTMLSlotElement: true, HTMLSourceElement: true, HTMLSpanElement: true, HTMLStyleElement: true, HTMLTableCaptionElement: true, HTMLTableCellElement: true, HTMLTableDataCellElement: true, HTMLTableHeaderCellElement: true, HTMLTableColElement: true, HTMLTableElement: true, HTMLTableRowElement: true, HTMLTableSectionElement: true, HTMLTemplateElement: true, HTMLTextAreaElement: true, HTMLTimeElement: true, HTMLTitleElement: true, HTMLTrackElement: true, HTMLUListElement: true, HTMLUnknownElement: true, HTMLVideoElement: true, HTMLDirectoryElement: true, HTMLFontElement: true, HTMLFrameElement: true, HTMLFrameSetElement: true, HTMLMarqueeElement: true, HTMLElement: false, HTMLAnchorElement: true, HTMLAreaElement: true, HTMLCanvasElement: true, CanvasRenderingContext2D: true, DOMException: true, Element: false, AbortPaymentEvent: true, AnimationEvent: true, AnimationPlaybackEvent: true, ApplicationCacheErrorEvent: true, BackgroundFetchClickEvent: true, BackgroundFetchEvent: true, BackgroundFetchFailEvent: true, BackgroundFetchedEvent: true, BeforeInstallPromptEvent: true, BeforeUnloadEvent: true, BlobEvent: true, CanMakePaymentEvent: true, ClipboardEvent: true, CloseEvent: true, CustomEvent: true, DeviceMotionEvent: true, DeviceOrientationEvent: true, ErrorEvent: true, ExtendableEvent: true, ExtendableMessageEvent: true, FetchEvent: true, FontFaceSetLoadEvent: true, ForeignFetchEvent: true, GamepadEvent: true, HashChangeEvent: true, InstallEvent: true, MediaEncryptedEvent: true, MediaKeyMessageEvent: true, MediaQueryListEvent: true, MediaStreamEvent: true, MediaStreamTrackEvent: true, MessageEvent: true, MIDIConnectionEvent: true, MIDIMessageEvent: true, MutationEvent: true, NotificationEvent: true, PageTransitionEvent: true, PaymentRequestEvent: true, PaymentRequestUpdateEvent: true, PopStateEvent: true, PresentationConnectionAvailableEvent: true, PresentationConnectionCloseEvent: true, ProgressEvent: true, PromiseRejectionEvent: true, PushEvent: true, RTCDataChannelEvent: true, RTCDTMFToneChangeEvent: true, RTCPeerConnectionIceEvent: true, RTCTrackEvent: true, SecurityPolicyViolationEvent: true, SensorErrorEvent: true, SpeechRecognitionError: true, SpeechRecognitionEvent: true, SpeechSynthesisEvent: true, StorageEvent: true, SyncEvent: true, TrackEvent: true, TransitionEvent: true, WebKitTransitionEvent: true, VRDeviceEvent: true, VRDisplayEvent: true, VRSessionEvent: true, MojoInterfaceRequestEvent: true, ResourceProgressEvent: true, USBConnectionEvent: true, IDBVersionChangeEvent: true, AudioProcessingEvent: true, OfflineAudioCompletionEvent: true, WebGLContextEvent: true, Event: false, InputEvent: false, SubmitEvent: false, EventTarget: false, HTMLFormElement: true, HTMLInputElement: true, MouseEvent: true, DragEvent: true, PointerEvent: true, WheelEvent: true, Document: true, HTMLDocument: true, Node: false, HTMLSelectElement: true, CompositionEvent: true, FocusEvent: true, KeyboardEvent: true, TextEvent: true, TouchEvent: true, UIEvent: false, Window: true, DOMWindow: true, SVGAElement: true, SVGAnimateElement: true, SVGAnimateMotionElement: true, SVGAnimateTransformElement: true, SVGAnimationElement: true, SVGCircleElement: true, SVGClipPathElement: true, SVGDefsElement: true, SVGDescElement: true, SVGDiscardElement: true, SVGEllipseElement: true, SVGFEBlendElement: true, SVGFEColorMatrixElement: true, SVGFEComponentTransferElement: true, SVGFECompositeElement: true, SVGFEConvolveMatrixElement: true, SVGFEDiffuseLightingElement: true, SVGFEDisplacementMapElement: true, SVGFEDistantLightElement: true, SVGFEFloodElement: true, SVGFEFuncAElement: true, SVGFEFuncBElement: true, SVGFEFuncGElement: true, SVGFEFuncRElement: true, SVGFEGaussianBlurElement: true, SVGFEImageElement: true, SVGFEMergeElement: true, SVGFEMergeNodeElement: true, SVGFEMorphologyElement: true, SVGFEOffsetElement: true, SVGFEPointLightElement: true, SVGFESpecularLightingElement: true, SVGFESpotLightElement: true, SVGFETileElement: true, SVGFETurbulenceElement: true, SVGFilterElement: true, SVGForeignObjectElement: true, SVGGElement: true, SVGGeometryElement: true, SVGGraphicsElement: true, SVGImageElement: true, SVGLineElement: true, SVGLinearGradientElement: true, SVGMarkerElement: true, SVGMaskElement: true, SVGMetadataElement: true, SVGPathElement: true, SVGPatternElement: true, SVGPolygonElement: true, SVGPolylineElement: true, SVGRadialGradientElement: true, SVGRectElement: true, SVGScriptElement: true, SVGSetElement: true, SVGStopElement: true, SVGStyleElement: true, SVGElement: true, SVGSVGElement: true, SVGSwitchElement: true, SVGSymbolElement: true, SVGTSpanElement: true, SVGTextContentElement: true, SVGTextElement: true, SVGTextPathElement: true, SVGTextPositioningElement: true, SVGTitleElement: true, SVGUseElement: true, SVGViewElement: true, SVGGradientElement: true, SVGComponentTransferFunctionElement: true, SVGFEDropShadowElement: true, SVGMPathElement: true});
   })();
   convertAllToFastObject(holders);
   convertToFastObject($);

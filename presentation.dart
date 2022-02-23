@@ -12,18 +12,60 @@ GameOfLife ca = GameOfLife(0, 0);
 void main() {
   //querySelector("#paragrafo")?.text = "Hello world!";
 
+  querySelector("#caWidth")?.onChange.listen((event) {
+    changeLabel("caWidth", "lblcaWidth");
+  });
+
+  querySelector("#caHeight")?.onChange.listen((event) {
+    changeLabel("caHeight", "lblcaHeight");
+  });
+
+  querySelector("#run_conway")?.onClick.listen((event) {
+    conway_start(event);
+  });
+}
+
+void changeLabel(String id_input, String id_output) {
+  querySelector("#$id_output")?.text =
+      (querySelector("#$id_input") as InputElement?)?.value;
+}
+
+void conway_start(MouseEvent event) {
+  var w_ele = querySelector("#caWidth") as InputElement?;
+  var h_ele = querySelector("#caHeight") as InputElement?;
+  int w = int.parse(w_ele?.value ?? "0");
+  int h = int.parse(h_ele?.value ?? "0");
+
+  ca = GameOfLife(w, h);
+  ca.initialize();
+
+  //querySelector("#out")?.text = "$w, $h";
+
+  window.requestAnimationFrame(conway_animation_boxes);
+}
+
+void conway_animation_boxes(num timestamp) {
   var canvas = querySelector("#canvas") as CanvasElement?;
   var context = canvas?.getContext('2d') as CanvasRenderingContext2D?;
   int canvasWidth = canvas?.width ?? 100;
   int canvasHeight = canvas?.height ?? 100;
+  context?.clearRect(0, 0, canvasWidth, canvasHeight);
 
-  ca = GameOfLife(canvasWidth, canvasHeight);
-  ca.initialize();
+  double boxW = canvasWidth / ca.shape[0];
+  double boxH = canvasHeight / ca.shape[1];
 
-  window.requestAnimationFrame(animation);
+  var img = ca.next();
+  for (int y = 0; y < ca.shape[1]; y++) {
+    for (int x = 0; x < ca.shape[0]; x++) {
+      int state = img[ca.listIndex([x, y])];
+      context?.setFillColorRgb(state * 255, state * 255, state * 255);
+      context?.fillRect(x * boxW, y * boxH, boxW, boxH);
+    }
+  }
+  window.requestAnimationFrame(conway_animation_boxes);
 }
 
-void animation(num timestamp) {
+void conway_animation_image(num timestamp) {
   var canvas = querySelector("#canvas") as CanvasElement?;
   var context = canvas?.getContext('2d') as CanvasRenderingContext2D?;
   int canvasWidth = canvas?.width ?? 100;
@@ -46,7 +88,7 @@ void animation(num timestamp) {
     }
   }
   context?.putImageData(id, 0, 0);
-  window.requestAnimationFrame(animation);
+  window.requestAnimationFrame(conway_animation_image);
 }
 
 void sierpinski() {

@@ -1,45 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="ALife Showcase" />
-        <meta name="author" content="Petrônio Cândido de Lima e Silva" />
-        <title>ALife Showcase </title>
 
-        <!-- jQUERY & BOOTSTRAP -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    </head>
-    <body id="page-top">
-        <div class="bs-example bs-example-tabs">
-            <ul class="nav nav-tabs" id="maintab"  role=tablist>
-                <li role="presentation" class="active"><a href="#home" role=tab id=home-tab>Geral</a></li>
-                <li role="presentation"><a href="#sierpinski"  role=tab id=sierpinski-tab>Sierpinski</a></li>
-                <li role="presentation"><a href="#conway" role=tab id=conway-tab> Conway</a></li>
-            </ul>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="ALife Showcase" />
+    <meta name="author" content="Petrônio Cândido de Lima e Silva" />
+    <title>ALife Showcase </title>
 
-            <div class="tab-content" id=maintabcontent>
-                <div class="tab-pane  fade in active" id="home" role="tabpanel" aria-labelledby="home-tab">Geral</div>
-                <div class="tab-pane fade" id="sierpinski" role="tabpanel" aria-labelledby="sierpinski-tab">sierpinski</div>
-                <div class="tab-pane fade" id="conway" role="tabpanel" aria-labelledby="conway-tab">conway</div>
+    <!-- jQUERY & BOOTSTRAP -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body id="page-top">
+    <div class="bs-example bs-example-tabs">
+        <ul class="nav nav-tabs" id="maintab" role=tablist>
+            <li role="presentation" class="active"><a href="#home" role=tab id=home-tab>Geral</a></li>
+            <li role="presentation"><a href="#sierpinski" role=tab id=sierpinski-tab>Sierpinski</a></li>
+            <li role="presentation"><a href="#conway" role=tab id=conway-tab> Conway</a></li>
+        </ul>
+
+        <div class="tab-content" id=maintabcontent>
+            <div class="tab-pane  fade in active" id="home" role="tabpanel" aria-labelledby="home-tab">Geral</div>
+            <div class="tab-pane fade" id="sierpinski" role="tabpanel" aria-labelledby="sierpinski-tab">sierpinski</div>
+            <div class="tab-pane fade" id="conway" role="tabpanel" aria-labelledby="conway-tab">
+                <h3>Conway's Game of Life</h3>
+                <form>
+                    <div class="form-group">
+                        <label for="caWidth">Width:</label><span id="lblcaWidth"></span>
+                        <input type="range" class="custom-range" min="10" max="50" id="caWidth">
+                    </div>
+                    <div class="form-group">
+                        <label for="caHeight">Height:</label><span id="lblcaHeight"></span>
+                        <input type="range" class="custom-range" min="10" max="50" id="caHeight">
+                    </div>
+                    
+                </form>
+                <button class="btn btn-primary" id="run_conway">Run</button>
+                
             </div>
         </div>
-          
+    </div>
 
-        <canvas id="canvas" width="500" height="500" style="border:1px solid #000000;"></canvas>
 
-        <script>
-            $('#maintab a').click(function (e) {
-                e.preventDefault()
-                $(this).tab('show')
-                })
-        </script>
+    <canvas id="canvas" width="500" height="500" style="border:1px solid #000000;"></canvas>
 
-        
-        <script src="presentation.js"></script>
+    <script>
+        $('#maintab a').click(function (e) {
+            e.preventDefault()
+            $(this).tab('show')
+        })
+    </script>
 
-    </body>
+
+    <script src="presentation.js"></script>
+
+</body>
 
 </html>
