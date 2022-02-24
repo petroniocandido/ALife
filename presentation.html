@@ -17,14 +17,15 @@
 <body id="page-top">
     <div class="bs-example bs-example-tabs">
         <ul class="nav nav-tabs" id="maintab" role=tablist>
-            <li role="presentation" class="active"><a href="#home" role=tab id=home-tab>Geral</a></li>
             <li role="presentation"><a href="#sierpinski" role=tab id=sierpinski-tab>Sierpinski</a></li>
             <li role="presentation"><a href="#conway" role=tab id=conway-tab> Conway</a></li>
         </ul>
 
         <div class="tab-content" id=maintabcontent>
-            <div class="tab-pane  fade in active" id="home" role="tabpanel" aria-labelledby="home-tab">Geral</div>
-            <div class="tab-pane fade" id="sierpinski" role="tabpanel" aria-labelledby="sierpinski-tab">sierpinski</div>
+            <div class="tab-pane fade" id="sierpinski" role="tabpanel" aria-labelledby="sierpinski-tab">
+                <h3>Sierpinski Triangle</h3>
+                <button class="btn btn-primary" id="run_sierpinski">Run</button>
+            </div>
             <div class="tab-pane fade" id="conway" role="tabpanel" aria-labelledby="conway-tab">
                 <h3>Conway's Game of Life</h3>
                 <form>
@@ -44,8 +45,9 @@
         </div>
     </div>
 
-
+<div>
     <canvas id="canvas" width="500" height="500" style="border:1px solid #000000;"></canvas>
+</div>
 
     <script>
         $('#maintab a').click(function (e) {
