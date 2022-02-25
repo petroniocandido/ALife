@@ -5,6 +5,7 @@ import 'dart:math';
 import '../../CellularAutomata.dart';
 import '../../SierpinskiTriangle.dart';
 import '../../GameOfLife.dart';
+import '../../PercolationCA.dart';
 
 final _random = Random();
 
@@ -29,6 +30,18 @@ void main() {
 
   querySelector("#run_conway")?.onClick.listen((event) {
     conway_start(event);
+  });
+
+  querySelector("#percoWidth")?.onChange.listen((event) {
+    changeLabel("percoWidth", "lblpercoWidth");
+  });
+
+  querySelector("#percoHeight")?.onChange.listen((event) {
+    changeLabel("percoHeight", "lblpercoHeight");
+  });
+
+  querySelector("#run_percolation")?.onClick.listen((event) {
+    percolation_start(event);
   });
 }
 
@@ -153,4 +166,49 @@ void sierpinski_animation_image(num timestamp) {
     }
   }
   context?.putImageData(id, 0, 0);
+}
+
+void percolation_start(MouseEvent event) {
+  var w_ele = querySelector("#caWidth") as InputElement?;
+  var h_ele = querySelector("#caHeight") as InputElement?;
+  int w = int.parse(w_ele?.value ?? "0");
+  int h = int.parse(h_ele?.value ?? "0");
+
+  ca = PercolationCA(<int>[w, h]);
+  ca.initialize();
+
+  window.requestAnimationFrame(percolation_animation_boxes);
+}
+
+void percolation_animation_boxes(num timestamp) {
+  var canvas = querySelector("#canvas") as CanvasElement?;
+  var context = canvas?.getContext('2d') as CanvasRenderingContext2D?;
+  int canvasWidth = canvas?.width ?? 100;
+  int canvasHeight = canvas?.height ?? 100;
+  context?.clearRect(0, 0, canvasWidth, canvasHeight);
+
+  double boxW = canvasWidth / ca.shape[0];
+  double boxH = canvasHeight / ca.shape[1];
+
+  var img = ca.next();
+  for (int y = 0; y < ca.shape[1]; y++) {
+    for (int x = 0; x < ca.shape[0]; x++) {
+      int state = img[ca.listIndex([x, y])];
+      switch (state) {
+        case 0:
+          context?.setFillColorRgb(255, 255, 255);
+          break;
+
+        case 1:
+          context?.setFillColorRgb(0, 0, 0);
+          break;
+
+        case 2:
+          context?.setFillColorRgb(0, 0, 255);
+          break;
+      }
+      context?.fillRect(x * boxW, y * boxH, boxW, boxH);
+    }
+  }
+  window.requestAnimationFrame(percolation_animation_boxes);
 }
