@@ -2,15 +2,22 @@ import 'dart:html';
 import 'dart:math';
 
 //import 'CellularAutomata.dart';
-import 'SierpinskiTriangle.dart';
-import 'GameOfLife.dart';
+import '../../CellularAutomata.dart';
+import '../../SierpinskiTriangle.dart';
+import '../../GameOfLife.dart';
 
 final _random = Random();
 
-GameOfLife ca = GameOfLife(0, 0);
+CellularAutomata ca = GameOfLife(0, 0);
 
 void main() {
-  //querySelector("#paragrafo")?.text = "Hello world!";
+  querySelector("#sierpinskiWidth")?.onChange.listen((event) {
+    changeLabel("sierpinskiWidth", "lblsierpinskiWidth");
+  });
+
+  querySelector("#run_sierpinski")?.onClick.listen((event) {
+    sierpinski_start(event);
+  });
 
   querySelector("#caWidth")?.onChange.listen((event) {
     changeLabel("caWidth", "lblcaWidth");
@@ -38,8 +45,6 @@ void conway_start(MouseEvent event) {
 
   ca = GameOfLife(w, h);
   ca.initialize();
-
-  //querySelector("#out")?.text = "$w, $h";
 
   window.requestAnimationFrame(conway_animation_boxes);
 }
@@ -91,7 +96,38 @@ void conway_animation_image(num timestamp) {
   window.requestAnimationFrame(conway_animation_image);
 }
 
-void sierpinski() {
+void sierpinski_start(MouseEvent event) {
+  var w_ele = querySelector("#sierpinskiWidth") as InputElement?;
+  int w = int.parse(w_ele?.value ?? "0");
+
+  ca = SierpinskiTriangle(w);
+  ca.initialize();
+
+  window.requestAnimationFrame(sierpinski_animation_boxes);
+}
+
+void sierpinski_animation_boxes(num timestamp) {
+  var canvas = querySelector("#canvas") as CanvasElement?;
+  var context = canvas?.getContext('2d') as CanvasRenderingContext2D?;
+  int canvasWidth = canvas?.width ?? 100;
+  int canvasHeight = canvas?.height ?? 100;
+  context?.clearRect(0, 0, canvasWidth, canvasHeight);
+
+  double boxW = canvasWidth / ca.shape[0];
+  double boxH = canvasHeight / ca.shape[0];
+
+  for (int y = 0; y < canvasHeight; y++) {
+    var img = ca.next();
+    for (int x = 0; x < ca.shape[0]; x++) {
+      int state = img[x];
+      context?.setFillColorRgb(state * 255, state * 255, state * 255);
+      context?.fillRect(x * boxW, y * boxH, boxW, boxH);
+    }
+  }
+  window.requestAnimationFrame(sierpinski_animation_boxes);
+}
+
+void sierpinski_animation_image(num timestamp) {
   var canvas = querySelector("#canvas") as CanvasElement?;
   var context = canvas?.getContext('2d') as CanvasRenderingContext2D?;
   int canvasWidth = canvas?.width ?? 100;
