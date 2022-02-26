@@ -2,10 +2,10 @@ import 'dart:html';
 import 'dart:math';
 
 //import 'CellularAutomata.dart';
-import '../../CellularAutomata.dart';
-import '../../SierpinskiTriangle.dart';
-import '../../GameOfLife.dart';
-import '../../PercolationCA.dart';
+import '../../CA/CellularAutomata.dart';
+import '../../CA/SierpinskiTriangle.dart';
+import '../../CA/GameOfLife.dart';
+import '../../CA/PercolationCA.dart';
 
 final _random = Random();
 
