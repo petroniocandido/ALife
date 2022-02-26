@@ -19,23 +19,23 @@ class PercolationCA extends CellularAutomata<int> {
   }
 
   @override
-  void cellUpdate(int list_index) {
-    if (grid[list_index] == 0) {
+  void cellUpdate(int list_index, [Map? args]) {
+    if (cells[list_index] == 0) {
       List<int> neighbors = cellNeighborhood(list_index);
 
       if (neighbors.length > 0) {
         var list = [
-          for (var i = 0; i <= neighbors.length - 1; i++) grid[neighbors[i]]
+          for (var i = 0; i <= neighbors.length - 1; i++) cells[neighbors[i]]
         ];
         if (list.any((element) => element == 2)) {
-          workingGrid[list_index] = 2;
+          cellsWorking[list_index] = 2;
         }
       }
     }
   }
 
   @override
-  List<int> cellNeighborhood(int list_index) {
+  List<int> cellNeighborhood(int list_index, [Map? args]) {
     var gix = gridIndex(list_index);
     List ix_grid = nextDimensionNeighbors(0, gix);
     var ret = <int>[];
@@ -46,15 +46,15 @@ class PercolationCA extends CellularAutomata<int> {
   }
 
   @override
-  void initialize() {
+  void initialize([Map? args]) {
     super.initialize();
-    int initial = _random.nextInt(grid.length - 1);
-    while (grid[initial] != 0) {
-      initial = _random.nextInt(grid.length - 1);
+    int initial = _random.nextInt(cells.length - 1);
+    while (cells[initial] != 0) {
+      initial = _random.nextInt(cells.length - 1);
     }
     print(initial);
     begin();
-    workingGrid[initial] = 2;
+    cellsWorking[initial] = 2;
     commit();
   }
 }

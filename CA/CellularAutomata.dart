@@ -7,13 +7,15 @@ abstract class CellularAutomata<T> {
 
   List<int> get shape_dimensions => _shape_dimensions;
 
-  List<T> _grid_current = [];
+  List<T> _cellsCurrent = [];
 
-  List<T> get grid => _grid_current;
+  List<T> get cells => _cellsCurrent;
 
-  List<T> _grid_working = [];
+  List<T> _cellsWorking = [];
 
-  List<T> get workingGrid => _grid_working;
+  List<T> get cellsWorking => _cellsWorking;
+
+  T operator [](int i) => _cellsCurrent[i];
 
   int padding = 0;
 
@@ -34,27 +36,27 @@ abstract class CellularAutomata<T> {
   ///////////////////////////////////////////////
 
   T cellCreate();
-  List<T> cellNeighborhood(int list_index);
-  void cellUpdate(int list_index);
+  List<int> cellNeighborhood(int list_index, [Map? args]);
+  void cellUpdate(int list_index, [Map? args]);
 
   ///////////////////////////////////////////////
   // BASE METHODS
   ///////////////////////////////////////////////
 
-  void initialize() {
-    _grid_current = [];
-    _grid_working = [];
+  void initialize([Map? args]) {
+    _cellsCurrent = [];
+    _cellsWorking = [];
     for (int i = 0; i < num_cells; i++) {
-      _grid_current.add(cellCreate());
+      _cellsCurrent.add(cellCreate());
     }
   }
 
   void begin() {
-    _grid_working = _grid_current.toList();
+    _cellsWorking = _cellsCurrent.toList();
   }
 
   void commit() {
-    _grid_current = _grid_working.toList();
+    _cellsCurrent = _cellsWorking.toList();
   }
 
   bool isValidGridIndex(List<int> index) {
@@ -92,7 +94,7 @@ abstract class CellularAutomata<T> {
       cellUpdate(i);
     }
     commit();
-    return _grid_current.toList();
+    return _cellsCurrent.toList();
   }
 
   List<T> run(int iterations) {
@@ -150,7 +152,7 @@ abstract class CellularAutomata<T> {
 void printGrid(CellularAutomata ca) {
   for (int x = 0; x < ca.shape[0]; x++) {
     var line = [
-      for (int y = 0; y < ca.shape[1]; y++) ca.grid[x * ca.shape[1] + y]
+      for (int y = 0; y < ca.shape[1]; y++) ca.cells[x * ca.shape[1] + y]
     ];
     print(line);
   }

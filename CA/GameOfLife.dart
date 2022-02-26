@@ -12,7 +12,7 @@ class GameOfLife extends CellularAutomata<int> {
   }
 
   @override
-  List<int> cellNeighborhood(int list_index) {
+  List<int> cellNeighborhood(int list_index, [Map? args]) {
     var gix = gridIndex(list_index);
     List ix_grid = nextDimensionNeighbors(0, gix);
     var ret = <int>[];
@@ -24,22 +24,22 @@ class GameOfLife extends CellularAutomata<int> {
   }
 
   @override
-  void cellUpdate(int list_index) {
+  void cellUpdate(int list_index, [Map? args]) {
     List<int> neighbors = cellNeighborhood(list_index);
 
     if (neighbors.length > 0) {
       var list = [
-        for (var i = 0; i <= neighbors.length - 1; i++) grid[neighbors[i]]
+        for (var i = 0; i <= neighbors.length - 1; i++) cells[neighbors[i]]
       ];
 
       int num = list.reduce((i, j) => i + j);
 
       if (num < 2) {
-        workingGrid[list_index] = 0;
+        cellsWorking[list_index] = 0;
       } else if (num > 3) {
-        workingGrid[list_index] = 0;
+        cellsWorking[list_index] = 0;
       } else if (num == 3) {
-        workingGrid[list_index] = 1;
+        cellsWorking[list_index] = 1;
       }
     }
   }

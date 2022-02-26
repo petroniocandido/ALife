@@ -3474,8 +3474,8 @@
       _._shape = t0;
       _.num_cells = 0;
       _._shape_dimensions = t1;
-      _._grid_current = t2;
-      _._grid_working = t3;
+      _._cellsCurrent = t2;
+      _._cellsWorking = t3;
     },
     GameOfLife_cellUpdate_closure: function GameOfLife_cellUpdate_closure() {
     },
@@ -3490,8 +3490,8 @@
       _._shape = t0;
       _.num_cells = 0;
       _._shape_dimensions = t1;
-      _._grid_current = t2;
-      _._grid_working = t3;
+      _._cellsCurrent = t2;
+      _._cellsWorking = t3;
     },
     PercolationCA_cellUpdate_closure: function PercolationCA_cellUpdate_closure() {
     },
@@ -3514,8 +3514,8 @@
       _._shape = t1;
       _.num_cells = 0;
       _._shape_dimensions = t2;
-      _._grid_current = t3;
-      _._grid_working = t4;
+      _._cellsCurrent = t3;
+      _._cellsWorking = t4;
     },
     main() {
       var t3, t4,
@@ -5235,10 +5235,10 @@
     initialize$0() {
       var i, _this = this,
         t1 = A._instanceType(_this)._eval$1("JSArray<CellularAutomata.T>");
-      _this.set$_grid_current(A._setArrayType([], t1));
-      _this.set$_grid_working(A._setArrayType([], t1));
+      _this.set$_cellsCurrent(A._setArrayType([], t1));
+      _this.set$_cellsWorking(A._setArrayType([], t1));
       for (i = 0; i < _this.num_cells; ++i)
-        B.JSArray_methods.add$1(_this._grid_current, _this.cellCreate$0());
+        B.JSArray_methods.add$1(_this._cellsCurrent, _this.cellCreate$0());
     },
     isValidGridIndex$1(index) {
       var t1, di, t2;
@@ -5291,15 +5291,15 @@
     },
     next$0() {
       var i, _this = this,
-        t1 = _this._grid_current;
+        t1 = _this._cellsCurrent;
       t1 = A._setArrayType(t1.slice(0), A._arrayInstanceType(t1));
-      _this.set$_grid_working(t1);
+      _this.set$_cellsWorking(t1);
       for (i = 0; i < _this.num_cells; ++i)
         _this.cellUpdate$1(i);
-      t1 = _this._grid_working;
+      t1 = _this._cellsWorking;
       t1 = A._setArrayType(t1.slice(0), A._arrayInstanceType(t1));
-      _this.set$_grid_current(t1);
-      t1 = _this._grid_current;
+      _this.set$_cellsCurrent(t1);
+      t1 = _this._cellsCurrent;
       t1 = A._setArrayType(t1.slice(0), A._arrayInstanceType(t1));
       return t1;
     },
@@ -5351,11 +5351,11 @@
     set$num_cells(num_cells) {
       this.num_cells = A._asInt(num_cells);
     },
-    set$_grid_current(_grid_current) {
-      this._grid_current = A._instanceType(this)._eval$1("List<CellularAutomata.T>")._as(_grid_current);
+    set$_cellsCurrent(_cellsCurrent) {
+      this._cellsCurrent = A._instanceType(this)._eval$1("List<CellularAutomata.T>")._as(_cellsCurrent);
     },
-    set$_grid_working(_grid_working) {
-      this._grid_working = A._instanceType(this)._eval$1("List<CellularAutomata.T>")._as(_grid_working);
+    set$_cellsWorking(_cellsWorking) {
+      this._cellsWorking = A._instanceType(this)._eval$1("List<CellularAutomata.T>")._as(_cellsWorking);
     }
   };
   A.CellularAutomata_closure.prototype = {
@@ -5386,7 +5386,7 @@
       if (neighbors.length > 0) {
         t1 = A._setArrayType([], type$.JSArray_int);
         for (i = 0; i <= neighbors.length - 1; ++i) {
-          t2 = _this._grid_current;
+          t2 = _this._cellsCurrent;
           t3 = neighbors[i];
           if (!(t3 >= 0 && t3 < t2.length))
             return A.ioore(t2, t3);
@@ -5394,11 +5394,11 @@
         }
         num = B.JSArray_methods.reduce$1(t1, new A.GameOfLife_cellUpdate_closure());
         if (num < 2)
-          B.JSArray_methods.$indexSet(_this._grid_working, list_index, 0);
+          B.JSArray_methods.$indexSet(_this._cellsWorking, list_index, 0);
         else if (num > 3)
-          B.JSArray_methods.$indexSet(_this._grid_working, list_index, 0);
+          B.JSArray_methods.$indexSet(_this._cellsWorking, list_index, 0);
         else if (num === 3)
-          B.JSArray_methods.$indexSet(_this._grid_working, list_index, 1);
+          B.JSArray_methods.$indexSet(_this._cellsWorking, list_index, 1);
       }
     }
   };
@@ -5416,7 +5416,7 @@
     },
     cellUpdate$1(list_index) {
       var neighbors, i, t2, t3, _this = this,
-        t1 = _this._grid_current;
+        t1 = _this._cellsCurrent;
       if (!(list_index < t1.length))
         return A.ioore(t1, list_index);
       if (J.$eq$(t1[list_index], 0)) {
@@ -5424,14 +5424,14 @@
         if (neighbors.length > 0) {
           t1 = A._setArrayType([], type$.JSArray_int);
           for (i = 0; i <= neighbors.length - 1; ++i) {
-            t2 = _this._grid_current;
+            t2 = _this._cellsCurrent;
             t3 = neighbors[i];
             if (!(t3 >= 0 && t3 < t2.length))
               return A.ioore(t2, t3);
             t1.push(t2[t3]);
           }
           if (B.JSArray_methods.any$1(t1, new A.PercolationCA_cellUpdate_closure()))
-            B.JSArray_methods.$indexSet(_this._grid_working, list_index, 2);
+            B.JSArray_methods.$indexSet(_this._cellsWorking, list_index, 2);
         }
       }
     },
@@ -5447,23 +5447,23 @@
       var t1, initial, t2, _this = this;
       _this.super$CellularAutomata$initialize();
       t1 = $.$get$_random();
-      initial = t1.nextInt$1(_this._grid_current.length - 1);
+      initial = t1.nextInt$1(_this._cellsCurrent.length - 1);
       while (true) {
-        t2 = _this._grid_current;
+        t2 = _this._cellsCurrent;
         if (!(initial >= 0 && initial < t2.length))
           return A.ioore(t2, initial);
         if (!!J.$eq$(t2[initial], 0))
           break;
-        initial = t1.nextInt$1(_this._grid_current.length - 1);
+        initial = t1.nextInt$1(_this._cellsCurrent.length - 1);
       }
       A.printString("" + initial);
-      t1 = _this._grid_current;
+      t1 = _this._cellsCurrent;
       t1 = A._setArrayType(t1.slice(0), A._arrayInstanceType(t1));
-      _this.set$_grid_working(t1);
-      B.JSArray_methods.$indexSet(_this._grid_working, initial, 2);
-      t1 = _this._grid_working;
+      _this.set$_cellsWorking(t1);
+      B.JSArray_methods.$indexSet(_this._cellsWorking, initial, 2);
+      t1 = _this._cellsWorking;
       t1 = A._setArrayType(t1.slice(0), A._arrayInstanceType(t1));
-      _this.set$_grid_current(t1);
+      _this.set$_cellsCurrent(t1);
     }
   };
   A.PercolationCA_cellUpdate_closure.prototype = {
@@ -5482,14 +5482,14 @@
       if (neighbors.length > 0) {
         t1 = A._setArrayType([], type$.JSArray_int);
         for (i = 0; i <= neighbors.length - 1; ++i) {
-          t2 = this._grid_current;
+          t2 = this._cellsCurrent;
           t3 = neighbors[i];
           if (!(t3 >= 0 && t3 < t2.length))
             return A.ioore(t2, t3);
           t1.push(t2[t3]);
         }
         num = B.JSArray_methods.reduce$1(t1, new A.BooleanCellularAutomata_cellUpdate_closure());
-        B.JSArray_methods.$indexSet(this._grid_working, list_index, B.JSInt_methods.$mod(num, 2));
+        B.JSArray_methods.$indexSet(this._cellsWorking, list_index, B.JSInt_methods.$mod(num, 2));
       }
     },
     cellNeighborhood$1(list_index) {
@@ -5512,10 +5512,10 @@
       var i, t1, _this = this;
       _this.super$CellularAutomata$initialize();
       for (i = 0; t1 = B.JSInt_methods._tdivFast$1(_this.num_cells, 2), i < t1; ++i)
-        B.JSArray_methods.$indexSet(_this._grid_current, i, 0);
-      B.JSArray_methods.$indexSet(_this._grid_current, t1, 1);
+        B.JSArray_methods.$indexSet(_this._cellsCurrent, i, 0);
+      B.JSArray_methods.$indexSet(_this._cellsCurrent, t1, 1);
       for (i = B.JSInt_methods._tdivFast$1(_this.num_cells, 2) + 1; i < _this.num_cells; ++i)
-        B.JSArray_methods.$indexSet(_this._grid_current, i, 0);
+        B.JSArray_methods.$indexSet(_this._cellsCurrent, i, 0);
     },
     cellUpdate$1(list_index) {
       var t1, i, t2, t3, _this = this,
@@ -5523,13 +5523,13 @@
       if (neighbors.length > 1) {
         t1 = A._setArrayType([], type$.JSArray_int);
         for (i = 0; i <= neighbors.length - 1; ++i) {
-          t2 = _this._grid_current;
+          t2 = _this._cellsCurrent;
           t3 = neighbors[i];
           if (!(t3 >= 0 && t3 < t2.length))
             return A.ioore(t2, t3);
           t1.push(t2[t3]);
         }
-        t2 = _this._grid_current;
+        t2 = _this._cellsCurrent;
         if (!(list_index < t2.length))
           return A.ioore(t2, list_index);
         t2 = A._asInt(t2[list_index]);
@@ -5539,7 +5539,7 @@
         if (1 > t3)
           A.throwExpression(A.RangeError$value(1, null));
         t1.splice(1, 0, t2);
-        t2 = _this._grid_working;
+        t2 = _this._cellsWorking;
         t1 = _this.rules.$index(0, A.IterableBase_iterableToFullString(t1, "[", "]"));
         B.JSArray_methods.$indexSet(t2, list_index, t1 == null ? 0 : t1);
       }
