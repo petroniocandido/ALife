@@ -17,24 +17,16 @@
 <body id="page-top">
     <div class="bs-example bs-example-tabs">
         <ul class="nav nav-tabs" id="maintab" role=tablist>
+            <li role="presentation"><a href="#general" role=tab id=general-tab>General</a></li>
             <li role="presentation"><a href="#sierpinski" role=tab id=sierpinski-tab>Sierpinski</a></li>
             <li role="presentation"><a href="#conway" role=tab id=conway-tab> Conway</a></li>
             <li role="presentation"><a href="#percolation" role=tab id=percolation-tab>Percolation</a></li>
+            <li role="presentation"><a href="#oscillator" role=tab id=oscillator-tab>Oscillator</a></li>
         </ul>
 
         <div class="tab-content" id=maintabcontent>
-            <div class="tab-pane fade" id="sierpinski" role="tabpanel" aria-labelledby="sierpinski-tab">
-                <h3>Sierpinski Triangle</h3>
-                <form>
-                    <div class="form-group">
-                        <label for="sierpinskiWidth">Width:</label><span id="lblsierpinskiWidth"></span>
-                        <input type="range" class="custom-range" min="10" max="50" id="sierpinskiWidth">
-                    </div>
-                </form>
-                <button class="btn btn-primary" id="run_sierpinski">Run</button>
-            </div>
-            <div class="tab-pane fade" id="conway" role="tabpanel" aria-labelledby="conway-tab">
-                <h3>Conway's Game of Life</h3>
+            <div class="tab-pane fade" id="general" role="tabpanel" aria-labelledby="general-tab">
+                <h3>General Configurations</h3>
                 <form>
                     <div class="form-group">
                         <label for="caWidth">Width:</label><span id="lblcaWidth"></span>
@@ -46,23 +38,29 @@
                     </div>
 
                 </form>
+
+            </div>
+            <div class="tab-pane fade" id="sierpinski" role="tabpanel" aria-labelledby="sierpinski-tab">
+                <h3>Sierpinski Triangle</h3>
+               
+                <button class="btn btn-primary" id="run_sierpinski">Run</button>
+            </div>
+            <div class="tab-pane fade" id="conway" role="tabpanel" aria-labelledby="conway-tab">
+                <h3>Conway's Game of Life</h3>
+                
                 <button class="btn btn-primary" id="run_conway">Run</button>
 
             </div>
-            <div class="tab-pane fade" id="percolation" role="tabpanel" aria-labelledby="conway-tab">
+            <div class="tab-pane fade" id="percolation" role="tabpanel" aria-labelledby="percolation-tab">
                 <h3>Percolation Process</h3>
-                <form>
-                    <div class="form-group">
-                        <label for="percoWidth">Width:</label><span id="lblpercoWidth"></span>
-                        <input type="range" class="custom-range" min="10" max="50" id="percoWidth">
-                    </div>
-                    <div class="form-group">
-                        <label for="percoHeight">Height:</label><span id="lblpercoHeight"></span>
-                        <input type="range" class="custom-range" min="10" max="50" id="percoHeight">
-                    </div>
-
-                </form>
+                
                 <button class="btn btn-primary" id="run_percolation">Run</button>
+
+            </div>
+            <div class="tab-pane fade" id="oscillator" role="tabpanel" aria-labelledby="oscillator-tab">
+                <h3>Oscilattor Network</h3>
+                
+                <button class="btn btn-primary" id="run_oscillator">Run</button>
 
             </div>
         </div>

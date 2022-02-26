@@ -3462,6 +3462,8 @@
     },
     CellularAutomata_closure: function CellularAutomata_closure() {
     },
+    ComplexCellularAutomata: function ComplexCellularAutomata() {
+    },
     GameOfLife$(width, height) {
       var t1 = type$.JSArray_int,
         t2 = A._setArrayType([width, height], t1);
@@ -3478,6 +3480,32 @@
       _._cellsWorking = t3;
     },
     GameOfLife_cellUpdate_closure: function GameOfLife_cellUpdate_closure() {
+    },
+    OscillatorCA$(x, y) {
+      var t1 = type$.JSArray_int,
+        t2 = A._setArrayType([x, y], t1),
+        t3 = type$.JSArray_Oscillator;
+      t1 = new A.OscillatorCA(A._setArrayType([], t3), A._setArrayType([], t3), t2, A._setArrayType([], t1), A._setArrayType([], t1), A._setArrayType([], t1));
+      t1.CellularAutomata$1(t2, type$.int);
+      return t1;
+    },
+    Oscillator: function Oscillator(t0, t1, t2) {
+      this._amplitude = t0;
+      this._frequency = t1;
+      this._phase = t2;
+    },
+    OscillatorCA: function OscillatorCA(t0, t1, t2, t3, t4, t5) {
+      var _ = this;
+      _.time = 0;
+      _._cellsCurrentInternal = t0;
+      _._cellsWorkingInternal = t1;
+      _._shape = t2;
+      _.num_cells = 0;
+      _._shape_dimensions = t3;
+      _._cellsCurrent = t4;
+      _._cellsWorking = t5;
+    },
+    OscillatorCA_cellUpdate_closure: function OscillatorCA_cellUpdate_closure() {
     },
     PercolationCA$(shape) {
       var t1 = type$.JSArray_int;
@@ -3520,7 +3548,7 @@
     main() {
       var t3, t4,
         t1 = document,
-        t2 = t1.querySelector("#sierpinskiWidth");
+        t2 = t1.querySelector("#caWidth");
       if (t2 != null) {
         t2 = J.get$onChange$x(t2);
         t3 = t2.$ti;
@@ -3528,27 +3556,19 @@
         type$.nullable_void_Function._as(null);
         A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
       }
-      t2 = t1.querySelector("#run_sierpinski");
+      t2 = t1.querySelector("#caHeight");
       if (t2 != null) {
-        t2 = J.get$onClick$x(t2);
+        t2 = J.get$onChange$x(t2);
         t3 = t2.$ti;
         t4 = t3._eval$1("~(1)?")._as(new A.main_closure0());
         type$.nullable_void_Function._as(null);
         A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
       }
-      t2 = t1.querySelector("#caWidth");
+      t2 = t1.querySelector("#run_sierpinski");
       if (t2 != null) {
-        t2 = J.get$onChange$x(t2);
+        t2 = J.get$onClick$x(t2);
         t3 = t2.$ti;
         t4 = t3._eval$1("~(1)?")._as(new A.main_closure1());
-        type$.nullable_void_Function._as(null);
-        A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
-      }
-      t2 = t1.querySelector("#caHeight");
-      if (t2 != null) {
-        t2 = J.get$onChange$x(t2);
-        t3 = t2.$ti;
-        t4 = t3._eval$1("~(1)?")._as(new A.main_closure2());
         type$.nullable_void_Function._as(null);
         A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
       }
@@ -3556,31 +3576,23 @@
       if (t2 != null) {
         t2 = J.get$onClick$x(t2);
         t3 = t2.$ti;
+        t4 = t3._eval$1("~(1)?")._as(new A.main_closure2());
+        type$.nullable_void_Function._as(null);
+        A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
+      }
+      t2 = t1.querySelector("#run_percolation");
+      if (t2 != null) {
+        t2 = J.get$onClick$x(t2);
+        t3 = t2.$ti;
         t4 = t3._eval$1("~(1)?")._as(new A.main_closure3());
         type$.nullable_void_Function._as(null);
         A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
       }
-      t2 = t1.querySelector("#percoWidth");
-      if (t2 != null) {
-        t2 = J.get$onChange$x(t2);
-        t3 = t2.$ti;
-        t4 = t3._eval$1("~(1)?")._as(new A.main_closure4());
-        type$.nullable_void_Function._as(null);
-        A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
-      }
-      t2 = t1.querySelector("#percoHeight");
-      if (t2 != null) {
-        t2 = J.get$onChange$x(t2);
-        t3 = t2.$ti;
-        t4 = t3._eval$1("~(1)?")._as(new A.main_closure5());
-        type$.nullable_void_Function._as(null);
-        A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
-      }
-      t1 = t1.querySelector("#run_percolation");
+      t1 = t1.querySelector("#run_oscillator");
       if (t1 != null) {
         t1 = J.get$onClick$x(t1);
         t2 = t1.$ti;
-        t3 = t2._eval$1("~(1)?")._as(new A.main_closure6());
+        t3 = t2._eval$1("~(1)?")._as(new A.main_closure4());
         type$.nullable_void_Function._as(null);
         A._EventStreamSubscription$(t1._target, t1._eventType, t3, false, t2._precomputed1);
       }
@@ -3769,6 +3781,65 @@
       }
       B.Window_methods.requestAnimationFrame$1(window, A.controller__percolation_animation_boxes$closure());
     },
+    oscillator_animation_boxes(timestamp) {
+      var canvas, t1, t2, canvasWidth, canvasHeight, t3, t4, t5, boxW, boxH, img, y, x, t6, state;
+      A._asNum(timestamp);
+      canvas = type$.nullable_CanvasElement._as(document.querySelector("#canvas"));
+      t1 = canvas == null;
+      t2 = t1 ? null : B.CanvasElement_methods.getContext$1(canvas, "2d");
+      type$.nullable_CanvasRenderingContext2D._as(t2);
+      canvasWidth = t1 ? null : canvas.width;
+      if (canvasWidth == null)
+        canvasWidth = 100;
+      canvasHeight = t1 ? null : canvas.height;
+      if (canvasHeight == null)
+        canvasHeight = 100;
+      t1 = t2 == null;
+      if (!t1)
+        t2.clearRect(0, 0, canvasWidth, canvasHeight);
+      t3 = $.$get$ca();
+      t4 = t3._shape;
+      t5 = t4.length;
+      if (0 >= t5)
+        return A.ioore(t4, 0);
+      boxW = canvasWidth / t4[0];
+      if (1 >= t5)
+        return A.ioore(t4, 1);
+      boxH = canvasHeight / t4[1];
+      img = t3.next$0();
+      t3 = type$.JSArray_int;
+      y = 0;
+      while (true) {
+        t4 = $.$get$ca()._shape;
+        if (1 >= t4.length)
+          return A.ioore(t4, 1);
+        if (!(y < t4[1]))
+          break;
+        t4 = y * boxH;
+        x = 0;
+        while (true) {
+          t5 = $.$get$ca();
+          t6 = t5._shape;
+          if (0 >= t6.length)
+            return A.ioore(t6, 0);
+          if (!(x < t6[0]))
+            break;
+          t5 = t5.listIndex$1(A._setArrayType([x, y], t3));
+          if (!(t5 >= 0 && t5 < img.length))
+            return A.ioore(img, t5);
+          state = A._asInt(img[t5]);
+          if (!t1) {
+            t5 = 31 * state;
+            B.CanvasRenderingContext2D_methods.set$fillStyle(t2, "rgba(" + t5 + ", " + t5 + ", " + t5 + ", 1)");
+          }
+          if (!t1)
+            t2.fillRect(x * boxW, t4, boxW, boxH);
+          ++x;
+        }
+        ++y;
+      }
+      B.Window_methods.requestAnimationFrame$1(window, A.controller__oscillator_animation_boxes$closure());
+    },
     main_closure: function main_closure() {
     },
     main_closure0: function main_closure0() {
@@ -3780,10 +3851,6 @@
     main_closure3: function main_closure3() {
     },
     main_closure4: function main_closure4() {
-    },
-    main_closure5: function main_closure5() {
-    },
-    main_closure6: function main_closure6() {
     },
     printString(string) {
       if (typeof dartPrint == "function") {
@@ -4222,6 +4289,7 @@
       return other > 31 ? 0 : receiver >>> other;
     },
     $isComparable: 1,
+    $isdouble: 1,
     $isnum: 1
   };
   J.JSInt.prototype = {$isint: 1};
@@ -5201,7 +5269,7 @@
     call$1(e) {
       return this.onData.call$1(type$.Event._as(e));
     },
-    $signature: 1
+    $signature: 4
   };
   A._JSRandom.prototype = {
     nextInt$1(max) {
@@ -5239,6 +5307,16 @@
       _this.set$_cellsWorking(A._setArrayType([], t1));
       for (i = 0; i < _this.num_cells; ++i)
         B.JSArray_methods.add$1(_this._cellsCurrent, _this.cellCreate$0());
+    },
+    begin$0() {
+      var t1 = this._cellsCurrent;
+      t1 = A._setArrayType(t1.slice(0), A._arrayInstanceType(t1));
+      this.set$_cellsWorking(t1);
+    },
+    commit$0(_) {
+      var t1 = this._cellsWorking;
+      t1 = A._setArrayType(t1.slice(0), A._arrayInstanceType(t1));
+      this.set$_cellsCurrent(t1);
     },
     isValidGridIndex$1(index) {
       var t1, di, t2;
@@ -5290,15 +5368,11 @@
       return index + t1;
     },
     next$0() {
-      var i, _this = this,
-        t1 = _this._cellsCurrent;
-      t1 = A._setArrayType(t1.slice(0), A._arrayInstanceType(t1));
-      _this.set$_cellsWorking(t1);
+      var i, t1, _this = this;
+      _this.begin$0();
       for (i = 0; i < _this.num_cells; ++i)
         _this.cellUpdate$1(i);
-      t1 = _this._cellsWorking;
-      t1 = A._setArrayType(t1.slice(0), A._arrayInstanceType(t1));
-      _this.set$_cellsCurrent(t1);
+      _this.commit$0(0);
       t1 = _this._cellsCurrent;
       t1 = A._setArrayType(t1.slice(0), A._arrayInstanceType(t1));
       return t1;
@@ -5362,11 +5436,41 @@
     call$2(i, j) {
       return A._asInt(i) * A._asInt(j);
     },
-    $signature: 2
+    $signature: 1
+  };
+  A.ComplexCellularAutomata.prototype = {
+    initialize$0() {
+      var i, t1, t2;
+      for (i = 0; i < this.num_cells; ++i) {
+        t1 = this._cellsCurrentInternal;
+        t2 = $.$get$_random();
+        B.JSArray_methods.add$1(t1, new A.Oscillator(t2.nextDouble$0(), t2.nextDouble$0(), t2.nextDouble$0()));
+        B.JSArray_methods.add$1(this._cellsCurrent, 0);
+      }
+    },
+    begin$0() {
+      this.super$CellularAutomata$begin();
+      var t1 = this._cellsCurrentInternal;
+      t1 = A._setArrayType(t1.slice(0), A._arrayInstanceType(t1));
+      this.set$_cellsWorkingInternal(t1);
+    },
+    commit$0(_) {
+      var t1;
+      this.super$CellularAutomata$commit(0);
+      t1 = this._cellsWorkingInternal;
+      t1 = A._setArrayType(t1.slice(0), A._arrayInstanceType(t1));
+      this.set$_cellsCurrentInternal(t1);
+    },
+    set$_cellsCurrentInternal(_cellsCurrentInternal) {
+      this._cellsCurrentInternal = A._instanceType(this)._eval$1("List<ComplexCellularAutomata.1>")._as(_cellsCurrentInternal);
+    },
+    set$_cellsWorkingInternal(_cellsWorkingInternal) {
+      this._cellsWorkingInternal = A._instanceType(this)._eval$1("List<ComplexCellularAutomata.1>")._as(_cellsWorkingInternal);
+    }
   };
   A.GameOfLife.prototype = {
     cellCreate$0() {
-      return $.$get$_random0().nextInt$1(2);
+      return $.$get$_random1().nextInt$1(2);
     },
     cellNeighborhood$1(list_index) {
       var t1, t2, _i,
@@ -5406,11 +5510,80 @@
     call$2(i, j) {
       return A._asInt(i) + A._asInt(j);
     },
-    $signature: 2
+    $signature: 1
+  };
+  A.Oscillator.prototype = {
+    wave$1(t) {
+      return this._amplitude * Math.sin(t * this._frequency + this._phase);
+    },
+    toString$0(_) {
+      return "y(t) = " + A.S(this._amplitude) + " * sin(t * " + A.S(this._frequency) + " + " + A.S(this._phase) + ")";
+    }
+  };
+  A.OscillatorCA.prototype = {
+    cellCreate$0() {
+      return 0;
+    },
+    cellUpdate$1(list_index) {
+      var wphase, neigh, t2, _i, i, t3, t4, t5, state, _this = this,
+        t1 = _this._cellsCurrentInternal;
+      if (!(list_index < t1.length))
+        return A.ioore(t1, list_index);
+      wphase = t1[list_index].wave$1(_this.time);
+      neigh = _this.cellNeighborhood$1(list_index);
+      t1 = A._setArrayType([], type$.JSArray_double);
+      for (t2 = neigh.length, _i = 0; _i < neigh.length; neigh.length === t2 || (0, A.throwConcurrentModificationError)(neigh), ++_i) {
+        i = neigh[_i];
+        t3 = _this._cellsCurrentInternal;
+        if (!(i >= 0 && i < t3.length))
+          return A.ioore(t3, i);
+        t3 = t3[i];
+        t4 = _this.time;
+        t1.push(t3._amplitude * Math.sin(t4 * t3._frequency + t3._phase));
+      }
+      t2 = A._setArrayType([], type$.JSArray_int);
+      for (t3 = t1.length, t4 = wphase - 0.05, t5 = wphase + 0.05, _i = 0; _i < t1.length; t1.length === t3 || (0, A.throwConcurrentModificationError)(t1), ++_i) {
+        i = t1[_i];
+        t2.push(i >= t4 && i <= t5 ? 1 : 0);
+      }
+      state = B.JSArray_methods.reduce$1(t2, new A.OscillatorCA_cellUpdate_closure());
+      B.JSArray_methods.$indexSet(_this._cellsWorking, list_index, state);
+    },
+    cellNeighborhood$1(list_index) {
+      var t1, t2, _i,
+        ix_grid = this.nextDimensionNeighbors$2(0, this.gridIndex$1(list_index)),
+        ret = A._setArrayType([], type$.JSArray_int);
+      for (t1 = ix_grid.length, t2 = type$.List_int, _i = 0; _i < ix_grid.length; ix_grid.length === t1 || (0, A.throwConcurrentModificationError)(ix_grid), ++_i)
+        B.JSArray_methods.add$1(ret, this.listIndex$1(t2._as(ix_grid[_i])));
+      return ret;
+    },
+    next$0() {
+      var t1, i, _this = this;
+      ++_this.time;
+      _this.super$CellularAutomata$begin();
+      t1 = _this._cellsCurrentInternal;
+      t1 = A._setArrayType(t1.slice(0), A._arrayInstanceType(t1));
+      _this.set$_cellsWorkingInternal(t1);
+      for (i = 0; i < _this.num_cells; ++i)
+        _this.cellUpdate$1(i);
+      _this.super$CellularAutomata$commit(0);
+      t1 = _this._cellsWorkingInternal;
+      t1 = A._setArrayType(t1.slice(0), A._arrayInstanceType(t1));
+      _this.set$_cellsCurrentInternal(t1);
+      t1 = _this._cellsCurrent;
+      t1 = A._setArrayType(t1.slice(0), A._arrayInstanceType(t1));
+      return t1;
+    }
+  };
+  A.OscillatorCA_cellUpdate_closure.prototype = {
+    call$2(i, j) {
+      return A._asInt(i) + A._asInt(j);
+    },
+    $signature: 1
   };
   A.PercolationCA.prototype = {
     cellCreate$0() {
-      if ($.$get$_random().nextDouble$0() < 0.6)
+      if ($.$get$_random0().nextDouble$0() < 0.6)
         return 1;
       return 0;
     },
@@ -5446,7 +5619,7 @@
     initialize$0() {
       var t1, initial, t2, _this = this;
       _this.super$CellularAutomata$initialize();
-      t1 = $.$get$_random();
+      t1 = $.$get$_random0();
       initial = t1.nextInt$1(_this._cellsCurrent.length - 1);
       while (true) {
         t2 = _this._cellsCurrent;
@@ -5474,7 +5647,7 @@
   };
   A.BooleanCellularAutomata.prototype = {
     cellCreate$0() {
-      return $.$get$_random1().nextInt$1(2);
+      return $.$get$_random2().nextInt$1(2);
     },
     cellUpdate$1(list_index) {
       var t1, i, t2, t3, num,
@@ -5505,7 +5678,7 @@
     call$2(i, j) {
       return A._asInt(i) + A._asInt(j);
     },
-    $signature: 2
+    $signature: 1
   };
   A.SierpinskiTriangle.prototype = {
     initialize$0() {
@@ -5547,36 +5720,30 @@
   };
   A.main_closure.prototype = {
     call$1($event) {
-      A.changeLabel("sierpinskiWidth", "lblsierpinskiWidth");
+      A.changeLabel("caWidth", "lblcaWidth");
     },
-    $signature: 1
+    $signature: 4
   };
   A.main_closure0.prototype = {
     call$1($event) {
+      A.changeLabel("caHeight", "lblcaHeight");
+    },
+    $signature: 4
+  };
+  A.main_closure1.prototype = {
+    call$1($event) {
       var w_ele, t1;
       type$.MouseEvent._as($event);
-      w_ele = type$.nullable_InputElement._as(document.querySelector("#sierpinskiWidth"));
+      w_ele = type$.nullable_InputElement._as(document.querySelector("#caWidth"));
       t1 = w_ele == null ? null : w_ele.value;
       t1 = A.SierpinskiTriangle$(A.int_parse(t1 == null ? "0" : t1));
       $.ca = t1;
       t1.initialize$0();
       B.Window_methods.requestAnimationFrame$1(window, A.controller__sierpinski_animation_boxes$closure());
     },
-    $signature: 3
-  };
-  A.main_closure1.prototype = {
-    call$1($event) {
-      A.changeLabel("caWidth", "lblcaWidth");
-    },
-    $signature: 1
+    $signature: 2
   };
   A.main_closure2.prototype = {
-    call$1($event) {
-      A.changeLabel("caHeight", "lblcaHeight");
-    },
-    $signature: 1
-  };
-  A.main_closure3.prototype = {
     call$1($event) {
       var t1, t2, w_ele, h_ele, w;
       type$.MouseEvent._as($event);
@@ -5592,21 +5759,9 @@
       t1.initialize$0();
       B.Window_methods.requestAnimationFrame$1(window, A.controller__conway_animation_boxes$closure());
     },
-    $signature: 3
+    $signature: 2
   };
-  A.main_closure4.prototype = {
-    call$1($event) {
-      A.changeLabel("percoWidth", "lblpercoWidth");
-    },
-    $signature: 1
-  };
-  A.main_closure5.prototype = {
-    call$1($event) {
-      A.changeLabel("percoHeight", "lblpercoHeight");
-    },
-    $signature: 1
-  };
-  A.main_closure6.prototype = {
+  A.main_closure3.prototype = {
     call$1($event) {
       var t1, t2, w_ele, h_ele, w;
       type$.MouseEvent._as($event);
@@ -5622,7 +5777,25 @@
       t1.initialize$0();
       B.Window_methods.requestAnimationFrame$1(window, A.controller__percolation_animation_boxes$closure());
     },
-    $signature: 3
+    $signature: 2
+  };
+  A.main_closure4.prototype = {
+    call$1($event) {
+      var t1, t2, w_ele, h_ele, w;
+      type$.MouseEvent._as($event);
+      t1 = document;
+      t2 = type$.nullable_InputElement;
+      w_ele = t2._as(t1.querySelector("#caWidth"));
+      h_ele = t2._as(t1.querySelector("#caHeight"));
+      t1 = w_ele == null ? null : w_ele.value;
+      w = A.int_parse(t1 == null ? "0" : t1);
+      t1 = h_ele == null ? null : h_ele.value;
+      t1 = A.OscillatorCA$(w, A.int_parse(t1 == null ? "0" : t1));
+      $.ca = t1;
+      t1.initialize$0();
+      B.Window_methods.requestAnimationFrame$1(window, A.controller__oscillator_animation_boxes$closure());
+    },
+    $signature: 2
   };
   (function aliases() {
     var _ = J.Interceptor.prototype;
@@ -5631,25 +5804,28 @@
     _.super$LegacyJavaScriptObject$toString = _.toString$0;
     _ = A.CellularAutomata.prototype;
     _.super$CellularAutomata$initialize = _.initialize$0;
+    _.super$CellularAutomata$begin = _.begin$0;
+    _.super$CellularAutomata$commit = _.commit$0;
   })();
   (function installTearOffs() {
     var _static_2 = hunkHelpers._static_2,
       _static_1 = hunkHelpers._static_1,
       _static_0 = hunkHelpers._static_0;
     _static_2(J, "_interceptors_JSArray__compareAny$closure", "JSArray__compareAny", 15);
-    _static_1(A, "async__AsyncRun__scheduleImmediateJsOverride$closure", "_AsyncRun__scheduleImmediateJsOverride", 4);
-    _static_1(A, "async__AsyncRun__scheduleImmediateWithSetImmediate$closure", "_AsyncRun__scheduleImmediateWithSetImmediate", 4);
-    _static_1(A, "async__AsyncRun__scheduleImmediateWithTimer$closure", "_AsyncRun__scheduleImmediateWithTimer", 4);
+    _static_1(A, "async__AsyncRun__scheduleImmediateJsOverride$closure", "_AsyncRun__scheduleImmediateJsOverride", 5);
+    _static_1(A, "async__AsyncRun__scheduleImmediateWithSetImmediate$closure", "_AsyncRun__scheduleImmediateWithSetImmediate", 5);
+    _static_1(A, "async__AsyncRun__scheduleImmediateWithTimer$closure", "_AsyncRun__scheduleImmediateWithTimer", 5);
     _static_0(A, "async___startMicrotaskLoop$closure", "_startMicrotaskLoop", 0);
-    _static_1(A, "controller__conway_animation_boxes$closure", "conway_animation_boxes", 5);
-    _static_1(A, "controller__sierpinski_animation_boxes$closure", "sierpinski_animation_boxes", 5);
-    _static_1(A, "controller__percolation_animation_boxes$closure", "percolation_animation_boxes", 5);
+    _static_1(A, "controller__conway_animation_boxes$closure", "conway_animation_boxes", 3);
+    _static_1(A, "controller__sierpinski_animation_boxes$closure", "sierpinski_animation_boxes", 3);
+    _static_1(A, "controller__percolation_animation_boxes$closure", "percolation_animation_boxes", 3);
+    _static_1(A, "controller__oscillator_animation_boxes$closure", "oscillator_animation_boxes", 3);
   })();
   (function inheritance() {
     var _inherit = hunkHelpers.inherit,
       _inheritMany = hunkHelpers.inheritMany;
     _inherit(A.Object, null);
-    _inheritMany(A.Object, [A.JS_CONST, J.Interceptor, J.ArrayIterator, A.Error, A.TypeErrorDecoder, A.NullThrownFromJavaScriptException, A._StackTrace, A.Closure, A.MapMixin, A.LinkedHashMapCell, A.Rti, A._FunctionParameters, A._TimerImpl, A.AsyncError, A._FutureListener, A._Future, A._AsyncCallbackEntry, A.Stream, A.StreamSubscription, A._Zone, A.StackOverflowError, A._Exception, A.FormatException, A.Null, A._StringStackTrace, A.StringBuffer, A.EventStreamProvider, A._JSRandom, A.CellularAutomata]);
+    _inheritMany(A.Object, [A.JS_CONST, J.Interceptor, J.ArrayIterator, A.Error, A.TypeErrorDecoder, A.NullThrownFromJavaScriptException, A._StackTrace, A.Closure, A.MapMixin, A.LinkedHashMapCell, A.Rti, A._FunctionParameters, A._TimerImpl, A.AsyncError, A._FutureListener, A._Future, A._AsyncCallbackEntry, A.Stream, A.StreamSubscription, A._Zone, A.StackOverflowError, A._Exception, A.FormatException, A.Null, A._StringStackTrace, A.StringBuffer, A.EventStreamProvider, A._JSRandom, A.CellularAutomata, A.Oscillator]);
     _inheritMany(J.Interceptor, [J.JSBool, J.JSNull, J.JavaScriptObject, J.JSArray, J.JSNumber, J.JSString]);
     _inheritMany(J.JavaScriptObject, [J.LegacyJavaScriptObject, A.EventTarget, A.CanvasRenderingContext2D, A.DomException, A.Event]);
     _inheritMany(J.LegacyJavaScriptObject, [J.PlainJavaScriptObject, J.UnknownJavaScriptObject, J.JavaScriptFunction]);
@@ -5657,12 +5833,12 @@
     _inheritMany(J.JSNumber, [J.JSInt, J.JSNumNotInt]);
     _inheritMany(A.Error, [A.LateError, A.TypeError, A.JsNoSuchMethodError, A.UnknownJsTypeError, A.RuntimeError, A.AssertionError, A._Error, A.NullThrownError, A.ArgumentError, A.UnsupportedError, A.UnimplementedError, A.StateError, A.ConcurrentModificationError, A.CyclicInitializationError]);
     _inherit(A.NullError, A.TypeError);
-    _inheritMany(A.Closure, [A.Closure0Args, A.Closure2Args, A.TearOffClosure, A.initHooks_closure, A.initHooks_closure1, A._AsyncRun__initializeScheduleImmediate_internalCallback, A._AsyncRun__initializeScheduleImmediate_closure, A._Future__propagateToListeners_handleWhenCompleteCallback_closure, A.Stream_length_closure, A._RootZone_bindUnaryCallbackGuarded_closure, A._EventStreamSubscription_closure, A.PercolationCA_cellUpdate_closure, A.main_closure, A.main_closure0, A.main_closure1, A.main_closure2, A.main_closure3, A.main_closure4, A.main_closure5, A.main_closure6]);
+    _inheritMany(A.Closure, [A.Closure0Args, A.Closure2Args, A.TearOffClosure, A.initHooks_closure, A.initHooks_closure1, A._AsyncRun__initializeScheduleImmediate_internalCallback, A._AsyncRun__initializeScheduleImmediate_closure, A._Future__propagateToListeners_handleWhenCompleteCallback_closure, A.Stream_length_closure, A._RootZone_bindUnaryCallbackGuarded_closure, A._EventStreamSubscription_closure, A.PercolationCA_cellUpdate_closure, A.main_closure, A.main_closure0, A.main_closure1, A.main_closure2, A.main_closure3, A.main_closure4]);
     _inheritMany(A.TearOffClosure, [A.StaticClosure, A.BoundClosure]);
     _inherit(A._AssertionError, A.AssertionError);
     _inherit(A.MapBase, A.MapMixin);
     _inherit(A.JsLinkedHashMap, A.MapBase);
-    _inheritMany(A.Closure2Args, [A.initHooks_closure0, A.MapBase_mapToString_closure, A.CellularAutomata_closure, A.GameOfLife_cellUpdate_closure, A.BooleanCellularAutomata_cellUpdate_closure]);
+    _inheritMany(A.Closure2Args, [A.initHooks_closure0, A.MapBase_mapToString_closure, A.CellularAutomata_closure, A.GameOfLife_cellUpdate_closure, A.OscillatorCA_cellUpdate_closure, A.BooleanCellularAutomata_cellUpdate_closure]);
     _inherit(A._TypeError, A._Error);
     _inheritMany(A.Closure0Args, [A._AsyncRun__scheduleImmediateJsOverride_internalCallback, A._AsyncRun__scheduleImmediateWithSetImmediate_internalCallback, A._TimerImpl_internalCallback, A._Future__addListener_closure, A._Future__prependListeners_closure, A._Future__propagateToListeners_handleWhenCompleteCallback, A._Future__propagateToListeners_handleValueCallback, A._Future__propagateToListeners_handleError, A.Stream_length_closure0, A._rootHandleError_closure, A._RootZone_bindCallbackGuarded_closure]);
     _inherit(A._RootZone, A._Zone);
@@ -5676,19 +5852,20 @@
     _inherit(A._EventStream, A.Stream);
     _inherit(A._ElementEventStreamImpl, A._EventStream);
     _inherit(A._EventStreamSubscription, A.StreamSubscription);
-    _inheritMany(A.CellularAutomata, [A.GameOfLife, A.PercolationCA, A.BooleanCellularAutomata]);
+    _inheritMany(A.CellularAutomata, [A.ComplexCellularAutomata, A.GameOfLife, A.PercolationCA, A.BooleanCellularAutomata]);
+    _inherit(A.OscillatorCA, A.ComplexCellularAutomata);
     _inherit(A.SierpinskiTriangle, A.BooleanCellularAutomata);
   })();
   var init = {
     typeUniverse: {eC: new Map(), tR: {}, eT: {}, tPV: {}, sEA: []},
     mangledGlobalNames: {int: "int", double: "double", num: "num", String: "String", bool: "bool", Null: "Null", List: "List"},
     mangledNames: {},
-    types: ["~()", "~(Event)", "int(int,int)", "~(MouseEvent)", "~(~())", "~(num)", "Null()", "@(@)", "@(@,String)", "@(String)", "Null(@)", "Null(~())", "_Future<@>(@)", "~(Object?,Object?)", "bool(int)", "int(@,@)"],
+    types: ["~()", "int(int,int)", "~(MouseEvent)", "~(num)", "~(Event)", "~(~())", "Null()", "@(@)", "@(@,String)", "@(String)", "Null(@)", "Null(~())", "_Future<@>(@)", "~(Object?,Object?)", "bool(int)", "int(@,@)"],
     interceptorsByTag: null,
     leafTags: null,
     arrayRti: Symbol("$ti")
   };
-  A._Universe_addRules(init.typeUniverse, JSON.parse('{"PlainJavaScriptObject":"LegacyJavaScriptObject","UnknownJavaScriptObject":"LegacyJavaScriptObject","JavaScriptFunction":"LegacyJavaScriptObject","AbortPaymentEvent":"Event","ExtendableEvent":"Event","AElement":"SvgElement","GraphicsElement":"SvgElement","AudioElement":"HtmlElement","MediaElement":"HtmlElement","PointerEvent":"MouseEvent","CompositionEvent":"UIEvent","HtmlDocument":"Node","Document":"Node","JSBool":{"bool":[]},"JSArray":{"List":["1"],"Iterable":["1"]},"JSUnmodifiableArray":{"JSArray":["1"],"List":["1"],"Iterable":["1"]},"JSNumber":{"num":[],"Comparable":["num"]},"JSInt":{"int":[],"num":[],"Comparable":["num"]},"JSNumNotInt":{"num":[],"Comparable":["num"]},"JSString":{"String":[],"Comparable":["String"]},"LateError":{"Error":[]},"NullError":{"TypeError":[],"Error":[]},"JsNoSuchMethodError":{"Error":[]},"UnknownJsTypeError":{"Error":[]},"_StackTrace":{"StackTrace":[]},"Closure":{"Function":[]},"Closure0Args":{"Function":[]},"Closure2Args":{"Function":[]},"TearOffClosure":{"Function":[]},"StaticClosure":{"Function":[]},"BoundClosure":{"Function":[]},"RuntimeError":{"Error":[]},"_AssertionError":{"Error":[]},"JsLinkedHashMap":{"MapMixin":["1","2"],"LinkedHashMap":["1","2"],"Map":["1","2"]},"_Error":{"Error":[]},"_TypeError":{"TypeError":[],"Error":[]},"_Future":{"Future":["1"]},"AsyncError":{"Error":[]},"_Zone":{"Zone":[]},"_RootZone":{"_Zone":[],"Zone":[]},"MapBase":{"MapMixin":["1","2"],"Map":["1","2"]},"MapMixin":{"Map":["1","2"]},"int":{"num":[],"Comparable":["num"]},"num":{"Comparable":["num"]},"String":{"Comparable":["String"]},"AssertionError":{"Error":[]},"TypeError":{"Error":[]},"NullThrownError":{"Error":[]},"ArgumentError":{"Error":[]},"RangeError":{"Error":[]},"IndexError":{"Error":[]},"UnsupportedError":{"Error":[]},"UnimplementedError":{"Error":[]},"StateError":{"Error":[]},"ConcurrentModificationError":{"Error":[]},"StackOverflowError":{"Error":[]},"CyclicInitializationError":{"Error":[]},"_StringStackTrace":{"StackTrace":[]},"MouseEvent":{"Event":[]},"HtmlElement":{"Element":[],"EventTarget":[]},"AnchorElement":{"Element":[],"EventTarget":[]},"AreaElement":{"Element":[],"EventTarget":[]},"CanvasElement":{"Element":[],"EventTarget":[]},"Element":{"EventTarget":[]},"FormElement":{"Element":[],"EventTarget":[]},"InputElement":{"Element":[],"EventTarget":[]},"Node":{"EventTarget":[]},"SelectElement":{"Element":[],"EventTarget":[]},"UIEvent":{"Event":[]},"Window":{"EventTarget":[]},"_EventStream":{"Stream":["1"]},"_ElementEventStreamImpl":{"_EventStream":["1"],"Stream":["1"]},"SvgElement":{"Element":[],"EventTarget":[]},"GameOfLife":{"CellularAutomata":["int"],"CellularAutomata.T":"int"},"PercolationCA":{"CellularAutomata":["int"],"CellularAutomata.T":"int"},"BooleanCellularAutomata":{"CellularAutomata":["int"]},"SierpinskiTriangle":{"CellularAutomata":["int"],"CellularAutomata.T":"int"}}'));
+  A._Universe_addRules(init.typeUniverse, JSON.parse('{"PlainJavaScriptObject":"LegacyJavaScriptObject","UnknownJavaScriptObject":"LegacyJavaScriptObject","JavaScriptFunction":"LegacyJavaScriptObject","AbortPaymentEvent":"Event","ExtendableEvent":"Event","AElement":"SvgElement","GraphicsElement":"SvgElement","AudioElement":"HtmlElement","MediaElement":"HtmlElement","PointerEvent":"MouseEvent","CompositionEvent":"UIEvent","HtmlDocument":"Node","Document":"Node","JSBool":{"bool":[]},"JSArray":{"List":["1"],"Iterable":["1"]},"JSUnmodifiableArray":{"JSArray":["1"],"List":["1"],"Iterable":["1"]},"JSNumber":{"double":[],"num":[],"Comparable":["num"]},"JSInt":{"double":[],"int":[],"num":[],"Comparable":["num"]},"JSNumNotInt":{"double":[],"num":[],"Comparable":["num"]},"JSString":{"String":[],"Comparable":["String"]},"LateError":{"Error":[]},"NullError":{"TypeError":[],"Error":[]},"JsNoSuchMethodError":{"Error":[]},"UnknownJsTypeError":{"Error":[]},"_StackTrace":{"StackTrace":[]},"Closure":{"Function":[]},"Closure0Args":{"Function":[]},"Closure2Args":{"Function":[]},"TearOffClosure":{"Function":[]},"StaticClosure":{"Function":[]},"BoundClosure":{"Function":[]},"RuntimeError":{"Error":[]},"_AssertionError":{"Error":[]},"JsLinkedHashMap":{"MapMixin":["1","2"],"LinkedHashMap":["1","2"],"Map":["1","2"]},"_Error":{"Error":[]},"_TypeError":{"TypeError":[],"Error":[]},"_Future":{"Future":["1"]},"AsyncError":{"Error":[]},"_Zone":{"Zone":[]},"_RootZone":{"_Zone":[],"Zone":[]},"MapBase":{"MapMixin":["1","2"],"Map":["1","2"]},"MapMixin":{"Map":["1","2"]},"double":{"num":[],"Comparable":["num"]},"int":{"num":[],"Comparable":["num"]},"num":{"Comparable":["num"]},"String":{"Comparable":["String"]},"AssertionError":{"Error":[]},"TypeError":{"Error":[]},"NullThrownError":{"Error":[]},"ArgumentError":{"Error":[]},"RangeError":{"Error":[]},"IndexError":{"Error":[]},"UnsupportedError":{"Error":[]},"UnimplementedError":{"Error":[]},"StateError":{"Error":[]},"ConcurrentModificationError":{"Error":[]},"StackOverflowError":{"Error":[]},"CyclicInitializationError":{"Error":[]},"_StringStackTrace":{"StackTrace":[]},"MouseEvent":{"Event":[]},"HtmlElement":{"Element":[],"EventTarget":[]},"AnchorElement":{"Element":[],"EventTarget":[]},"AreaElement":{"Element":[],"EventTarget":[]},"CanvasElement":{"Element":[],"EventTarget":[]},"Element":{"EventTarget":[]},"FormElement":{"Element":[],"EventTarget":[]},"InputElement":{"Element":[],"EventTarget":[]},"Node":{"EventTarget":[]},"SelectElement":{"Element":[],"EventTarget":[]},"UIEvent":{"Event":[]},"Window":{"EventTarget":[]},"_EventStream":{"Stream":["1"]},"_ElementEventStreamImpl":{"_EventStream":["1"],"Stream":["1"]},"SvgElement":{"Element":[],"EventTarget":[]},"ComplexCellularAutomata":{"CellularAutomata":["1"]},"GameOfLife":{"CellularAutomata":["int"],"CellularAutomata.T":"int"},"OscillatorCA":{"ComplexCellularAutomata":["int","Oscillator"],"CellularAutomata":["int"],"CellularAutomata.T":"int","ComplexCellularAutomata.1":"Oscillator"},"PercolationCA":{"CellularAutomata":["int"],"CellularAutomata.T":"int"},"BooleanCellularAutomata":{"CellularAutomata":["int"]},"SierpinskiTriangle":{"CellularAutomata":["int"],"CellularAutomata.T":"int"}}'));
   A._Universe_addErasedTypes(init.typeUniverse, JSON.parse('{"StreamSubscription":1,"MapBase":2}'));
   var string$ = {
     Error_: "Error handler must accept one Object or one Object and a StackTrace as arguments, and return a value of the returned future's type"
@@ -5702,7 +5879,9 @@
       Event: findType("Event"),
       Function: findType("Function"),
       Future_dynamic: findType("Future<@>"),
+      JSArray_Oscillator: findType("JSArray<Oscillator>"),
       JSArray_String: findType("JSArray<String>"),
+      JSArray_double: findType("JSArray<double>"),
       JSArray_dynamic: findType("JSArray<@>"),
       JSArray_int: findType("JSArray<int>"),
       JSNull: findType("JSNull"),
@@ -5947,9 +6126,10 @@
       }
     }()));
     _lazyFinal($, "_AsyncRun__scheduleImmediateClosure", "$get$_AsyncRun__scheduleImmediateClosure", () => A._AsyncRun__initializeScheduleImmediate());
-    _lazyFinal($, "_random", "$get$_random0", () => A.Random_Random());
+    _lazyFinal($, "_random", "$get$_random1", () => A.Random_Random());
     _lazyFinal($, "_random0", "$get$_random", () => A.Random_Random());
-    _lazyFinal($, "_random1", "$get$_random1", () => A.Random_Random());
+    _lazyFinal($, "_random1", "$get$_random0", () => A.Random_Random());
+    _lazyFinal($, "_random2", "$get$_random2", () => A.Random_Random());
     _lazy($, "ca", "$get$ca", () => A.GameOfLife$(0, 0));
   })();
   (function nativeSupport() {

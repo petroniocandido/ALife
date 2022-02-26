@@ -5,7 +5,7 @@ import 'dart:math';
 final _random = Random();
 
 class Oscillator {
-  double _amplitude = _random.nextDouble() * 10;
+  double _amplitude = _random.nextDouble();
 
   double get amplitude => _amplitude;
 
@@ -19,6 +19,11 @@ class Oscillator {
 
   double wave(int t) {
     return _amplitude * sin(t * _frequency + _phase);
+  }
+
+  @override
+  String toString() {
+    return "y(t) = $_amplitude * sin(t * $_frequency + $_phase)";
   }
 }
 
@@ -90,6 +95,7 @@ class OscillatorCA extends ComplexCellularAutomata<int, Oscillator> {
 
 void main() {
   print("Inicio");
+
   var ca = OscillatorCA(5, 5);
   ca.initialize();
   printGrid(ca);
@@ -101,6 +107,10 @@ void main() {
     printGrid(ca);
     print("");
   }
-
-  print("Fim");
+  /*
+  var osc = Oscillator();
+  print(osc);
+  for (int i = 0; i < 10; i++) {
+    print(osc.wave(i));
+  }*/
 }
