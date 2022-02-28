@@ -5548,6 +5548,23 @@
       }
       state = B.JSArray_methods.reduce$1(t2, new A.OscillatorCA_cellUpdate_closure());
       B.JSArray_methods.$indexSet(_this._cellsWorking, list_index, state);
+      for (t1 = neigh.length, _i = 0; _i < t1; ++_i) {
+        i = neigh[_i];
+        t2 = _this._cellsWorkingInternal;
+        if (!(list_index < t2.length))
+          return A.ioore(t2, list_index);
+        t2 = t2[list_index];
+        t3 = t2._amplitude;
+        t4 = _this._cellsCurrentInternal;
+        if (!(i >= 0 && i < t4.length))
+          return A.ioore(t4, i);
+        t4 = t4[i];
+        t2._amplitude = t3 + 0.01 * (t4._amplitude - t3);
+        t3 = t2._frequency;
+        t2._frequency = t3 + 0.01 * (t4._frequency - t3);
+        t3 = t2._phase;
+        t2._phase = t3 + 0.01 * (t4._phase - t3);
+      }
     },
     cellNeighborhood$1(list_index) {
       var t1, t2, _i,

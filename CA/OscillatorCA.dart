@@ -9,13 +9,19 @@ class Oscillator {
 
   double get amplitude => _amplitude;
 
+  void set amplitude(double v) => _amplitude = v;
+
   double _frequency = _random.nextDouble();
 
   double get frequency => _frequency;
 
+  void set frequency(double v) => _frequency = v;
+
   double _phase = _random.nextDouble();
 
   double get phase => _phase;
+
+  void set phase(double v) => _phase = v;
 
   double wave(int t) {
     return _amplitude * sin(t * _frequency + _phase);
@@ -34,6 +40,8 @@ class OscillatorCA extends ComplexCellularAutomata<int, Oscillator> {
 
   double epsilon = 0.05;
 
+  double alpha = 0.01;
+
   @override
   int cellCreate() {
     return 0;
@@ -51,6 +59,18 @@ class OscillatorCA extends ComplexCellularAutomata<int, Oscillator> {
         i >= wphase - epsilon && i <= wphase + epsilon ? 1 : 0
     ].reduce((i, j) => i + j);
     cellsWorking[list_index] = state;
+
+    for (int i in neigh) {
+      cellsWorkingInternal[list_index].amplitude += alpha *
+          (cellsCurrentInternal[i].amplitude -
+              cellsWorkingInternal[list_index].amplitude);
+      cellsWorkingInternal[list_index].frequency += alpha *
+          (cellsCurrentInternal[i].frequency -
+              cellsWorkingInternal[list_index].frequency);
+      cellsWorkingInternal[list_index].phase += alpha *
+          (cellsCurrentInternal[i].phase -
+              cellsWorkingInternal[list_index].phase);
+    }
   }
 
   @override
