@@ -27,6 +27,14 @@ class Oscillator {
     return _amplitude * sin(t * _frequency + _phase);
   }
 
+  List<double> d_wave(int t) {
+    return [
+      sin(_frequency * t + _phase),
+      _amplitude * t * cos(_frequency * t + _phase),
+      _amplitude * cos(_frequency * t + _phase)
+    ];
+  }
+
   @override
   String toString() {
     return "y(t) = $_amplitude * sin(t * $_frequency + $_phase)";
@@ -35,6 +43,12 @@ class Oscillator {
 
 class OscillatorCA extends ComplexCellularAutomata<int, Oscillator> {
   OscillatorCA(int x, int y) : super([x, y]);
+
+  int _adaptionRule = 0;
+
+  int get adaptionRule => _adaptionRule;
+
+  void set adaptionRule(int v) => _adaptionRule = v;
 
   int time = 0;
 
@@ -68,6 +82,25 @@ class OscillatorCA extends ComplexCellularAutomata<int, Oscillator> {
     ].reduce((i, j) => i + j);
     cellsWorking[list_index] = state;
 
+    gradientAdaption(list_index, wphase, neigh, n_wphases);
+
+    averageAdaption(list_index, neigh);
+  }
+
+  void gradientAdaption(
+      int list_index, double wphase, List<int> neigh, List<double> n_wphases) {
+    List<double> deriv = cellsCurrentInternal[list_index].d_wave(time);
+
+    for (int i = 0; i < neigh.length; i++) {
+      double error = wphase - n_wphases[i];
+
+      cellsWorkingInternal[list_index].amplitude += _alpha * -deriv[0] * error;
+      cellsWorkingInternal[list_index].frequency += _alpha * -deriv[1] * error;
+      cellsWorkingInternal[list_index].phase += _alpha * -deriv[2] * error;
+    }
+  }
+
+  void averageAdaption(int list_index, List<int> neigh) {
     for (int i in neigh) {
       cellsWorkingInternal[list_index].amplitude += _alpha *
           (cellsCurrentInternal[i].amplitude -

@@ -224,11 +224,16 @@ void oscillator_start(MouseEvent event) {
 
   var a_ele = querySelector("#alpha") as InputElement?;
   var e_ele = querySelector("#epsilon") as InputElement?;
-  double a = double.parse(a_ele?.value ?? "1") / 100;
+  double a = double.parse(a_ele?.value ?? "1") / 1000;
   double e = double.parse(e_ele?.value ?? "5") / 100;
+
+  var t_ele = querySelector("#adaption_type") as InputElement?;
+
+  int t = int.parse(t_ele?.value ?? "0");
 
   (ca as OscillatorCA).alpha = a;
   (ca as OscillatorCA).epsilon = e;
+  (ca as OscillatorCA).adaptionRule = t;
 
   ca.initialize();
 

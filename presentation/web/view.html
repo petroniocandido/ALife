@@ -42,35 +42,52 @@
             </div>
             <div class="tab-pane fade" id="sierpinski" role="tabpanel" aria-labelledby="sierpinski-tab">
                 <h3>Sierpinski Triangle</h3>
-               
+
                 <button class="btn btn-primary" id="run_sierpinski">Run</button>
             </div>
             <div class="tab-pane fade" id="conway" role="tabpanel" aria-labelledby="conway-tab">
                 <h3>Conway's Game of Life</h3>
-                
+
                 <button class="btn btn-primary" id="run_conway">Run</button>
 
             </div>
             <div class="tab-pane fade" id="percolation" role="tabpanel" aria-labelledby="percolation-tab">
                 <h3>Percolation Process</h3>
-                
+
                 <button class="btn btn-primary" id="run_percolation">Run</button>
 
             </div>
             <div class="tab-pane fade" id="oscillator" role="tabpanel" aria-labelledby="oscillator-tab">
                 <h3>Oscilattor Network</h3>
                 <form>
-                    <div class="form-group">
-                        <label for="alpha">Alpha:</label><span id="lblAlpha"></span>
-                        <input type="range" class="custom-range" min="1" max="20" id="alpha">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="adaption_type">Adaption type:</label>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="adaption_type" id="gradient_adapt"
+                                    value="0">
+                                <label class="form-check-label" for="gradient_adapt">Gradient Descent</label>
+
+                                <input class="form-check-input" type="radio" name="adaption_type" id="avg_adapt"
+                                    value="1">
+                                <label class="form-check-label" for="avg_adapt">Average</label>
+                            </div>
+                        </div>
+
                     </div>
-                    <div class="form-group">
-                        <label for="epsilon">Epsilon:</label><span id="lblEpsilon"></span>
-                        <input type="range" class="custom-range" min="1" max="20" id="epsilon">
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="alpha">Alpha:</label><span id="lblAlpha"></span>
+                            <input type="range" class="custom-range" min="0" max="20" id="alpha">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="epsilon">Epsilon:</label><span id="lblEpsilon"></span>
+                            <input type="range" class="custom-range" min="0" max="20" id="epsilon">
+                        </div>
                     </div>
 
                 </form>
-                
+
                 <button class="btn btn-primary" id="run_oscillator">Run</button>
 
             </div>

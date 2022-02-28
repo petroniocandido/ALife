@@ -5678,7 +5678,7 @@
       return 0;
     },
     cellUpdate$1(list_index) {
-      var wphase, neigh, t2, _i, i, t3, t4, state, t5, _this = this,
+      var wphase, neigh, t2, _i, i, t3, t4, state, _this = this,
         t1 = _this._cellsCurrentInternal;
       if (!(list_index < t1.length))
         return A.ioore(t1, list_index);
@@ -5702,15 +5702,46 @@
       }
       state = B.JSArray_methods.reduce$1(t2, new A.OscillatorCA_cellUpdate_closure());
       B.JSArray_methods.$indexSet(_this._cellsWorking, list_index, state);
+      _this.gradientAdaption$4(list_index, wphase, neigh, t1);
+      _this.averageAdaption$2(list_index, neigh);
+    },
+    gradientAdaption$4(list_index, wphase, neigh, n_wphases) {
+      var t1, t2, deriv, i, error, t3, _this = this;
+      type$.List_int._as(neigh);
+      type$.List_double._as(n_wphases);
+      t1 = _this._cellsCurrentInternal;
+      if (!(list_index < t1.length))
+        return A.ioore(t1, list_index);
+      t1 = t1[list_index];
+      t2 = _this.time;
+      deriv = [Math.sin(t1._frequency * t2 + t1._phase), t1._amplitude * t2 * Math.cos(t1._frequency * t2 + t1._phase), t1._amplitude * Math.cos(t1._frequency * t2 + t1._phase)];
+      for (i = 0; i < neigh.length; ++i) {
+        if (!(i < n_wphases.length))
+          return A.ioore(n_wphases, i);
+        error = wphase - n_wphases[i];
+        t1 = _this._cellsWorkingInternal;
+        if (!(list_index < t1.length))
+          return A.ioore(t1, list_index);
+        t1 = t1[list_index];
+        t2 = t1._amplitude;
+        t3 = _this._alpha;
+        t1._amplitude = t2 + t3 * -deriv[0] * error;
+        t1._frequency = t1._frequency + t3 * -deriv[1] * error;
+        t1._phase = t1._phase + t3 * -deriv[2] * error;
+      }
+    },
+    averageAdaption$2(list_index, neigh) {
+      var t1, _i, i, t2, t3, t4, t5;
+      type$.List_int._as(neigh);
       for (t1 = neigh.length, _i = 0; _i < t1; ++_i) {
         i = neigh[_i];
-        t2 = _this._cellsWorkingInternal;
+        t2 = this._cellsWorkingInternal;
         if (!(list_index < t2.length))
           return A.ioore(t2, list_index);
         t2 = t2[list_index];
         t3 = t2._amplitude;
-        t4 = _this._alpha;
-        t5 = _this._cellsCurrentInternal;
+        t4 = this._alpha;
+        t5 = this._cellsCurrentInternal;
         if (!(i >= 0 && i < t5.length))
           return A.ioore(t5, i);
         t5 = t5[i];
@@ -5953,7 +5984,7 @@
   };
   A.main_closure4.prototype = {
     call$1($event) {
-      var t1, t2, w_ele, h_ele, t3, w, a_ele, e_ele, _null = null;
+      var t1, t2, w_ele, h_ele, t3, w, a_ele, e_ele, t4, t_ele, _null = null;
       type$.MouseEvent._as($event);
       t1 = document;
       t2 = type$.nullable_InputElement;
@@ -5965,14 +5996,17 @@
       $.ca = A.OscillatorCA$(w, A.int_parse(t3 == null ? "0" : t3));
       a_ele = t2._as(t1.querySelector("#alpha"));
       e_ele = t2._as(t1.querySelector("#epsilon"));
-      t1 = a_ele == null ? _null : a_ele.value;
-      t1 = A.double_parse(t1 == null ? "1" : t1);
-      t2 = e_ele == null ? _null : e_ele.value;
-      t2 = A.double_parse(t2 == null ? "5" : t2);
-      t3 = type$.OscillatorCA._as($.$get$ca());
-      t3._alpha = t1 / 100;
-      t3._epsilon = t2 / 100;
-      t3.initialize$0();
+      t3 = a_ele == null ? _null : a_ele.value;
+      t3 = A.double_parse(t3 == null ? "1" : t3);
+      t4 = e_ele == null ? _null : e_ele.value;
+      t4 = A.double_parse(t4 == null ? "5" : t4);
+      t_ele = t2._as(t1.querySelector("#adaption_type"));
+      t1 = t_ele == null ? _null : t_ele.value;
+      A.int_parse(t1 == null ? "0" : t1);
+      t1 = type$.OscillatorCA._as($.$get$ca());
+      t1._alpha = t3 / 1000;
+      t1._epsilon = t4 / 100;
+      t1.initialize$0();
       B.Window_methods.requestAnimationFrame$1(window, A.controller__oscillator_animation_boxes$closure());
     },
     $signature: 3
@@ -6078,6 +6112,7 @@
       JSArray_int: findType("JSArray<int>"),
       JSNull: findType("JSNull"),
       JavaScriptFunction: findType("JavaScriptFunction"),
+      List_double: findType("List<double>"),
       List_int: findType("List<int>"),
       MouseEvent: findType("MouseEvent"),
       Null: findType("Null"),
