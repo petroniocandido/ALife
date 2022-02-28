@@ -59,6 +59,17 @@
             </div>
             <div class="tab-pane fade" id="oscillator" role="tabpanel" aria-labelledby="oscillator-tab">
                 <h3>Oscilattor Network</h3>
+                <form>
+                    <div class="form-group">
+                        <label for="alpha">Alpha:</label><span id="lblAlpha"></span>
+                        <input type="range" class="custom-range" min="1" max="20" id="alpha">
+                    </div>
+                    <div class="form-group">
+                        <label for="epsilon">Epsilon:</label><span id="lblEpsilon"></span>
+                        <input type="range" class="custom-range" min="1" max="20" id="epsilon">
+                    </div>
+
+                </form>
                 
                 <button class="btn btn-primary" id="run_oscillator">Run</button>
 

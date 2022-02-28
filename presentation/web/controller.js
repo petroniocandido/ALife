@@ -637,6 +637,19 @@
         return parseInt(source, 16);
       return null;
     },
+    Primitives_parseDouble(source) {
+      var result, trimmed;
+      if (!/^\s*[+-]?(?:Infinity|NaN|(?:\.\d+|\d+(?:\.\d*)?)(?:[eE][+-]?\d+)?)\s*$/.test(source))
+        return null;
+      result = parseFloat(source);
+      if (isNaN(result)) {
+        trimmed = B.JSString_methods.trim$0(source);
+        if (trimmed === "NaN" || trimmed === "+NaN" || trimmed === "-NaN")
+          return result;
+        return null;
+      }
+      return result;
+    },
     Primitives_objectTypeName(object) {
       return A.Primitives__objectTypeNameNewRti(object);
     },
@@ -3252,7 +3265,13 @@
       var value = A.Primitives_parseInt(source, null);
       if (value != null)
         return value;
-      throw A.wrapException(new A.FormatException(source));
+      throw A.wrapException(A.FormatException$(source, null));
+    },
+    double_parse(source) {
+      var value = A.Primitives_parseDouble(source);
+      if (value != null)
+        return value;
+      throw A.wrapException(A.FormatException$("Invalid double", source));
     },
     Error__objectToString(object) {
       if (object instanceof A.Closure)
@@ -3305,6 +3324,16 @@
     RangeError$value(value, $name) {
       return new A.RangeError(null, null, true, value, $name, "Value not in range");
     },
+    RangeError$range(invalidValue, minValue, maxValue, $name, message) {
+      return new A.RangeError(minValue, maxValue, true, invalidValue, $name, "Invalid value");
+    },
+    RangeError_checkValidRange(start, end, $length) {
+      if (0 > start || start > $length)
+        throw A.wrapException(A.RangeError$range(start, 0, $length, "start", null));
+      if (start > end || end > $length)
+        throw A.wrapException(A.RangeError$range(end, start, $length, "end", null));
+      return end;
+    },
     UnsupportedError$(message) {
       return new A.UnsupportedError(message);
     },
@@ -3313,6 +3342,9 @@
     },
     ConcurrentModificationError$(modifiedObject) {
       return new A.ConcurrentModificationError(modifiedObject);
+    },
+    FormatException$(message, source) {
+      return new A.FormatException(message, source);
     },
     Error: function Error() {
     },
@@ -3367,8 +3399,9 @@
     _Exception: function _Exception(t0) {
       this.message = t0;
     },
-    FormatException: function FormatException(t0) {
+    FormatException: function FormatException(t0, t1) {
       this.message = t0;
+      this.source = t1;
     },
     Null: function Null() {
     },
@@ -3485,7 +3518,7 @@
       var t1 = type$.JSArray_int,
         t2 = A._setArrayType([x, y], t1),
         t3 = type$.JSArray_Oscillator;
-      t1 = new A.OscillatorCA(A._setArrayType([], t3), A._setArrayType([], t3), t2, A._setArrayType([], t1), A._setArrayType([], t1), A._setArrayType([], t1));
+      t1 = new A.OscillatorCA(0.05, 0.01, A._setArrayType([], t3), A._setArrayType([], t3), t2, A._setArrayType([], t1), A._setArrayType([], t1), A._setArrayType([], t1));
       t1.CellularAutomata$1(t2, type$.int);
       return t1;
     },
@@ -3494,16 +3527,18 @@
       this._frequency = t1;
       this._phase = t2;
     },
-    OscillatorCA: function OscillatorCA(t0, t1, t2, t3, t4, t5) {
+    OscillatorCA: function OscillatorCA(t0, t1, t2, t3, t4, t5, t6, t7) {
       var _ = this;
       _.time = 0;
-      _._cellsCurrentInternal = t0;
-      _._cellsWorkingInternal = t1;
-      _._shape = t2;
+      _._epsilon = t0;
+      _._alpha = t1;
+      _._cellsCurrentInternal = t2;
+      _._cellsWorkingInternal = t3;
+      _._shape = t4;
       _.num_cells = 0;
-      _._shape_dimensions = t3;
-      _._cellsCurrent = t4;
-      _._cellsWorking = t5;
+      _._shape_dimensions = t5;
+      _._cellsCurrent = t6;
+      _._cellsWorking = t7;
     },
     OscillatorCA_cellUpdate_closure: function OscillatorCA_cellUpdate_closure() {
     },
@@ -3588,11 +3623,27 @@
         type$.nullable_void_Function._as(null);
         A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
       }
-      t1 = t1.querySelector("#run_oscillator");
+      t2 = t1.querySelector("#run_oscillator");
+      if (t2 != null) {
+        t2 = J.get$onClick$x(t2);
+        t3 = t2.$ti;
+        t4 = t3._eval$1("~(1)?")._as(new A.main_closure4());
+        type$.nullable_void_Function._as(null);
+        A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
+      }
+      t2 = t1.querySelector("#alpha");
+      if (t2 != null) {
+        t2 = J.get$onChange$x(t2);
+        t3 = t2.$ti;
+        t4 = t3._eval$1("~(1)?")._as(new A.main_closure5());
+        type$.nullable_void_Function._as(null);
+        A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
+      }
+      t1 = t1.querySelector("#epsilon");
       if (t1 != null) {
-        t1 = J.get$onClick$x(t1);
+        t1 = J.get$onChange$x(t1);
         t2 = t1.$ti;
-        t3 = t2._eval$1("~(1)?")._as(new A.main_closure4());
+        t3 = t2._eval$1("~(1)?")._as(new A.main_closure6());
         type$.nullable_void_Function._as(null);
         A._EventStreamSubscription$(t1._target, t1._eventType, t3, false, t2._precomputed1);
       }
@@ -3852,6 +3903,10 @@
     },
     main_closure4: function main_closure4() {
     },
+    main_closure5: function main_closure5() {
+    },
+    main_closure6: function main_closure6() {
+    },
     printString(string) {
       if (typeof dartPrint == "function") {
         dartPrint(string);
@@ -3934,6 +3989,65 @@
     JSArray__compareAny(a, b) {
       var t1 = type$.Comparable_dynamic;
       return J.compareTo$1$ns(t1._as(a), t1._as(b));
+    },
+    JSString__isWhitespace(codeUnit) {
+      if (codeUnit < 256)
+        switch (codeUnit) {
+          case 9:
+          case 10:
+          case 11:
+          case 12:
+          case 13:
+          case 32:
+          case 133:
+          case 160:
+            return true;
+          default:
+            return false;
+        }
+      switch (codeUnit) {
+        case 5760:
+        case 8192:
+        case 8193:
+        case 8194:
+        case 8195:
+        case 8196:
+        case 8197:
+        case 8198:
+        case 8199:
+        case 8200:
+        case 8201:
+        case 8202:
+        case 8232:
+        case 8233:
+        case 8239:
+        case 8287:
+        case 12288:
+        case 65279:
+          return true;
+        default:
+          return false;
+      }
+    },
+    JSString__skipLeadingWhitespace(string, index) {
+      var t1, codeUnit;
+      for (t1 = string.length; index < t1;) {
+        codeUnit = B.JSString_methods._codeUnitAt$1(string, index);
+        if (codeUnit !== 32 && codeUnit !== 13 && !J.JSString__isWhitespace(codeUnit))
+          break;
+        ++index;
+      }
+      return index;
+    },
+    JSString__skipTrailingWhitespace(string, index) {
+      var index0, codeUnit;
+      for (; index > 0; index = index0) {
+        index0 = index - 1;
+        codeUnit = B.JSString_methods.codeUnitAt$1(string, index0);
+        if (codeUnit !== 32 && codeUnit !== 13 && !J.JSString__isWhitespace(codeUnit))
+          break;
+      }
+      return index;
     },
     getInterceptor$(receiver) {
       if (typeof receiver == "number") {
@@ -4295,8 +4409,41 @@
   J.JSInt.prototype = {$isint: 1};
   J.JSNumNotInt.prototype = {};
   J.JSString.prototype = {
+    codeUnitAt$1(receiver, index) {
+      if (index < 0)
+        throw A.wrapException(A.diagnoseIndexError(receiver, index));
+      if (index >= receiver.length)
+        A.throwExpression(A.diagnoseIndexError(receiver, index));
+      return receiver.charCodeAt(index);
+    },
+    _codeUnitAt$1(receiver, index) {
+      if (index >= receiver.length)
+        throw A.wrapException(A.diagnoseIndexError(receiver, index));
+      return receiver.charCodeAt(index);
+    },
     $add(receiver, other) {
       return receiver + other;
+    },
+    substring$2(receiver, start, end) {
+      return receiver.substring(start, A.RangeError_checkValidRange(start, end, receiver.length));
+    },
+    trim$0(receiver) {
+      var startIndex, t1, endIndex0,
+        result = receiver.trim(),
+        endIndex = result.length;
+      if (endIndex === 0)
+        return result;
+      if (this._codeUnitAt$1(result, 0) === 133) {
+        startIndex = J.JSString__skipLeadingWhitespace(result, 1);
+        if (startIndex === endIndex)
+          return "";
+      } else
+        startIndex = 0;
+      t1 = endIndex - 1;
+      endIndex0 = this.codeUnitAt$1(result, t1) === 133 ? J.JSString__skipTrailingWhitespace(result, t1) : endIndex;
+      if (startIndex === 0 && endIndex0 === endIndex)
+        return result;
+      return result.substring(startIndex, endIndex0);
     },
     compareTo$1(receiver, other) {
       var t1;
@@ -5117,8 +5264,14 @@
   A.FormatException.prototype = {
     toString$0(_) {
       var message = this.message,
-        report = "" !== message ? "FormatException: " + message : "FormatException";
-      return report;
+        report = "" !== message ? "FormatException: " + message : "FormatException",
+        source = this.source;
+      if (typeof source == "string") {
+        if (source.length > 78)
+          source = B.JSString_methods.substring$2(source, 0, 75) + "...";
+        return report + "\n" + source;
+      } else
+        return report;
     }
   };
   A.Null.prototype = {
@@ -5269,7 +5422,7 @@
     call$1(e) {
       return this.onData.call$1(type$.Event._as(e));
     },
-    $signature: 4
+    $signature: 1
   };
   A._JSRandom.prototype = {
     nextInt$1(max) {
@@ -5436,7 +5589,7 @@
     call$2(i, j) {
       return A._asInt(i) * A._asInt(j);
     },
-    $signature: 1
+    $signature: 2
   };
   A.ComplexCellularAutomata.prototype = {
     initialize$0() {
@@ -5510,7 +5663,7 @@
     call$2(i, j) {
       return A._asInt(i) + A._asInt(j);
     },
-    $signature: 1
+    $signature: 2
   };
   A.Oscillator.prototype = {
     wave$1(t) {
@@ -5525,7 +5678,7 @@
       return 0;
     },
     cellUpdate$1(list_index) {
-      var wphase, neigh, t2, _i, i, t3, t4, t5, state, _this = this,
+      var wphase, neigh, t2, _i, i, t3, t4, state, t5, _this = this,
         t1 = _this._cellsCurrentInternal;
       if (!(list_index < t1.length))
         return A.ioore(t1, list_index);
@@ -5542,9 +5695,10 @@
         t1.push(t3._amplitude * Math.sin(t4 * t3._frequency + t3._phase));
       }
       t2 = A._setArrayType([], type$.JSArray_int);
-      for (t3 = t1.length, t4 = wphase - 0.05, t5 = wphase + 0.05, _i = 0; _i < t1.length; t1.length === t3 || (0, A.throwConcurrentModificationError)(t1), ++_i) {
+      for (t3 = t1.length, _i = 0; _i < t1.length; t1.length === t3 || (0, A.throwConcurrentModificationError)(t1), ++_i) {
         i = t1[_i];
-        t2.push(i >= t4 && i <= t5 ? 1 : 0);
+        t4 = _this._epsilon;
+        t2.push(i >= wphase - t4 && i <= wphase + t4 ? 1 : 0);
       }
       state = B.JSArray_methods.reduce$1(t2, new A.OscillatorCA_cellUpdate_closure());
       B.JSArray_methods.$indexSet(_this._cellsWorking, list_index, state);
@@ -5555,15 +5709,16 @@
           return A.ioore(t2, list_index);
         t2 = t2[list_index];
         t3 = t2._amplitude;
-        t4 = _this._cellsCurrentInternal;
-        if (!(i >= 0 && i < t4.length))
-          return A.ioore(t4, i);
-        t4 = t4[i];
-        t2._amplitude = t3 + 0.01 * (t4._amplitude - t3);
+        t4 = _this._alpha;
+        t5 = _this._cellsCurrentInternal;
+        if (!(i >= 0 && i < t5.length))
+          return A.ioore(t5, i);
+        t5 = t5[i];
+        t2._amplitude = t3 + t4 * (t5._amplitude - t3);
         t3 = t2._frequency;
-        t2._frequency = t3 + 0.01 * (t4._frequency - t3);
+        t2._frequency = t3 + t4 * (t5._frequency - t3);
         t3 = t2._phase;
-        t2._phase = t3 + 0.01 * (t4._phase - t3);
+        t2._phase = t3 + t4 * (t5._phase - t3);
       }
     },
     cellNeighborhood$1(list_index) {
@@ -5596,7 +5751,7 @@
     call$2(i, j) {
       return A._asInt(i) + A._asInt(j);
     },
-    $signature: 1
+    $signature: 2
   };
   A.PercolationCA.prototype = {
     cellCreate$0() {
@@ -5695,7 +5850,7 @@
     call$2(i, j) {
       return A._asInt(i) + A._asInt(j);
     },
-    $signature: 1
+    $signature: 2
   };
   A.SierpinskiTriangle.prototype = {
     initialize$0() {
@@ -5739,13 +5894,13 @@
     call$1($event) {
       A.changeLabel("caWidth", "lblcaWidth");
     },
-    $signature: 4
+    $signature: 1
   };
   A.main_closure0.prototype = {
     call$1($event) {
       A.changeLabel("caHeight", "lblcaHeight");
     },
-    $signature: 4
+    $signature: 1
   };
   A.main_closure1.prototype = {
     call$1($event) {
@@ -5758,7 +5913,7 @@
       t1.initialize$0();
       B.Window_methods.requestAnimationFrame$1(window, A.controller__sierpinski_animation_boxes$closure());
     },
-    $signature: 2
+    $signature: 3
   };
   A.main_closure2.prototype = {
     call$1($event) {
@@ -5776,7 +5931,7 @@
       t1.initialize$0();
       B.Window_methods.requestAnimationFrame$1(window, A.controller__conway_animation_boxes$closure());
     },
-    $signature: 2
+    $signature: 3
   };
   A.main_closure3.prototype = {
     call$1($event) {
@@ -5794,25 +5949,45 @@
       t1.initialize$0();
       B.Window_methods.requestAnimationFrame$1(window, A.controller__percolation_animation_boxes$closure());
     },
-    $signature: 2
+    $signature: 3
   };
   A.main_closure4.prototype = {
     call$1($event) {
-      var t1, t2, w_ele, h_ele, w;
+      var t1, t2, w_ele, h_ele, t3, w, a_ele, e_ele, _null = null;
       type$.MouseEvent._as($event);
       t1 = document;
       t2 = type$.nullable_InputElement;
       w_ele = t2._as(t1.querySelector("#caWidth"));
       h_ele = t2._as(t1.querySelector("#caHeight"));
-      t1 = w_ele == null ? null : w_ele.value;
-      w = A.int_parse(t1 == null ? "0" : t1);
-      t1 = h_ele == null ? null : h_ele.value;
-      t1 = A.OscillatorCA$(w, A.int_parse(t1 == null ? "0" : t1));
-      $.ca = t1;
-      t1.initialize$0();
+      t3 = w_ele == null ? _null : w_ele.value;
+      w = A.int_parse(t3 == null ? "0" : t3);
+      t3 = h_ele == null ? _null : h_ele.value;
+      $.ca = A.OscillatorCA$(w, A.int_parse(t3 == null ? "0" : t3));
+      a_ele = t2._as(t1.querySelector("#alpha"));
+      e_ele = t2._as(t1.querySelector("#epsilon"));
+      t1 = a_ele == null ? _null : a_ele.value;
+      t1 = A.double_parse(t1 == null ? "1" : t1);
+      t2 = e_ele == null ? _null : e_ele.value;
+      t2 = A.double_parse(t2 == null ? "5" : t2);
+      t3 = type$.OscillatorCA._as($.$get$ca());
+      t3._alpha = t1 / 100;
+      t3._epsilon = t2 / 100;
+      t3.initialize$0();
       B.Window_methods.requestAnimationFrame$1(window, A.controller__oscillator_animation_boxes$closure());
     },
-    $signature: 2
+    $signature: 3
+  };
+  A.main_closure5.prototype = {
+    call$1($event) {
+      A.changeLabel("alpha", "lblAlpha");
+    },
+    $signature: 1
+  };
+  A.main_closure6.prototype = {
+    call$1($event) {
+      A.changeLabel("epsilon", "lblEpsilon");
+    },
+    $signature: 1
   };
   (function aliases() {
     var _ = J.Interceptor.prototype;
@@ -5833,10 +6008,10 @@
     _static_1(A, "async__AsyncRun__scheduleImmediateWithSetImmediate$closure", "_AsyncRun__scheduleImmediateWithSetImmediate", 5);
     _static_1(A, "async__AsyncRun__scheduleImmediateWithTimer$closure", "_AsyncRun__scheduleImmediateWithTimer", 5);
     _static_0(A, "async___startMicrotaskLoop$closure", "_startMicrotaskLoop", 0);
-    _static_1(A, "controller__conway_animation_boxes$closure", "conway_animation_boxes", 3);
-    _static_1(A, "controller__sierpinski_animation_boxes$closure", "sierpinski_animation_boxes", 3);
-    _static_1(A, "controller__percolation_animation_boxes$closure", "percolation_animation_boxes", 3);
-    _static_1(A, "controller__oscillator_animation_boxes$closure", "oscillator_animation_boxes", 3);
+    _static_1(A, "controller__conway_animation_boxes$closure", "conway_animation_boxes", 4);
+    _static_1(A, "controller__sierpinski_animation_boxes$closure", "sierpinski_animation_boxes", 4);
+    _static_1(A, "controller__percolation_animation_boxes$closure", "percolation_animation_boxes", 4);
+    _static_1(A, "controller__oscillator_animation_boxes$closure", "oscillator_animation_boxes", 4);
   })();
   (function inheritance() {
     var _inherit = hunkHelpers.inherit,
@@ -5850,7 +6025,7 @@
     _inheritMany(J.JSNumber, [J.JSInt, J.JSNumNotInt]);
     _inheritMany(A.Error, [A.LateError, A.TypeError, A.JsNoSuchMethodError, A.UnknownJsTypeError, A.RuntimeError, A.AssertionError, A._Error, A.NullThrownError, A.ArgumentError, A.UnsupportedError, A.UnimplementedError, A.StateError, A.ConcurrentModificationError, A.CyclicInitializationError]);
     _inherit(A.NullError, A.TypeError);
-    _inheritMany(A.Closure, [A.Closure0Args, A.Closure2Args, A.TearOffClosure, A.initHooks_closure, A.initHooks_closure1, A._AsyncRun__initializeScheduleImmediate_internalCallback, A._AsyncRun__initializeScheduleImmediate_closure, A._Future__propagateToListeners_handleWhenCompleteCallback_closure, A.Stream_length_closure, A._RootZone_bindUnaryCallbackGuarded_closure, A._EventStreamSubscription_closure, A.PercolationCA_cellUpdate_closure, A.main_closure, A.main_closure0, A.main_closure1, A.main_closure2, A.main_closure3, A.main_closure4]);
+    _inheritMany(A.Closure, [A.Closure0Args, A.Closure2Args, A.TearOffClosure, A.initHooks_closure, A.initHooks_closure1, A._AsyncRun__initializeScheduleImmediate_internalCallback, A._AsyncRun__initializeScheduleImmediate_closure, A._Future__propagateToListeners_handleWhenCompleteCallback_closure, A.Stream_length_closure, A._RootZone_bindUnaryCallbackGuarded_closure, A._EventStreamSubscription_closure, A.PercolationCA_cellUpdate_closure, A.main_closure, A.main_closure0, A.main_closure1, A.main_closure2, A.main_closure3, A.main_closure4, A.main_closure5, A.main_closure6]);
     _inheritMany(A.TearOffClosure, [A.StaticClosure, A.BoundClosure]);
     _inherit(A._AssertionError, A.AssertionError);
     _inherit(A.MapBase, A.MapMixin);
@@ -5877,7 +6052,7 @@
     typeUniverse: {eC: new Map(), tR: {}, eT: {}, tPV: {}, sEA: []},
     mangledGlobalNames: {int: "int", double: "double", num: "num", String: "String", bool: "bool", Null: "Null", List: "List"},
     mangledNames: {},
-    types: ["~()", "int(int,int)", "~(MouseEvent)", "~(num)", "~(Event)", "~(~())", "Null()", "@(@)", "@(@,String)", "@(String)", "Null(@)", "Null(~())", "_Future<@>(@)", "~(Object?,Object?)", "bool(int)", "int(@,@)"],
+    types: ["~()", "~(Event)", "int(int,int)", "~(MouseEvent)", "~(num)", "~(~())", "Null()", "@(@)", "@(@,String)", "@(String)", "Null(@)", "Null(~())", "_Future<@>(@)", "~(Object?,Object?)", "bool(int)", "int(@,@)"],
     interceptorsByTag: null,
     leafTags: null,
     arrayRti: Symbol("$ti")
@@ -5907,6 +6082,7 @@
       MouseEvent: findType("MouseEvent"),
       Null: findType("Null"),
       Object: findType("Object"),
+      OscillatorCA: findType("OscillatorCA"),
       StackTrace: findType("StackTrace"),
       String: findType("String"),
       TypeError: findType("TypeError"),
