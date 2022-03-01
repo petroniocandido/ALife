@@ -5,7 +5,7 @@ import 'dart:math';
 final _random = Random();
 
 class Oscillator {
-  double _amplitude = _random.nextDouble();
+  double _amplitude = 2 * _random.nextDouble();
 
   double get amplitude => _amplitude;
 
@@ -17,7 +17,7 @@ class Oscillator {
 
   void set frequency(double v) => _frequency = v;
 
-  double _phase = _random.nextDouble();
+  double _phase = (2 * _random.nextDouble()) - 1;
 
   double get phase => _phase;
 

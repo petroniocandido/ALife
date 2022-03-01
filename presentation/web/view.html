@@ -59,6 +59,78 @@
             </div>
             <div class="tab-pane fade" id="oscillator" role="tabpanel" aria-labelledby="oscillator-tab">
                 <h3>Oscilattor Network</h3>
+
+                <h4>General behavior</h4>
+                In the Oscillator Cellular Automata each cell is an oscillator interacting with the neighbor cells in order to reach synchronization.
+                
+                This simulation contains a squared grid of cells $C: m\times n$, for $m,n \in \mathbb{N}^+$ where each cell is represented as $c_{ij} \in C$, for $i=1\ldots n$, $j=1\ldots m$. Each cell $c_{ij}$ executes the sinoidal function: 
+                $$y(t) = A(t) \cdot sin(f(t) \cdot t + d(t))$$
+                
+                Where:
+                <ul>
+                    <li>$t \in \mathbb{N}^+$ is the time index, or the iteration number in CA simulation;
+                    </li>
+                    <li>$y(t) \in \mathbb{R}$ is the wave value at time $t$;
+                    </li>
+                    <li>$A(t) \in \mathbb{R}^+$ is the wave amplitude at time $t$ and is initialized such as $A(0) \sim \mathcal(0,2)$;
+                    </li>
+                    <li>$f(t) \in \mathbb{R}^+$ is the wave frequency at time $t$ and is initialized such as $f(0) \sim \mathcal(0,1)$;
+                    </li>
+                    <li>$d(t) \in \mathbb{R}$ is the wave phase displacement at time $t$ and is initialized such as $d(0) \sim \mathcal(-1,1)$;
+                    </li>
+                    
+                </ul>
+                
+                Each cell $c_{ij}$ can be represented as: 
+                
+                $$ c_{ij} = \{ \theta_{ij}(t), s_{ij}(t), N(i,j) \} $$ 
+                
+                Where:
+                
+                <ul>
+                    <li>
+                        $\theta_{ij} = [A_{ij}(t), f_{ij}(t), d_{ij}(t)]$ is the internal state at time $t$;
+                    </li>
+                    <li>
+                        $s_{ij} \in \mathbb{N}^+$ is the external (or output) state at time $t$;
+                    </li>
+                    <li>
+                        $N(i,j)$ the set of surrounding neighbors
+                    </li>
+                </ul>
+
+                It is important note that all parameters of each cell, except its neighborhood, are time-varying and should be referred with the time index $t$.
+                
+                <h4>Output Cell States</h4>
+
+                The output state $s_{ij}$ of each cell $c_{ij} \in C$, also called the cell's activation, means the amount of neighbors $n\in N(i,j)$ whose oscillators are synchronized, e. g., the wave values $y(t)$ are equal or close by a proximity radius of $\epsilon$. The parameter $\epsilon \in \mathbb{R}^+$ is the closeness radius and control the minimal level of proximity the wave values must have to be considered synchronized, such that $y_{ij}(t) - \epsilon \leq y_n(t) \leq y_{ij}(t) + \epsilon$.  The final computation of state is given by:
+
+                $$
+                s_{ij}(t+1) = \sum_{n \in N(i,j)} \mathbb{1}(y_{ij}(t) - \epsilon \leq y_n(t) \leq y_{ij}(t) + \epsilon) 
+                $$
+
+                Once $C$ is a square grid, $N(i,j)$ return the 8 surrounding neighbors, $s_{ij}$ will be in $[0,8]$ interval and the color intensity will reflect $s_{ij}$ in shades of gray.
+                
+
+                <h4>Gradient Descent Adaption</h4>
+
+                During the simulation all cells interact with its neighbors in order t
+
+                For the set of parameters of the function $\theta = [A, f, d]$, the Gradient Descent method 
+
+                $$ L(y_i, y_j) = \Delta y = y_j - y_i $$
+
+                $$\nabla_\theta = \left[ \frac{\partial A}{\partial L}, \frac{\partial A}{\partial L}, \frac{\partial A}{\partial L} \right]$$
+
+                <ul>
+                    <li>$\frac{\partial A}{\partial y} = sin(f \cdot t + d)$</li>
+                    <li>$\frac{\partial f}{\partial y} = A\cdot t \cdot cos(f \cdot t + d)$</li>
+                    <li>$\frac{\partial d}{\partial y} = A\cdot cos(f \cdot t + d)$</li>
+                </ul>
+
+                $$ \theta' = \theta + \alpha \cdot -\nabla_\theta $$
+
+
                 <form>
                     <div class="form-row">
                         <div class="form-group col-md-6">
@@ -77,11 +149,11 @@
                     </div>
                     <div class="form-row">
                         <div class="form-group col-md-6">
-                            <label for="alpha">Alpha:</label><span id="lblAlpha"></span>
+                            <label for="alpha">$\alpha$:</label><span id="lblAlpha"></span>
                             <input type="range" class="custom-range" min="0" max="20" id="alpha">
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="epsilon">Epsilon:</label><span id="lblEpsilon"></span>
+                            <label for="epsilon">$\epsilon$:</label><span id="lblEpsilon"></span>
                             <input type="range" class="custom-range" min="0" max="20" id="epsilon">
                         </div>
                     </div>
@@ -107,6 +179,10 @@
 
 
     <script src="controller.js"></script>
+    <script src="mathjax-config.js" defer></script>
+    <script type="text/javascript" id="MathJax-script" defer
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+        </script>
 
 </body>
 

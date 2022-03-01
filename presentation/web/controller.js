@@ -5597,7 +5597,7 @@
       for (i = 0; i < this.num_cells; ++i) {
         t1 = this._cellsCurrentInternal;
         t2 = $.$get$_random();
-        B.JSArray_methods.add$1(t1, new A.Oscillator(t2.nextDouble$0(), t2.nextDouble$0(), t2.nextDouble$0()));
+        B.JSArray_methods.add$1(t1, new A.Oscillator(2 * t2.nextDouble$0(), t2.nextDouble$0(), 2 * t2.nextDouble$0() - 1));
         B.JSArray_methods.add$1(this._cellsCurrent, 0);
       }
     },
