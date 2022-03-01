@@ -112,23 +112,27 @@
                 Once $C$ is a square grid, $N(i,j)$ return the 8 surrounding neighbors, $s_{ij}$ will be in $[0,8]$ interval and the color intensity will reflect $s_{ij}$ in shades of gray.
                 
 
-                <h4>Gradient Descent Adaption</h4>
+                <h4>Updating Cell States</h4>
 
-                During the simulation all cells interact with its neighbors in order t
+                During the simulation, all cells interact with its neighbors trying to synchronize its waves. The current method of syncronization is based in the Gradient Descent method, which employs the difference of wave values as loss function:  
 
-                For the set of parameters of the function $\theta = [A, f, d]$, the Gradient Descent method 
+                $$ L(c_{ij}, c_{kl}) = \Delta y(t) = y_{ij}(t) - y_{kl}(t) $$
 
-                $$ L(y_i, y_j) = \Delta y = y_j - y_i $$
+                Given an internal state $\theta(t)$, the Gradient of $L$ is given by:
 
                 $$\nabla_\theta = \left[ \frac{\partial A}{\partial L}, \frac{\partial A}{\partial L}, \frac{\partial A}{\partial L} \right]$$
 
                 <ul>
-                    <li>$\frac{\partial A}{\partial y} = sin(f \cdot t + d)$</li>
-                    <li>$\frac{\partial f}{\partial y} = A\cdot t \cdot cos(f \cdot t + d)$</li>
-                    <li>$\frac{\partial d}{\partial y} = A\cdot cos(f \cdot t + d)$</li>
+                    <li>$\frac{\partial A}{\partial L} = sin(f \cdot t + d)\cdot \Delta y(t)$</li>
+                    <li>$\frac{\partial f}{\partial L} = A\cdot t \cdot cos(f \cdot t + d)\cdot \Delta y(t)$</li>
+                    <li>$\frac{\partial d}{\partial L} = A\cdot cos(f \cdot t + d)\cdot \Delta y(t)$</li>
                 </ul>
 
-                $$ \theta' = \theta + \alpha \cdot -\nabla_\theta $$
+                The $\alpha \in mathbb{R}^+$ is the learning rate.
+
+                The Gradient Descent method updates the internal state using the following formula:
+
+                $$ \theta(t+1) = \theta(t) + \alpha \cdot -\nabla_\theta $$
 
 
                 <form>
