@@ -15,7 +15,7 @@ final _random = Random();
 
 CellularAutomata ca = GameOfLife(0, 0);
 
-Map rules = {};
+Map<String, dynamic> rules = {};
 
 void main() {
   querySelector("#caWidth")?.onChange.listen((event) {
@@ -27,7 +27,8 @@ void main() {
   });
 
   querySelector("#run_sierpinski")?.onClick.listen((event) {
-    sierpinski_start(event);
+    //sierpinski_start(event);
+    ca1d_start(event);
   });
 
   querySelector("#run_conway")?.onClick.listen((event) {
@@ -54,30 +55,17 @@ void main() {
 }
 
 void readRulesFromJSON() async {
-  /*HttpRequest.getString('ca1d.json').then((myjson) {
-    //rules = json.decode(myjson);
-    var t = querySelector("#teste") as Element;
-    t.text = "teste";
-    //myjson; // json.decode(myjson);
-  });*/
-
   try {
-    // Make the GET request
     final jsonString = await HttpRequest.getString(
-        "file:///home/petronio/dados/Projetos/ALife/presentation/web/ca1d.json");
-    // The request succeeded. Process the JSON.
-    ///////processResponse(jsonString);
-    var t = querySelector("#teste") as Element;
-    t.text = jsonString;
+        "https://petroniocandido.github.io/ALife/presentation/web/ca1d.json");
+    rules = json.decode(jsonString) as Map<String, dynamic>;
   } catch (e) {
-    // The GET request failed. Handle the error.
     print("Couldn't open");
   }
 
   var sel = querySelector("#CellularAutomata1D") as SelectElement;
 
-  //for (String key in rules.keys) {
-  for (String key in ['1', '2', '3']) {
+  for (String key in rules.keys) {
     var opt = document.createElement("option") as OptionElement;
     opt.value = key;
     opt.innerText = key;
@@ -147,6 +135,25 @@ void conway_animation_image(num timestamp) {
   }
   context?.putImageData(id, 0, 0);
   window.requestAnimationFrame(conway_animation_image);
+}
+
+void ca1d_start(MouseEvent event) {
+  var w_ele = querySelector("#caWidth") as InputElement?;
+  int w = int.parse(w_ele?.value ?? "0");
+
+  var t = querySelector("#teste") as Element;
+
+  var sel = querySelector("#CellularAutomata1D") as SelectElement;
+
+  String key = sel.options[sel.selectedIndex ?? 0].value;
+
+  Map<String, dynamic> r = rules[key];
+
+  t.text = r.toString();
+  ca = SimpleCellularAutomata1D(w, r);
+  ca.initialize();
+
+  window.requestAnimationFrame(sierpinski_animation_boxes);
 }
 
 void sierpinski_start(MouseEvent event) {

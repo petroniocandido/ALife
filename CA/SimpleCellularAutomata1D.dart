@@ -4,13 +4,14 @@ import 'dart:math';
 final _random = Random();
 
 class SimpleCellularAutomata1D extends CellularAutomata<int> {
-  SimpleCellularAutomata1D(int shape, Map<String, int> _r) : super([shape]) {
+  SimpleCellularAutomata1D(int shape, Map<String, dynamic> _r)
+      : super([shape]) {
     _rules = _r;
   }
 
-  Map<String, int> _rules = {};
+  Map<String, dynamic> _rules = {};
 
-  Map<String, int> get rules => _rules;
+  Map<String, dynamic> get rules => _rules;
 
   @override
   int cellCreate() {
@@ -39,7 +40,7 @@ class SimpleCellularAutomata1D extends CellularAutomata<int> {
 
       lhs.insert(1, cells[list_index]);
 
-      cellsWorking[list_index] = rules[lhs.toString()] ?? 0;
+      cellsWorking[list_index] = (rules[lhs.toString()] ?? 0) as int;
     }
   }
 }
