@@ -1,9 +1,12 @@
 import 'dart:html';
+import 'dart:convert';
 import 'dart:math';
+import 'dart:async';
 
 //import 'CellularAutomata.dart';
 import '../../CA/CellularAutomata.dart';
 import '../../CA/SierpinskiTriangle.dart';
+import '../../CA/SimpleCellularAutomata1D.dart';
 import '../../CA/GameOfLife.dart';
 import '../../CA/PercolationCA.dart';
 import '../../CA/OscillatorCA.dart';
@@ -11,6 +14,8 @@ import '../../CA/OscillatorCA.dart';
 final _random = Random();
 
 CellularAutomata ca = GameOfLife(0, 0);
+
+Map rules = {};
 
 void main() {
   querySelector("#caWidth")?.onChange.listen((event) {
@@ -44,6 +49,40 @@ void main() {
   querySelector("#epsilon")?.onChange.listen((event) {
     changeLabel("epsilon", "lblEpsilon");
   });
+
+  readRulesFromJSON();
+}
+
+void readRulesFromJSON() async {
+  /*HttpRequest.getString('ca1d.json').then((myjson) {
+    //rules = json.decode(myjson);
+    var t = querySelector("#teste") as Element;
+    t.text = "teste";
+    //myjson; // json.decode(myjson);
+  });*/
+
+  try {
+    // Make the GET request
+    final jsonString = await HttpRequest.getString(
+        "file:///home/petronio/dados/Projetos/ALife/presentation/web/ca1d.json");
+    // The request succeeded. Process the JSON.
+    ///////processResponse(jsonString);
+    var t = querySelector("#teste") as Element;
+    t.text = jsonString;
+  } catch (e) {
+    // The GET request failed. Handle the error.
+    print("Couldn't open");
+  }
+
+  var sel = querySelector("#CellularAutomata1D") as SelectElement;
+
+  //for (String key in rules.keys) {
+  for (String key in ['1', '2', '3']) {
+    var opt = document.createElement("option") as OptionElement;
+    opt.value = key;
+    opt.innerText = key;
+    sel.append(opt);
+  }
 }
 
 void changeLabel(String id_input, String id_output) {
