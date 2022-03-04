@@ -14,8 +14,19 @@ class SimpleCellularAutomata1D extends CellularAutomata<int> {
   Map<String, dynamic> get rules => _rules;
 
   @override
+  void initialize([Map? args]) {
+    super.initialize();
+    int w = shape[0];
+    int init_cells = max(w * (rules["start"] ?? 0.1) as double, 1) as int;
+    for (int i = 0; i < init_cells; i++) {
+      int list_index = _random.nextInt(w);
+      cells[list_index] = 1;
+    }
+  }
+
+  @override
   int cellCreate() {
-    return _random.nextInt(2);
+    return 0;
   }
 
   @override

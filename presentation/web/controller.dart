@@ -57,7 +57,7 @@ void main() {
 void readRulesFromJSON() async {
   try {
     final jsonString = await HttpRequest.getString(
-        "https://petroniocandido.github.io/ALife/presentation/web/ca1d.json");
+        "https://raw.githubusercontent.com/petroniocandido/ALife/main/presentation/web/ca1d.json");
     rules = json.decode(jsonString) as Map<String, dynamic>;
   } catch (e) {
     print("Couldn't open");

@@ -3915,7 +3915,7 @@
               // Function start
               $async$handler = 3;
               $async$goto = 6;
-              return A._asyncAwait(A.HttpRequest_getString("https://petroniocandido.github.io/ALife/presentation/web/ca1d.json"), $async$readRulesFromJSON);
+              return A._asyncAwait(A.HttpRequest_getString("https://raw.githubusercontent.com/petroniocandido/ALife/main/presentation/web/ca1d.json"), $async$readRulesFromJSON);
             case 6:
               // returning from await.
               jsonString = $async$result;
@@ -6696,8 +6696,22 @@
     $signature: 21
   };
   A.SimpleCellularAutomata1D.prototype = {
+    initialize$0() {
+      var t1, w, init_cells, i, list_index, _this = this;
+      _this.super$CellularAutomata$initialize();
+      t1 = _this._shape;
+      if (0 >= t1.length)
+        return A.ioore(t1, 0);
+      w = t1[0];
+      t1 = _this._rules.$index(0, "start");
+      init_cells = A._asInt(Math.max(w * A._asNum(t1 == null ? 0.1 : t1), 1));
+      for (i = 0; i < init_cells; ++i) {
+        list_index = $.$get$_random2().nextInt$1(w);
+        B.JSArray_methods.$indexSet(_this._cellsCurrent, list_index, 1);
+      }
+    },
     cellCreate$0() {
-      return $.$get$_random2().nextInt$1(2);
+      return 0;
     },
     cellNeighborhood$1(list_index) {
       var t1, t2, _i,
