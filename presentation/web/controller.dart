@@ -13,6 +13,8 @@ import '../../CA/OscillatorCA.dart';
 
 final _random = Random();
 
+num animation_request_id = 0;
+
 CellularAutomata ca = GameOfLife(0, 0);
 
 Map<String, dynamic> rules = {};
@@ -27,20 +29,35 @@ void main() {
   });
 
   querySelector("#run_sierpinski")?.onClick.listen((event) {
-    //sierpinski_start(event);
     ca1d_start(event);
+  });
+
+  querySelector("#stop_sierpinski")?.onClick.listen((event) {
+    stop_simulation(event);
   });
 
   querySelector("#run_conway")?.onClick.listen((event) {
     conway_start(event);
   });
 
+  querySelector("#stop_conway")?.onClick.listen((event) {
+    stop_simulation(event);
+  });
+
   querySelector("#run_percolation")?.onClick.listen((event) {
     percolation_start(event);
   });
 
+  querySelector("#stop_percolation")?.onClick.listen((event) {
+    stop_simulation(event);
+  });
+
   querySelector("#run_oscillator")?.onClick.listen((event) {
     oscillator_start(event);
+  });
+
+  querySelector("#stop_oscillator")?.onClick.listen((event) {
+    stop_simulation(event);
   });
 
   querySelector("#alpha")?.onChange.listen((event) {
@@ -78,6 +95,10 @@ void changeLabel(String id_input, String id_output) {
       (querySelector("#$id_input") as InputElement?)?.value;
 }
 
+void stop_simulation(MouseEvent event) {
+  window.cancelAnimationFrame(animation_request_id as int);
+}
+
 void conway_start(MouseEvent event) {
   var w_ele = querySelector("#caWidth") as InputElement?;
   var h_ele = querySelector("#caHeight") as InputElement?;
@@ -108,7 +129,7 @@ void conway_animation_boxes(num timestamp) {
       context?.fillRect(x * boxW, y * boxH, boxW, boxH);
     }
   }
-  window.requestAnimationFrame(conway_animation_boxes);
+  animation_request_id = window.requestAnimationFrame(conway_animation_boxes);
 }
 
 void conway_animation_image(num timestamp) {
@@ -134,7 +155,7 @@ void conway_animation_image(num timestamp) {
     }
   }
   context?.putImageData(id, 0, 0);
-  window.requestAnimationFrame(conway_animation_image);
+  animation_request_id = window.requestAnimationFrame(conway_animation_image);
 }
 
 void ca1d_start(MouseEvent event) {
@@ -157,6 +178,7 @@ void ca1d_start(MouseEvent event) {
 }
 
 void sierpinski_start(MouseEvent event) {
+  var t = querySelector("#teste") as Element;
   var w_ele = querySelector("#caWidth") as InputElement?;
   int w = int.parse(w_ele?.value ?? "0");
 
@@ -167,6 +189,8 @@ void sierpinski_start(MouseEvent event) {
 }
 
 void sierpinski_animation_boxes(num timestamp) {
+  animation_request_id = timestamp;
+
   var canvas = querySelector("#canvas") as CanvasElement?;
   var context = canvas?.getContext('2d') as CanvasRenderingContext2D?;
   int canvasWidth = canvas?.width ?? 100;
@@ -184,7 +208,8 @@ void sierpinski_animation_boxes(num timestamp) {
       context?.fillRect(x * boxW, y * boxH, boxW, boxH);
     }
   }
-  window.requestAnimationFrame(sierpinski_animation_boxes);
+  animation_request_id =
+      window.requestAnimationFrame(sierpinski_animation_boxes);
 }
 
 void sierpinski_animation_image(num timestamp) {
@@ -224,7 +249,8 @@ void percolation_start(MouseEvent event) {
   ca = PercolationCA(<int>[w, h]);
   ca.initialize();
 
-  window.requestAnimationFrame(percolation_animation_boxes);
+  animation_request_id =
+      window.requestAnimationFrame(percolation_animation_boxes);
 }
 
 void percolation_animation_boxes(num timestamp) {
@@ -257,7 +283,8 @@ void percolation_animation_boxes(num timestamp) {
       context?.fillRect(x * boxW, y * boxH, boxW, boxH);
     }
   }
-  window.requestAnimationFrame(percolation_animation_boxes);
+  animation_request_id =
+      window.requestAnimationFrame(percolation_animation_boxes);
 }
 
 void oscillator_start(MouseEvent event) {
@@ -283,7 +310,8 @@ void oscillator_start(MouseEvent event) {
 
   ca.initialize();
 
-  window.requestAnimationFrame(oscillator_animation_boxes);
+  animation_request_id =
+      window.requestAnimationFrame(oscillator_animation_boxes);
 }
 
 void oscillator_animation_boxes(num timestamp) {
@@ -304,5 +332,6 @@ void oscillator_animation_boxes(num timestamp) {
       context?.fillRect(x * boxW, y * boxH, boxW, boxH);
     }
   }
-  window.requestAnimationFrame(oscillator_animation_boxes);
+  animation_request_id =
+      window.requestAnimationFrame(oscillator_animation_boxes);
 }

@@ -3858,7 +3858,7 @@
         type$.nullable_void_Function._as(null);
         A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
       }
-      t2 = t1.querySelector("#run_conway");
+      t2 = t1.querySelector("#stop_sierpinski");
       if (t2 != null) {
         t2 = J.get$onClick$x(t2);
         t3 = t2.$ti;
@@ -3866,7 +3866,7 @@
         type$.nullable_void_Function._as(null);
         A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
       }
-      t2 = t1.querySelector("#run_percolation");
+      t2 = t1.querySelector("#run_conway");
       if (t2 != null) {
         t2 = J.get$onClick$x(t2);
         t3 = t2.$ti;
@@ -3874,7 +3874,7 @@
         type$.nullable_void_Function._as(null);
         A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
       }
-      t2 = t1.querySelector("#run_oscillator");
+      t2 = t1.querySelector("#stop_conway");
       if (t2 != null) {
         t2 = J.get$onClick$x(t2);
         t3 = t2.$ti;
@@ -3882,11 +3882,43 @@
         type$.nullable_void_Function._as(null);
         A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
       }
+      t2 = t1.querySelector("#run_percolation");
+      if (t2 != null) {
+        t2 = J.get$onClick$x(t2);
+        t3 = t2.$ti;
+        t4 = t3._eval$1("~(1)?")._as(new A.main_closure5());
+        type$.nullable_void_Function._as(null);
+        A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
+      }
+      t2 = t1.querySelector("#stop_percolation");
+      if (t2 != null) {
+        t2 = J.get$onClick$x(t2);
+        t3 = t2.$ti;
+        t4 = t3._eval$1("~(1)?")._as(new A.main_closure6());
+        type$.nullable_void_Function._as(null);
+        A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
+      }
+      t2 = t1.querySelector("#run_oscillator");
+      if (t2 != null) {
+        t2 = J.get$onClick$x(t2);
+        t3 = t2.$ti;
+        t4 = t3._eval$1("~(1)?")._as(new A.main_closure7());
+        type$.nullable_void_Function._as(null);
+        A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
+      }
+      t2 = t1.querySelector("#stop_oscillator");
+      if (t2 != null) {
+        t2 = J.get$onClick$x(t2);
+        t3 = t2.$ti;
+        t4 = t3._eval$1("~(1)?")._as(new A.main_closure8());
+        type$.nullable_void_Function._as(null);
+        A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
+      }
       t2 = t1.querySelector("#alpha");
       if (t2 != null) {
         t2 = J.get$onChange$x(t2);
         t3 = t2.$ti;
-        t4 = t3._eval$1("~(1)?")._as(new A.main_closure5());
+        t4 = t3._eval$1("~(1)?")._as(new A.main_closure9());
         type$.nullable_void_Function._as(null);
         A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
       }
@@ -3894,7 +3926,7 @@
       if (t1 != null) {
         t1 = J.get$onChange$x(t1);
         t2 = t1.$ti;
-        t3 = t2._eval$1("~(1)?")._as(new A.main_closure6());
+        t3 = t2._eval$1("~(1)?")._as(new A.main_closure10());
         type$.nullable_void_Function._as(null);
         A._EventStreamSubscription$(t1._target, t1._eventType, t3, false, t2._precomputed1);
       }
@@ -4024,11 +4056,11 @@
         }
         ++y;
       }
-      B.Window_methods.requestAnimationFrame$1(window, A.controller__conway_animation_boxes$closure());
+      $.animation_request_id = B.Window_methods.requestAnimationFrame$1(window, A.controller__conway_animation_boxes$closure());
     },
     sierpinski_animation_boxes(timestamp) {
       var canvas, t1, t2, canvasWidth, canvasHeight, t3, t4, boxW, boxH, y, img, x, t5, state;
-      A._asNum(timestamp);
+      $.animation_request_id = A._asNum(timestamp);
       canvas = type$.nullable_CanvasElement._as(document.querySelector("#canvas"));
       t1 = canvas == null;
       t2 = t1 ? null : B.CanvasElement_methods.getContext$1(canvas, "2d");
@@ -4072,7 +4104,7 @@
           ++x;
         }
       }
-      B.Window_methods.requestAnimationFrame$1(window, A.controller__sierpinski_animation_boxes$closure());
+      $.animation_request_id = B.Window_methods.requestAnimationFrame$1(window, A.controller__sierpinski_animation_boxes$closure());
     },
     percolation_animation_boxes(timestamp) {
       var canvas, t1, t2, canvasWidth, canvasHeight, t3, t4, t5, boxW, boxH, img, y, x, t6;
@@ -4140,7 +4172,7 @@
         }
         ++y;
       }
-      B.Window_methods.requestAnimationFrame$1(window, A.controller__percolation_animation_boxes$closure());
+      $.animation_request_id = B.Window_methods.requestAnimationFrame$1(window, A.controller__percolation_animation_boxes$closure());
     },
     oscillator_animation_boxes(timestamp) {
       var canvas, t1, t2, canvasWidth, canvasHeight, t3, t4, t5, boxW, boxH, img, y, x, t6, state;
@@ -4199,7 +4231,7 @@
         }
         ++y;
       }
-      B.Window_methods.requestAnimationFrame$1(window, A.controller__oscillator_animation_boxes$closure());
+      $.animation_request_id = B.Window_methods.requestAnimationFrame$1(window, A.controller__oscillator_animation_boxes$closure());
     },
     main_closure: function main_closure() {
     },
@@ -4216,6 +4248,14 @@
     main_closure5: function main_closure5() {
     },
     main_closure6: function main_closure6() {
+    },
+    main_closure7: function main_closure7() {
+    },
+    main_closure8: function main_closure8() {
+    },
+    main_closure9: function main_closure9() {
+    },
+    main_closure10: function main_closure10() {
     },
     printString(string) {
       if (typeof dartPrint == "function") {
@@ -6242,7 +6282,7 @@
     call$1(e) {
       return this.onData.call$1(type$.Event._as(e));
     },
-    $signature: 1
+    $signature: 2
   };
   A.ImmutableListMixin.prototype = {
     get$iterator(receiver) {
@@ -6756,13 +6796,13 @@
     call$1($event) {
       A.changeLabel("caWidth", "lblcaWidth");
     },
-    $signature: 1
+    $signature: 2
   };
   A.main_closure0.prototype = {
     call$1($event) {
       A.changeLabel("caHeight", "lblcaHeight");
     },
-    $signature: 1
+    $signature: 2
   };
   A.main_closure1.prototype = {
     call$1($event) {
@@ -6791,9 +6831,20 @@
       t1.initialize$0();
       B.Window_methods.requestAnimationFrame$1(window, A.controller__sierpinski_animation_boxes$closure());
     },
-    $signature: 2
+    $signature: 1
   };
   A.main_closure2.prototype = {
+    call$1($event) {
+      var t1, t2;
+      type$.MouseEvent._as($event);
+      t1 = window;
+      t2 = A._asInt($.animation_request_id);
+      B.Window_methods._ensureRequestAnimationFrame$0(t1);
+      t1.cancelAnimationFrame(t2);
+    },
+    $signature: 1
+  };
+  A.main_closure3.prototype = {
     call$1($event) {
       var t1, t2, w_ele, h_ele, w;
       type$.MouseEvent._as($event);
@@ -6809,9 +6860,20 @@
       t1.initialize$0();
       B.Window_methods.requestAnimationFrame$1(window, A.controller__conway_animation_boxes$closure());
     },
-    $signature: 2
+    $signature: 1
   };
-  A.main_closure3.prototype = {
+  A.main_closure4.prototype = {
+    call$1($event) {
+      var t1, t2;
+      type$.MouseEvent._as($event);
+      t1 = window;
+      t2 = A._asInt($.animation_request_id);
+      B.Window_methods._ensureRequestAnimationFrame$0(t1);
+      t1.cancelAnimationFrame(t2);
+    },
+    $signature: 1
+  };
+  A.main_closure5.prototype = {
     call$1($event) {
       var t1, t2, w_ele, h_ele, w;
       type$.MouseEvent._as($event);
@@ -6825,11 +6887,22 @@
       t1 = A.PercolationCA$(A._setArrayType([w, A.int_parse(t1 == null ? "0" : t1)], type$.JSArray_int));
       $.ca = t1;
       t1.initialize$0();
-      B.Window_methods.requestAnimationFrame$1(window, A.controller__percolation_animation_boxes$closure());
+      $.animation_request_id = B.Window_methods.requestAnimationFrame$1(window, A.controller__percolation_animation_boxes$closure());
     },
-    $signature: 2
+    $signature: 1
   };
-  A.main_closure4.prototype = {
+  A.main_closure6.prototype = {
+    call$1($event) {
+      var t1, t2;
+      type$.MouseEvent._as($event);
+      t1 = window;
+      t2 = A._asInt($.animation_request_id);
+      B.Window_methods._ensureRequestAnimationFrame$0(t1);
+      t1.cancelAnimationFrame(t2);
+    },
+    $signature: 1
+  };
+  A.main_closure7.prototype = {
     call$1($event) {
       var t1, t2, w_ele, h_ele, t3, w, a_ele, e_ele, t4, t_ele, _null = null;
       type$.MouseEvent._as($event);
@@ -6854,21 +6927,32 @@
       t1._alpha = t3 / 1000;
       t1._epsilon = t4 / 100;
       t1.initialize$0();
-      B.Window_methods.requestAnimationFrame$1(window, A.controller__oscillator_animation_boxes$closure());
+      $.animation_request_id = B.Window_methods.requestAnimationFrame$1(window, A.controller__oscillator_animation_boxes$closure());
     },
-    $signature: 2
+    $signature: 1
   };
-  A.main_closure5.prototype = {
+  A.main_closure8.prototype = {
+    call$1($event) {
+      var t1, t2;
+      type$.MouseEvent._as($event);
+      t1 = window;
+      t2 = A._asInt($.animation_request_id);
+      B.Window_methods._ensureRequestAnimationFrame$0(t1);
+      t1.cancelAnimationFrame(t2);
+    },
+    $signature: 1
+  };
+  A.main_closure9.prototype = {
     call$1($event) {
       A.changeLabel("alpha", "lblAlpha");
     },
-    $signature: 1
+    $signature: 2
   };
-  A.main_closure6.prototype = {
+  A.main_closure10.prototype = {
     call$1($event) {
       A.changeLabel("epsilon", "lblEpsilon");
     },
-    $signature: 1
+    $signature: 2
   };
   (function aliases() {
     var _ = J.Interceptor.prototype;
@@ -6911,7 +6995,7 @@
     _inherit(A.EfficientLengthIterable, A.Iterable);
     _inheritMany(A.EfficientLengthIterable, [A.ListIterable, A.LinkedHashMapKeyIterable]);
     _inherit(A.NullError, A.TypeError);
-    _inheritMany(A.Closure, [A.Closure0Args, A.Closure2Args, A.TearOffClosure, A.initHooks_closure, A.initHooks_closure1, A._AsyncRun__initializeScheduleImmediate_internalCallback, A._AsyncRun__initializeScheduleImmediate_closure, A._awaitOnObject_closure, A._Future__chainForeignFuture_closure, A._Future__propagateToListeners_handleWhenCompleteCallback_closure, A.Stream_length_closure, A._RootZone_bindUnaryCallbackGuarded_closure, A.HttpRequest_getString_closure, A.HttpRequest_request_closure, A._EventStreamSubscription_closure, A.PercolationCA_cellUpdate_closure, A.main_closure, A.main_closure0, A.main_closure1, A.main_closure2, A.main_closure3, A.main_closure4, A.main_closure5, A.main_closure6]);
+    _inheritMany(A.Closure, [A.Closure0Args, A.Closure2Args, A.TearOffClosure, A.initHooks_closure, A.initHooks_closure1, A._AsyncRun__initializeScheduleImmediate_internalCallback, A._AsyncRun__initializeScheduleImmediate_closure, A._awaitOnObject_closure, A._Future__chainForeignFuture_closure, A._Future__propagateToListeners_handleWhenCompleteCallback_closure, A.Stream_length_closure, A._RootZone_bindUnaryCallbackGuarded_closure, A.HttpRequest_getString_closure, A.HttpRequest_request_closure, A._EventStreamSubscription_closure, A.PercolationCA_cellUpdate_closure, A.main_closure, A.main_closure0, A.main_closure1, A.main_closure2, A.main_closure3, A.main_closure4, A.main_closure5, A.main_closure6, A.main_closure7, A.main_closure8, A.main_closure9, A.main_closure10]);
     _inheritMany(A.TearOffClosure, [A.StaticClosure, A.BoundClosure]);
     _inherit(A._AssertionError, A.AssertionError);
     _inherit(A.MapBase, A.MapMixin);
@@ -6950,7 +7034,7 @@
     typeUniverse: {eC: new Map(), tR: {}, eT: {}, tPV: {}, sEA: []},
     mangledGlobalNames: {int: "int", double: "double", num: "num", String: "String", bool: "bool", Null: "Null", List: "List"},
     mangledNames: {},
-    types: ["~()", "~(Event)", "~(MouseEvent)", "~(num)", "int(int,int)", "~(~())", "Null(@)", "Null()", "@(@)", "@(@,String)", "@(String)", "Null(~())", "~(@)", "Null(@,StackTrace)", "~(int,@)", "~(Object[StackTrace?])", "Null(Object,StackTrace)", "_Future<@>(@)", "~(Object?,Object?)", "String(HttpRequest)", "~(ProgressEvent)", "bool(int)", "int(@,@)"],
+    types: ["~()", "~(MouseEvent)", "~(Event)", "~(num)", "int(int,int)", "~(~())", "Null(@)", "Null()", "@(@)", "@(@,String)", "@(String)", "Null(~())", "~(@)", "Null(@,StackTrace)", "~(int,@)", "~(Object[StackTrace?])", "Null(Object,StackTrace)", "_Future<@>(@)", "~(Object?,Object?)", "String(HttpRequest)", "~(ProgressEvent)", "bool(int)", "int(@,@)"],
     interceptorsByTag: null,
     leafTags: null,
     arrayRti: Symbol("$ti")
@@ -7186,6 +7270,7 @@
     $._isInCallbackLoop = false;
     $.Zone__current = B.C__RootZone;
     $._toStringVisiting = A._setArrayType([], A.findType("JSArray<Object>"));
+    $.animation_request_id = 0;
     $.rules = A.LinkedHashMap_LinkedHashMap$_empty(type$.String, type$.dynamic);
   })();
   (function lazyInitializers() {

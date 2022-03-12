@@ -58,7 +58,17 @@ class SimpleCellularAutomata1D extends CellularAutomata<int> {
 
 void main() {
   print("Inicio");
-  var ca = SimpleCellularAutomata1D(15, {});
+  var ca = SimpleCellularAutomata1D(15, {
+    "start": 0.01,
+    "[0, 0, 0]": 0,
+    "[0, 0, 1]": 1,
+    "[0, 1, 0]": 1,
+    "[0, 1, 1]": 1,
+    "[1, 0, 0]": 1,
+    "[1, 0, 1]": 0,
+    "[1, 1, 0]": 0,
+    "[1, 1, 1]": 0
+  });
   ca.initialize();
   print(ca.cells);
 
