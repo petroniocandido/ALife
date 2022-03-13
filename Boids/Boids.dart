@@ -10,7 +10,9 @@ class Boid {
   Point2D get direction => _direction;
 }
 
-class BoidSimulation<T extends Boid> {
+typedef Boid ActionFunction(Boid obj, BoidSimulation sun);
+
+abstract class BoidSimulation<T extends Boid> {
   var _boids = <T>[];
 
   List<T> get boids => _boids;
@@ -18,4 +20,20 @@ class BoidSimulation<T extends Boid> {
   int _numBoids = 0;
 
   int get numBoids => _numBoids;
+
+  var _actions = <ActionFunction>[];
+
+  // Abstract Methods
+
+  void initialize();
+
+  // Concrete Methods
+
+  void next() {
+    for (Boid boid in _boids) {
+      for (ActionFunction func in _actions) {
+        func.call(boid, this);
+      }
+    }
+  }
 }
