@@ -256,284 +256,14 @@
     checkNotNullable(value, $name, $T) {
       return value;
     },
-    IterableElementError_noElement() {
-      return new A.StateError("No element");
-    },
-    Sort_sort(a, compare, $E) {
-      A.Sort__doSort(a, 0, J.get$length$asx(a) - 1, compare, $E);
-    },
-    Sort__doSort(a, left, right, compare, $E) {
-      if (right - left <= 32)
-        A.Sort__insertionSort(a, left, right, compare, $E);
-      else
-        A.Sort__dualPivotQuicksort(a, left, right, compare, $E);
-    },
-    Sort__insertionSort(a, left, right, compare, $E) {
-      var i, t1, el, j, t2, j0;
-      for (i = left + 1, t1 = J.getInterceptor$ax(a); i <= right; ++i) {
-        el = t1.$index(a, i);
-        j = i;
-        while (true) {
-          if (j > left) {
-            t2 = compare.call$2(t1.$index(a, j - 1), el);
-            if (typeof t2 !== "number")
-              return t2.$gt();
-            t2 = t2 > 0;
-          } else
-            t2 = false;
-          if (!t2)
-            break;
-          j0 = j - 1;
-          t1.$indexSet(a, j, t1.$index(a, j0));
-          j = j0;
-        }
-        t1.$indexSet(a, j, el);
-      }
-    },
-    Sort__dualPivotQuicksort(a, left, right, compare, $E) {
-      var t0, less, great, k, ak, comp, great0, less0, pivots_are_equal,
-        sixth = B.JSInt_methods._tdivFast$1(right - left + 1, 6),
-        index1 = left + sixth,
-        index5 = right - sixth,
-        index3 = B.JSInt_methods._tdivFast$1(left + right, 2),
-        index2 = index3 - sixth,
-        index4 = index3 + sixth,
-        t1 = J.getInterceptor$ax(a),
-        el1 = t1.$index(a, index1),
-        el2 = t1.$index(a, index2),
-        el3 = t1.$index(a, index3),
-        el4 = t1.$index(a, index4),
-        el5 = t1.$index(a, index5),
-        t2 = compare.call$2(el1, el2);
-      if (typeof t2 !== "number")
-        return t2.$gt();
-      if (t2 > 0) {
-        t0 = el2;
-        el2 = el1;
-        el1 = t0;
-      }
-      t2 = compare.call$2(el4, el5);
-      if (typeof t2 !== "number")
-        return t2.$gt();
-      if (t2 > 0) {
-        t0 = el5;
-        el5 = el4;
-        el4 = t0;
-      }
-      t2 = compare.call$2(el1, el3);
-      if (typeof t2 !== "number")
-        return t2.$gt();
-      if (t2 > 0) {
-        t0 = el3;
-        el3 = el1;
-        el1 = t0;
-      }
-      t2 = compare.call$2(el2, el3);
-      if (typeof t2 !== "number")
-        return t2.$gt();
-      if (t2 > 0) {
-        t0 = el3;
-        el3 = el2;
-        el2 = t0;
-      }
-      t2 = compare.call$2(el1, el4);
-      if (typeof t2 !== "number")
-        return t2.$gt();
-      if (t2 > 0) {
-        t0 = el4;
-        el4 = el1;
-        el1 = t0;
-      }
-      t2 = compare.call$2(el3, el4);
-      if (typeof t2 !== "number")
-        return t2.$gt();
-      if (t2 > 0) {
-        t0 = el4;
-        el4 = el3;
-        el3 = t0;
-      }
-      t2 = compare.call$2(el2, el5);
-      if (typeof t2 !== "number")
-        return t2.$gt();
-      if (t2 > 0) {
-        t0 = el5;
-        el5 = el2;
-        el2 = t0;
-      }
-      t2 = compare.call$2(el2, el3);
-      if (typeof t2 !== "number")
-        return t2.$gt();
-      if (t2 > 0) {
-        t0 = el3;
-        el3 = el2;
-        el2 = t0;
-      }
-      t2 = compare.call$2(el4, el5);
-      if (typeof t2 !== "number")
-        return t2.$gt();
-      if (t2 > 0) {
-        t0 = el5;
-        el5 = el4;
-        el4 = t0;
-      }
-      t1.$indexSet(a, index1, el1);
-      t1.$indexSet(a, index3, el3);
-      t1.$indexSet(a, index5, el5);
-      t1.$indexSet(a, index2, t1.$index(a, left));
-      t1.$indexSet(a, index4, t1.$index(a, right));
-      less = left + 1;
-      great = right - 1;
-      if (J.$eq$(compare.call$2(el2, el4), 0)) {
-        for (k = less; k <= great; ++k) {
-          ak = t1.$index(a, k);
-          comp = compare.call$2(ak, el2);
-          if (comp === 0)
-            continue;
-          if (comp < 0) {
-            if (k !== less) {
-              t1.$indexSet(a, k, t1.$index(a, less));
-              t1.$indexSet(a, less, ak);
-            }
-            ++less;
-          } else
-            for (; true;) {
-              comp = compare.call$2(t1.$index(a, great), el2);
-              if (comp > 0) {
-                --great;
-                continue;
-              } else {
-                great0 = great - 1;
-                if (comp < 0) {
-                  t1.$indexSet(a, k, t1.$index(a, less));
-                  less0 = less + 1;
-                  t1.$indexSet(a, less, t1.$index(a, great));
-                  t1.$indexSet(a, great, ak);
-                  great = great0;
-                  less = less0;
-                  break;
-                } else {
-                  t1.$indexSet(a, k, t1.$index(a, great));
-                  t1.$indexSet(a, great, ak);
-                  great = great0;
-                  break;
-                }
-              }
-            }
-        }
-        pivots_are_equal = true;
-      } else {
-        for (k = less; k <= great; ++k) {
-          ak = t1.$index(a, k);
-          if (compare.call$2(ak, el2) < 0) {
-            if (k !== less) {
-              t1.$indexSet(a, k, t1.$index(a, less));
-              t1.$indexSet(a, less, ak);
-            }
-            ++less;
-          } else if (compare.call$2(ak, el4) > 0)
-            for (; true;)
-              if (compare.call$2(t1.$index(a, great), el4) > 0) {
-                --great;
-                if (great < k)
-                  break;
-                continue;
-              } else {
-                great0 = great - 1;
-                if (compare.call$2(t1.$index(a, great), el2) < 0) {
-                  t1.$indexSet(a, k, t1.$index(a, less));
-                  less0 = less + 1;
-                  t1.$indexSet(a, less, t1.$index(a, great));
-                  t1.$indexSet(a, great, ak);
-                  less = less0;
-                } else {
-                  t1.$indexSet(a, k, t1.$index(a, great));
-                  t1.$indexSet(a, great, ak);
-                }
-                great = great0;
-                break;
-              }
-        }
-        pivots_are_equal = false;
-      }
-      t2 = less - 1;
-      t1.$indexSet(a, left, t1.$index(a, t2));
-      t1.$indexSet(a, t2, el2);
-      t2 = great + 1;
-      t1.$indexSet(a, right, t1.$index(a, t2));
-      t1.$indexSet(a, t2, el4);
-      A.Sort__doSort(a, left, less - 2, compare, $E);
-      A.Sort__doSort(a, great + 2, right, compare, $E);
-      if (pivots_are_equal)
-        return;
-      if (less < index1 && great > index5) {
-        for (; J.$eq$(compare.call$2(t1.$index(a, less), el2), 0);)
-          ++less;
-        for (; J.$eq$(compare.call$2(t1.$index(a, great), el4), 0);)
-          --great;
-        for (k = less; k <= great; ++k) {
-          ak = t1.$index(a, k);
-          if (compare.call$2(ak, el2) === 0) {
-            if (k !== less) {
-              t1.$indexSet(a, k, t1.$index(a, less));
-              t1.$indexSet(a, less, ak);
-            }
-            ++less;
-          } else if (compare.call$2(ak, el4) === 0)
-            for (; true;)
-              if (compare.call$2(t1.$index(a, great), el4) === 0) {
-                --great;
-                if (great < k)
-                  break;
-                continue;
-              } else {
-                great0 = great - 1;
-                if (compare.call$2(t1.$index(a, great), el2) < 0) {
-                  t1.$indexSet(a, k, t1.$index(a, less));
-                  less0 = less + 1;
-                  t1.$indexSet(a, less, t1.$index(a, great));
-                  t1.$indexSet(a, great, ak);
-                  less = less0;
-                } else {
-                  t1.$indexSet(a, k, t1.$index(a, great));
-                  t1.$indexSet(a, great, ak);
-                }
-                great = great0;
-                break;
-              }
-        }
-        A.Sort__doSort(a, less, great, compare, $E);
-      } else
-        A.Sort__doSort(a, less, great, compare, $E);
-    },
     LateError: function LateError(t0) {
       this._message = t0;
-    },
-    EfficientLengthIterable: function EfficientLengthIterable() {
-    },
-    ListIterable: function ListIterable() {
-    },
-    ListIterator: function ListIterator(t0, t1, t2) {
-      var _ = this;
-      _.__internal$_iterable = t0;
-      _.__internal$_length = t1;
-      _.__internal$_index = 0;
-      _.__internal$_current = null;
-      _.$ti = t2;
     },
     unminifyOrTag(rawClassName) {
       var preserved = init.mangledGlobalNames[rawClassName];
       if (preserved != null)
         return preserved;
       return rawClassName;
-    },
-    isJsIndexable(object, record) {
-      var result;
-      if (record != null) {
-        result = record.x;
-        if (result != null)
-          return result;
-      }
-      return type$.JavaScriptIndexingBehavior_dynamic._is(object);
     },
     S(value) {
       var result;
@@ -565,33 +295,6 @@
       }
       return hash;
     },
-    Primitives_parseInt(source, radix) {
-      var decimalMatch,
-        match = /^\s*[+-]?((0x[a-f0-9]+)|(\d+)|([a-z0-9]+))\s*$/i.exec(source);
-      if (match == null)
-        return null;
-      if (3 >= match.length)
-        return A.ioore(match, 3);
-      decimalMatch = match[3];
-      if (decimalMatch != null)
-        return parseInt(source, 10);
-      if (match[2] != null)
-        return parseInt(source, 16);
-      return null;
-    },
-    Primitives_parseDouble(source) {
-      var result, trimmed;
-      if (!/^\s*[+-]?(?:Infinity|NaN|(?:\.\d+|\d+(?:\.\d*)?)(?:[eE][+-]?\d+)?)\s*$/.test(source))
-        return null;
-      result = parseFloat(source);
-      if (isNaN(result)) {
-        trimmed = B.JSString_methods.trim$0(source);
-        if (trimmed === "NaN" || trimmed === "+NaN" || trimmed === "-NaN")
-          return result;
-        return null;
-      }
-      return result;
-    },
     Primitives_objectTypeName(object) {
       return A.Primitives__objectTypeNameNewRti(object);
     },
@@ -618,9 +321,6 @@
       }
       return A._rtiToString(A.instanceType(object), null);
     },
-    iae(argument) {
-      throw A.wrapException(A.argumentErrorValue(argument));
-    },
     ioore(receiver, index) {
       if (receiver == null)
         J.get$length$asx(receiver);
@@ -632,11 +332,8 @@
         return new A.ArgumentError(true, index, _s5_, null);
       $length = A._asInt(J.get$length$asx(indexable));
       if (index < 0 || index >= $length)
-        return A.IndexError$(index, indexable, _s5_, null, $length);
-      return A.RangeError$value(index, _s5_);
-    },
-    argumentErrorValue(object) {
-      return new A.ArgumentError(true, object, null, null);
+        return new A.IndexError($length, true, index, _s5_, "Index out of range");
+      return new A.RangeError(true, index, _s5_, "Value not in range");
     },
     wrapException(ex) {
       var wrapper, t1;
@@ -701,8 +398,6 @@
     unwrapException(ex) {
       if (ex == null)
         return new A.NullThrownFromJavaScriptException(ex);
-      if (ex instanceof A.ExceptionAndStackTrace)
-        return A.saveStackTrace(ex, type$.Object._as(ex.dartException));
       if (typeof ex !== "object")
         return ex;
       if ("dartException" in ex)
@@ -810,8 +505,6 @@
     },
     getTraceFromException(exception) {
       var trace;
-      if (exception instanceof A.ExceptionAndStackTrace)
-        return exception.stackTrace;
       if (exception == null)
         return new A._StackTrace(exception);
       trace = exception.$cachedTrace;
@@ -1069,14 +762,6 @@
       }
       throw A.wrapException(A.ArgumentError$("Field name " + fieldName + " not found.", null));
     },
-    boolConversionCheck(value) {
-      if (value == null)
-        A.assertThrow("boolean expression must not be null");
-      return value;
-    },
-    assertThrow(message) {
-      throw A.wrapException(new A._AssertionError(message));
-    },
     throwCyclicInit(staticName) {
       throw A.wrapException(new A.CyclicInitializationError(staticName));
     },
@@ -1253,10 +938,6 @@
     NullThrownFromJavaScriptException: function NullThrownFromJavaScriptException(t0) {
       this._irritant = t0;
     },
-    ExceptionAndStackTrace: function ExceptionAndStackTrace(t0, t1) {
-      this.dartException = t0;
-      this.stackTrace = t1;
-    },
     _StackTrace: function _StackTrace(t0) {
       this._exception = t0;
       this._trace = null;
@@ -1278,9 +959,6 @@
     RuntimeError: function RuntimeError(t0) {
       this.message = t0;
     },
-    _AssertionError: function _AssertionError(t0) {
-      this.message = t0;
-    },
     JsLinkedHashMap: function JsLinkedHashMap(t0) {
       var _ = this;
       _.__js_helper$_length = 0;
@@ -1288,16 +966,10 @@
       _._modifications = 0;
       _.$ti = t0;
     },
-    LinkedHashMapKeyIterable: function LinkedHashMapKeyIterable(t0, t1) {
-      this._map = t0;
-      this.$ti = t1;
-    },
-    LinkedHashMapKeyIterator: function LinkedHashMapKeyIterator(t0, t1, t2) {
-      var _ = this;
-      _._map = t0;
-      _._modifications = t1;
-      _.__js_helper$_current = _._cell = null;
-      _.$ti = t2;
+    LinkedHashMapCell: function LinkedHashMapCell(t0, t1) {
+      this.hashMapCellKey = t0;
+      this.hashMapCellValue = t1;
+      this._next = null;
     },
     initHooks_closure: function initHooks_closure(t0) {
       this.getTag = t0;
@@ -1647,12 +1319,6 @@
     },
     _failedAsCheck(object, testRti) {
       throw A.wrapException(A._TypeError$fromMessage(A._Error_compose(object, A.instanceOrFunctionType(object, testRti), A._rtiToString(testRti, null))));
-    },
-    checkTypeBound(type, bound, variable, methodName) {
-      var _null = null;
-      if (A._isSubtype(init.typeUniverse, type, _null, bound, _null))
-        return type;
-      throw A.wrapException(A._TypeError$fromMessage("The type argument '" + A._rtiToString(type, _null) + "' is not a subtype of the type variable bound '" + A._rtiToString(bound, _null) + "' of type variable '" + variable + "' in '" + methodName + "'."));
     },
     _Error_compose(object, objectRti, checkedTypeDescription) {
       var objectDescription = A.Error_safeToString(object),
@@ -2783,56 +2449,6 @@
       t1._TimerImpl$2(milliseconds, callback);
       return t1;
     },
-    _makeAsyncAwaitCompleter($T) {
-      return new A._AsyncAwaitCompleter(new A._Future($.Zone__current, $T._eval$1("_Future<0>")), $T._eval$1("_AsyncAwaitCompleter<0>"));
-    },
-    _asyncStartSync(bodyFunction, completer) {
-      bodyFunction.call$2(0, null);
-      completer.isSync = true;
-      return completer._future;
-    },
-    _asyncAwait(object, bodyFunction) {
-      A._awaitOnObject(object, bodyFunction);
-    },
-    _asyncReturn(object, completer) {
-      completer.complete$1(0, object);
-    },
-    _asyncRethrow(object, completer) {
-      completer.completeError$2(A.unwrapException(object), A.getTraceFromException(object));
-    },
-    _awaitOnObject(object, bodyFunction) {
-      var t1, future,
-        thenCallback = new A._awaitOnObject_closure(bodyFunction),
-        errorCallback = new A._awaitOnObject_closure0(bodyFunction);
-      if (object instanceof A._Future)
-        object._thenAwait$1$2(thenCallback, errorCallback, type$.dynamic);
-      else {
-        t1 = type$.dynamic;
-        if (type$.Future_dynamic._is(object))
-          object.then$1$2$onError(thenCallback, errorCallback, t1);
-        else {
-          future = new A._Future($.Zone__current, type$._Future_dynamic);
-          future._state = 8;
-          future._resultOrListeners = object;
-          future._thenAwait$1$2(thenCallback, errorCallback, t1);
-        }
-      }
-    },
-    _wrapJsFunctionForAsync($function) {
-      var $protected = function(fn, ERROR) {
-        return function(errorCode, result) {
-          while (true)
-            try {
-              fn(errorCode, result);
-              break;
-            } catch (error) {
-              result = error;
-              errorCode = ERROR;
-            }
-        };
-      }($function, 1);
-      return $.Zone__current.registerBinaryCallback$3$1(new A._wrapJsFunctionForAsync_closure($protected), type$.void, type$.int, type$.dynamic);
-    },
     AsyncError$(error, stackTrace) {
       var t1 = A.checkNotNullable(error, "error", type$.Object);
       return new A.AsyncError(t1, stackTrace == null ? A.AsyncError_defaultStackTrace(error) : stackTrace);
@@ -2962,9 +2578,9 @@
       }
     },
     _registerErrorHandler(errorHandler, zone) {
-      var t1;
-      if (type$.dynamic_Function_Object_StackTrace._is(errorHandler))
-        return zone.registerBinaryCallback$3$1(errorHandler, type$.dynamic, type$.Object, type$.StackTrace);
+      var t1 = type$.dynamic_Function_Object_StackTrace;
+      if (t1._is(errorHandler))
+        return t1._as(errorHandler);
       t1 = type$.dynamic_Function_Object;
       if (t1._is(errorHandler))
         return t1._as(errorHandler);
@@ -3022,19 +2638,6 @@
         if (next == null)
           $._lastCallback = entry;
       }
-    },
-    scheduleMicrotask(callback) {
-      var _null = null,
-        currentZone = $.Zone__current;
-      if (B.C__RootZone === currentZone) {
-        A._rootScheduleMicrotask(_null, _null, B.C__RootZone, callback);
-        return;
-      }
-      A._rootScheduleMicrotask(_null, _null, currentZone, type$.void_Function._as(currentZone.bindCallbackGuarded$1(callback)));
-    },
-    StreamIterator_StreamIterator(stream, $T) {
-      A.checkNotNullable(stream, "stream", type$.Object);
-      return new A._StreamIterator($T._eval$1("_StreamIterator<0>"));
     },
     _rootHandleError(error, stackTrace) {
       A._schedulePriorityAsyncCallback(new A._rootHandleError_closure(error, stackTrace));
@@ -3107,29 +2710,9 @@
       this.$this = t0;
       this.callback = t1;
     },
-    _AsyncAwaitCompleter: function _AsyncAwaitCompleter(t0, t1) {
-      this._future = t0;
-      this.isSync = false;
-      this.$ti = t1;
-    },
-    _awaitOnObject_closure: function _awaitOnObject_closure(t0) {
-      this.bodyFunction = t0;
-    },
-    _awaitOnObject_closure0: function _awaitOnObject_closure0(t0) {
-      this.bodyFunction = t0;
-    },
-    _wrapJsFunctionForAsync_closure: function _wrapJsFunctionForAsync_closure(t0) {
-      this.$protected = t0;
-    },
     AsyncError: function AsyncError(t0, t1) {
       this.error = t0;
       this.stackTrace = t1;
-    },
-    _Completer: function _Completer() {
-    },
-    _AsyncCompleter: function _AsyncCompleter(t0, t1) {
-      this.future = t0;
-      this.$ti = t1;
     },
     _FutureListener: function _FutureListener(t0, t1, t2, t3, t4) {
       var _ = this;
@@ -3154,30 +2737,6 @@
     _Future__prependListeners_closure: function _Future__prependListeners_closure(t0, t1) {
       this._box_0 = t0;
       this.$this = t1;
-    },
-    _Future__chainForeignFuture_closure: function _Future__chainForeignFuture_closure(t0) {
-      this.$this = t0;
-    },
-    _Future__chainForeignFuture_closure0: function _Future__chainForeignFuture_closure0(t0) {
-      this.$this = t0;
-    },
-    _Future__chainForeignFuture_closure1: function _Future__chainForeignFuture_closure1(t0, t1, t2) {
-      this.$this = t0;
-      this.e = t1;
-      this.s = t2;
-    },
-    _Future__asyncCompleteWithValue_closure: function _Future__asyncCompleteWithValue_closure(t0, t1) {
-      this.$this = t0;
-      this.value = t1;
-    },
-    _Future__chainFuture_closure: function _Future__chainFuture_closure(t0, t1) {
-      this.$this = t0;
-      this.value = t1;
-    },
-    _Future__asyncCompleteError_closure: function _Future__asyncCompleteError_closure(t0, t1, t2) {
-      this.$this = t0;
-      this.error = t1;
-      this.stackTrace = t2;
     },
     _Future__propagateToListeners_handleWhenCompleteCallback: function _Future__propagateToListeners_handleWhenCompleteCallback(t0, t1, t2) {
       this._box_0 = t0;
@@ -3211,11 +2770,6 @@
     },
     StreamSubscription: function StreamSubscription() {
     },
-    StreamTransformerBase: function StreamTransformerBase() {
-    },
-    _StreamIterator: function _StreamIterator(t0) {
-      this.$ti = t0;
-    },
     _Zone: function _Zone() {
     },
     _rootHandleError_closure: function _rootHandleError_closure(t0, t1) {
@@ -3235,25 +2789,6 @@
     },
     LinkedHashMap_LinkedHashMap$_empty($K, $V) {
       return new A.JsLinkedHashMap($K._eval$1("@<0>")._bind$1($V)._eval$1("JsLinkedHashMap<1,2>"));
-    },
-    IterableBase_iterableToShortString(iterable, leftDelimiter, rightDelimiter) {
-      var parts, t1;
-      if (A._isToStringVisiting(iterable)) {
-        if (leftDelimiter === "(" && rightDelimiter === ")")
-          return "(...)";
-        return leftDelimiter + "..." + rightDelimiter;
-      }
-      parts = A._setArrayType([], type$.JSArray_String);
-      B.JSArray_methods.add$1($._toStringVisiting, iterable);
-      try {
-        A._iterablePartsToStrings(iterable, parts);
-      } finally {
-        if (0 >= $._toStringVisiting.length)
-          return A.ioore($._toStringVisiting, -1);
-        $._toStringVisiting.pop();
-      }
-      t1 = A.StringBuffer__writeAll(leftDelimiter, type$.Iterable_dynamic._as(parts), ", ") + rightDelimiter;
-      return t1.charCodeAt(0) == 0 ? t1 : t1;
     },
     IterableBase_iterableToFullString(iterable, leftDelimiter, rightDelimiter) {
       var buffer, t1;
@@ -3280,87 +2815,6 @@
           return true;
       return false;
     },
-    _iterablePartsToStrings(iterable, parts) {
-      var next, ultimateString, penultimateString, penultimate, ultimate, ultimate0, elision,
-        it = iterable.get$iterator(iterable),
-        $length = 0, count = 0;
-      while (true) {
-        if (!($length < 80 || count < 3))
-          break;
-        if (!it.moveNext$0())
-          return;
-        next = A.S(it.get$current());
-        B.JSArray_methods.add$1(parts, next);
-        $length += next.length + 2;
-        ++count;
-      }
-      if (!it.moveNext$0()) {
-        if (count <= 5)
-          return;
-        if (0 >= parts.length)
-          return A.ioore(parts, -1);
-        ultimateString = parts.pop();
-        if (0 >= parts.length)
-          return A.ioore(parts, -1);
-        penultimateString = parts.pop();
-      } else {
-        penultimate = it.get$current();
-        ++count;
-        if (!it.moveNext$0()) {
-          if (count <= 4) {
-            B.JSArray_methods.add$1(parts, A.S(penultimate));
-            return;
-          }
-          ultimateString = A.S(penultimate);
-          if (0 >= parts.length)
-            return A.ioore(parts, -1);
-          penultimateString = parts.pop();
-          $length += ultimateString.length + 2;
-        } else {
-          ultimate = it.get$current();
-          ++count;
-          for (; it.moveNext$0(); penultimate = ultimate, ultimate = ultimate0) {
-            ultimate0 = it.get$current();
-            ++count;
-            if (count > 100) {
-              while (true) {
-                if (!($length > 75 && count > 3))
-                  break;
-                if (0 >= parts.length)
-                  return A.ioore(parts, -1);
-                $length -= parts.pop().length + 2;
-                --count;
-              }
-              B.JSArray_methods.add$1(parts, "...");
-              return;
-            }
-          }
-          penultimateString = A.S(penultimate);
-          ultimateString = A.S(ultimate);
-          $length += ultimateString.length + penultimateString.length + 4;
-        }
-      }
-      if (count > parts.length + 2) {
-        $length += 5;
-        elision = "...";
-      } else
-        elision = null;
-      while (true) {
-        if (!($length > 80 && parts.length > 3))
-          break;
-        if (0 >= parts.length)
-          return A.ioore(parts, -1);
-        $length -= parts.pop().length + 2;
-        if (elision == null) {
-          $length += 5;
-          elision = "...";
-        }
-      }
-      if (elision != null)
-        B.JSArray_methods.add$1(parts, elision);
-      B.JSArray_methods.add$1(parts, penultimateString);
-      B.JSArray_methods.add$1(parts, ultimateString);
-    },
     MapBase_mapToString(m) {
       var result, t1 = {};
       if (A._isToStringVisiting(m))
@@ -3380,10 +2834,6 @@
       t1 = result._contents;
       return t1.charCodeAt(0) == 0 ? t1 : t1;
     },
-    ListBase: function ListBase() {
-    },
-    ListMixin: function ListMixin() {
-    },
     MapBase: function MapBase() {
     },
     MapBase_mapToString_closure: function MapBase_mapToString_closure(t0, t1) {
@@ -3391,61 +2841,6 @@
       this.result = t1;
     },
     MapMixin: function MapMixin() {
-    },
-    _ListBase_Object_ListMixin: function _ListBase_Object_ListMixin() {
-    },
-    _parseJson(source, reviver) {
-      var e, exception, t1, parsed = null;
-      try {
-        parsed = JSON.parse(source);
-      } catch (exception) {
-        e = A.unwrapException(exception);
-        t1 = A.FormatException$(String(e), null);
-        throw A.wrapException(t1);
-      }
-      t1 = A._convertJsonToDartLazy(parsed);
-      return t1;
-    },
-    _convertJsonToDartLazy(object) {
-      var i;
-      if (object == null)
-        return null;
-      if (typeof object != "object")
-        return object;
-      if (Object.getPrototypeOf(object) !== Array.prototype)
-        return new A._JsonMap(object, Object.create(null));
-      for (i = 0; i < object.length; ++i)
-        object[i] = A._convertJsonToDartLazy(object[i]);
-      return object;
-    },
-    _JsonMap: function _JsonMap(t0, t1) {
-      this._original = t0;
-      this._processed = t1;
-      this._data = null;
-    },
-    _JsonMapKeyIterable: function _JsonMapKeyIterable(t0) {
-      this._parent = t0;
-    },
-    Codec: function Codec() {
-    },
-    Converter: function Converter() {
-    },
-    JsonCodec: function JsonCodec() {
-    },
-    JsonDecoder: function JsonDecoder(t0) {
-      this._reviver = t0;
-    },
-    int_parse(source) {
-      var value = A.Primitives_parseInt(source, null);
-      if (value != null)
-        return value;
-      throw A.wrapException(A.FormatException$(source, null));
-    },
-    double_parse(source) {
-      var value = A.Primitives_parseDouble(source);
-      if (value != null)
-        return value;
-      throw A.wrapException(A.FormatException$("Invalid double", source));
     },
     Error__objectToString(object) {
       if (object instanceof A.Closure)
@@ -3458,26 +2853,20 @@
       throw error;
       throw A.wrapException("unreachable");
     },
-    List_List$filled($length, fill, growable, $E) {
-      var i,
-        result = growable ? J.JSArray_JSArray$growable($length, $E) : J.JSArray_JSArray$fixed($length, $E);
-      if ($length !== 0 && fill != null)
-        for (i = 0; i < result.length; ++i)
-          result[i] = fill;
-      return result;
-    },
     StringBuffer__writeAll(string, objects, separator) {
-      var iterator = J.get$iterator$ax(objects);
+      var t1 = A._arrayInstanceType(objects),
+        iterator = new J.ArrayIterator(objects, objects.length, t1._eval$1("ArrayIterator<1>"));
       if (!iterator.moveNext$0())
         return string;
+      t1 = t1._precomputed1;
       if (separator.length === 0) {
         do
-          string += A.S(iterator.get$current());
+          string += A.S(t1._as(iterator._current));
         while (iterator.moveNext$0());
       } else {
-        string += A.S(iterator.get$current());
+        string += A.S(t1._as(iterator._current));
         for (; iterator.moveNext$0();)
-          string = string + separator + A.S(iterator.get$current());
+          string = string + separator + A.S(t1._as(iterator._current));
       }
       return string;
     },
@@ -3498,30 +2887,7 @@
       return new A.ArgumentError(true, value, $name, message);
     },
     RangeError$(message) {
-      var _null = null;
-      return new A.RangeError(_null, _null, false, _null, _null, message);
-    },
-    RangeError$value(value, $name) {
-      return new A.RangeError(null, null, true, value, $name, "Value not in range");
-    },
-    RangeError$range(invalidValue, minValue, maxValue, $name, message) {
-      return new A.RangeError(minValue, maxValue, true, invalidValue, $name, "Invalid value");
-    },
-    RangeError_checkValidRange(start, end, $length) {
-      if (0 > start || start > $length)
-        throw A.wrapException(A.RangeError$range(start, 0, $length, "start", null));
-      if (start > end || end > $length)
-        throw A.wrapException(A.RangeError$range(end, start, $length, "end", null));
-      return end;
-    },
-    RangeError_checkNotNegative(value, $name) {
-      if (value < 0)
-        throw A.wrapException(A.RangeError$range(value, 0, null, $name, null));
-      return value;
-    },
-    IndexError$(invalidValue, indexable, $name, message, $length) {
-      var t1 = A._asInt($length == null ? J.get$length$asx(indexable) : $length);
-      return new A.IndexError(t1, true, invalidValue, $name, "Index out of range");
+      return new A.RangeError(false, null, null, message);
     },
     UnsupportedError$(message) {
       return new A.UnsupportedError(message);
@@ -3529,17 +2895,8 @@
     UnimplementedError$(message) {
       return new A.UnimplementedError(message);
     },
-    StateError$(message) {
-      return new A.StateError(message);
-    },
     ConcurrentModificationError$(modifiedObject) {
       return new A.ConcurrentModificationError(modifiedObject);
-    },
-    FormatException$(message, source) {
-      return new A.FormatException(message, source);
-    },
-    print(object) {
-      A.printString(A.S(object));
     },
     Error: function Error() {
     },
@@ -3557,14 +2914,12 @@
       _.name = t2;
       _.message = t3;
     },
-    RangeError: function RangeError(t0, t1, t2, t3, t4, t5) {
+    RangeError: function RangeError(t0, t1, t2, t3) {
       var _ = this;
-      _.start = t0;
-      _.end = t1;
-      _._hasValue = t2;
-      _.invalidValue = t3;
-      _.name = t4;
-      _.message = t5;
+      _._hasValue = t0;
+      _.invalidValue = t1;
+      _.name = t2;
+      _.message = t3;
     },
     IndexError: function IndexError(t0, t1, t2, t3, t4) {
       var _ = this;
@@ -3580,9 +2935,6 @@
     UnimplementedError: function UnimplementedError(t0) {
       this.message = t0;
     },
-    StateError: function StateError(t0) {
-      this.message = t0;
-    },
     ConcurrentModificationError: function ConcurrentModificationError(t0) {
       this.modifiedObject = t0;
     },
@@ -3594,12 +2946,6 @@
     _Exception: function _Exception(t0) {
       this.message = t0;
     },
-    FormatException: function FormatException(t0, t1) {
-      this.message = t0;
-      this.source = t1;
-    },
-    Iterable: function Iterable() {
-    },
     Null: function Null() {
     },
     Object: function Object() {
@@ -3608,24 +2954,6 @@
     },
     StringBuffer: function StringBuffer(t0) {
       this._contents = t0;
-    },
-    HttpRequest_getString(url) {
-      return A.HttpRequest_request(url, null, null).then$1$1(new A.HttpRequest_getString_closure(), type$.String);
-    },
-    HttpRequest_request(url, onProgress, withCredentials) {
-      var t2, t3, t4,
-        t1 = new A._Future($.Zone__current, type$._Future_HttpRequest),
-        completer = new A._AsyncCompleter(t1, type$._AsyncCompleter_HttpRequest),
-        xhr = new XMLHttpRequest();
-      B.HttpRequest_methods.open$3$async(xhr, "GET", url, true);
-      t2 = type$.nullable_void_Function_ProgressEvent;
-      t3 = t2._as(new A.HttpRequest_request_closure(xhr, completer));
-      type$.nullable_void_Function._as(null);
-      t4 = type$.ProgressEvent;
-      A._EventStreamSubscription$(xhr, "load", t3, false, t4);
-      A._EventStreamSubscription$(xhr, "error", t2._as(completer.get$completeError()), false, t4);
-      xhr.send();
-      return t1;
     },
     _EventStreamSubscription$(_target, _eventType, onData, _useCapture, $T) {
       var t1 = A._wrapZone(new A._EventStreamSubscription_closure(onData), type$.Event),
@@ -3653,13 +2981,7 @@
     },
     CanvasRenderingContext2D: function CanvasRenderingContext2D() {
     },
-    CharacterData: function CharacterData() {
-    },
     DomException: function DomException() {
-    },
-    _FrozenElementList: function _FrozenElementList(t0, t1) {
-      this._nodeList = t0;
-      this.$ti = t1;
     },
     Element: function Element() {
     },
@@ -3669,27 +2991,9 @@
     },
     FormElement: function FormElement() {
     },
-    HttpRequest: function HttpRequest() {
-    },
-    HttpRequest_getString_closure: function HttpRequest_getString_closure() {
-    },
-    HttpRequest_request_closure: function HttpRequest_request_closure(t0, t1) {
-      this.xhr = t0;
-      this.completer = t1;
-    },
-    HttpRequestEventTarget: function HttpRequestEventTarget() {
-    },
-    InputElement: function InputElement() {
-    },
     MouseEvent: function MouseEvent() {
     },
     Node: function Node() {
-    },
-    NodeList: function NodeList() {
-    },
-    OptionElement: function OptionElement() {
-    },
-    ProgressEvent: function ProgressEvent() {
     },
     SelectElement: function SelectElement() {
     },
@@ -3697,16 +3001,10 @@
     },
     Window: function Window() {
     },
-    EventStreamProvider: function EventStreamProvider(t0, t1) {
-      this._eventType = t0;
-      this.$ti = t1;
+    EventStreamProvider: function EventStreamProvider(t0) {
+      this.$ti = t0;
     },
-    _EventStream: function _EventStream(t0, t1, t2, t3) {
-      var _ = this;
-      _._target = t0;
-      _._eventType = t1;
-      _._useCapture = t2;
-      _.$ti = t3;
+    _EventStream: function _EventStream() {
     },
     _ElementEventStreamImpl: function _ElementEventStreamImpl(t0, t1, t2, t3) {
       var _ = this;
@@ -3726,281 +3024,54 @@
     _EventStreamSubscription_closure: function _EventStreamSubscription_closure(t0) {
       this.onData = t0;
     },
-    ImmutableListMixin: function ImmutableListMixin() {
-    },
-    FixedSizeListIterator: function FixedSizeListIterator(t0, t1, t2) {
-      var _ = this;
-      _._array = t0;
-      _._html$_length = t1;
-      _._position = -1;
-      _._html$_current = null;
-      _.$ti = t2;
-    },
-    _NodeList_JavaScriptObject_ListMixin: function _NodeList_JavaScriptObject_ListMixin() {
-    },
-    _NodeList_JavaScriptObject_ListMixin_ImmutableListMixin: function _NodeList_JavaScriptObject_ListMixin_ImmutableListMixin() {
-    },
-    Random_Random() {
-      return B.C__JSRandom;
-    },
     _JSRandom: function _JSRandom() {
     },
     SvgElement: function SvgElement() {
     },
-    CellularAutomata: function CellularAutomata() {
-    },
-    CellularAutomata_closure: function CellularAutomata_closure() {
-    },
-    ComplexCellularAutomata: function ComplexCellularAutomata() {
-    },
-    GameOfLife$(width, height) {
-      var t1 = type$.JSArray_int,
-        t2 = A._setArrayType([width, height], t1);
-      t1 = new A.GameOfLife(t2, A._setArrayType([], t1), A._setArrayType([], t1), A._setArrayType([], t1));
-      t1.CellularAutomata$1(t2, type$.int);
+    BoidSimulation$(_x, _y) {
+      var t1 = new A.BoidSimulation(new A.Point2D(0, 0), new A.Point2D(0, 0), A._setArrayType([], type$.JSArray_Boid), A._setArrayType([], type$.JSArray_of_Boid_Function_Boid_BoidSimulation), A.LinkedHashMap_LinkedHashMap$_empty(type$.int, type$.Map_int_double));
+      t1._shape_dimensions = new A.Point2D(_x, _y);
       return t1;
     },
-    GameOfLife: function GameOfLife(t0, t1, t2, t3) {
+    Boid: function Boid(t0, t1, t2) {
+      this._position = t0;
+      this._direction = t1;
+      this._id = t2;
+    },
+    BoidSimulation: function BoidSimulation(t0, t1, t2, t3, t4) {
       var _ = this;
-      _._shape = t0;
-      _.num_cells = 0;
-      _._shape_dimensions = t1;
-      _._cellsCurrent = t2;
-      _._cellsWorking = t3;
+      _._shape_dimensions = t0;
+      _._swarmMidPoint = t1;
+      _._boids = t2;
+      _._actions = t3;
+      _._distances = t4;
     },
-    GameOfLife_cellUpdate_closure: function GameOfLife_cellUpdate_closure() {
-    },
-    OscillatorCA$(x, y) {
-      var t1 = type$.JSArray_int,
-        t2 = A._setArrayType([x, y], t1),
-        t3 = type$.JSArray_Oscillator;
-      t1 = new A.OscillatorCA(0.05, 0.01, A._setArrayType([], t3), A._setArrayType([], t3), t2, A._setArrayType([], t1), A._setArrayType([], t1), A._setArrayType([], t1));
-      t1.CellularAutomata$1(t2, type$.int);
-      return t1;
-    },
-    Oscillator: function Oscillator(t0, t1, t2) {
-      this._amplitude = t0;
-      this._frequency = t1;
-      this._phase = t2;
-    },
-    OscillatorCA: function OscillatorCA(t0, t1, t2, t3, t4, t5, t6, t7) {
-      var _ = this;
-      _.time = 0;
-      _._epsilon = t0;
-      _._alpha = t1;
-      _._cellsCurrentInternal = t2;
-      _._cellsWorkingInternal = t3;
-      _._shape = t4;
-      _.num_cells = 0;
-      _._shape_dimensions = t5;
-      _._cellsCurrent = t6;
-      _._cellsWorking = t7;
-    },
-    OscillatorCA_cellUpdate_closure: function OscillatorCA_cellUpdate_closure() {
-    },
-    PercolationCA$(shape) {
-      var t1 = type$.JSArray_int;
-      t1 = new A.PercolationCA(shape, A._setArrayType([], t1), A._setArrayType([], t1), A._setArrayType([], t1));
-      t1.CellularAutomata$1(shape, type$.int);
-      return t1;
-    },
-    PercolationCA: function PercolationCA(t0, t1, t2, t3) {
-      var _ = this;
-      _._shape = t0;
-      _.num_cells = 0;
-      _._shape_dimensions = t1;
-      _._cellsCurrent = t2;
-      _._cellsWorking = t3;
-    },
-    PercolationCA_cellUpdate_closure: function PercolationCA_cellUpdate_closure() {
-    },
-    SimpleCellularAutomata1D$(shape, _r) {
-      var t1 = type$.JSArray_int,
-        t2 = A._setArrayType([shape], t1);
-      t1 = new A.SimpleCellularAutomata1D(A.LinkedHashMap_LinkedHashMap$_empty(type$.String, type$.dynamic), t2, A._setArrayType([], t1), A._setArrayType([], t1), A._setArrayType([], t1));
-      t1.CellularAutomata$1(t2, type$.int);
-      t1.set$_rules(_r);
-      return t1;
-    },
-    SimpleCellularAutomata1D: function SimpleCellularAutomata1D(t0, t1, t2, t3, t4) {
-      var _ = this;
-      _._rules = t0;
-      _._shape = t1;
-      _.num_cells = 0;
-      _._shape_dimensions = t2;
-      _._cellsCurrent = t3;
-      _._cellsWorking = t4;
+    Point2D: function Point2D(t0, t1) {
+      this._x = t0;
+      this._y = t1;
     },
     main() {
       var t3, t4,
         t1 = document,
-        t2 = t1.querySelector("#caWidth");
+        t2 = t1.querySelector("#run_boids");
       if (t2 != null) {
-        t2 = J.get$onChange$x(t2);
+        t2 = J.get$onClick$x(t2);
         t3 = t2.$ti;
         t4 = t3._eval$1("~(1)?")._as(new A.main_closure());
         type$.nullable_void_Function._as(null);
         A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
       }
-      t2 = t1.querySelector("#caHeight");
-      if (t2 != null) {
-        t2 = J.get$onChange$x(t2);
-        t3 = t2.$ti;
-        t4 = t3._eval$1("~(1)?")._as(new A.main_closure0());
-        type$.nullable_void_Function._as(null);
-        A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
-      }
-      t2 = t1.querySelector("#run_sierpinski");
-      if (t2 != null) {
-        t2 = J.get$onClick$x(t2);
-        t3 = t2.$ti;
-        t4 = t3._eval$1("~(1)?")._as(new A.main_closure1());
-        type$.nullable_void_Function._as(null);
-        A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
-      }
-      t2 = t1.querySelector("#stop_sierpinski");
-      if (t2 != null) {
-        t2 = J.get$onClick$x(t2);
-        t3 = t2.$ti;
-        t4 = t3._eval$1("~(1)?")._as(new A.main_closure2());
-        type$.nullable_void_Function._as(null);
-        A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
-      }
-      t2 = t1.querySelector("#run_conway");
-      if (t2 != null) {
-        t2 = J.get$onClick$x(t2);
-        t3 = t2.$ti;
-        t4 = t3._eval$1("~(1)?")._as(new A.main_closure3());
-        type$.nullable_void_Function._as(null);
-        A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
-      }
-      t2 = t1.querySelector("#stop_conway");
-      if (t2 != null) {
-        t2 = J.get$onClick$x(t2);
-        t3 = t2.$ti;
-        t4 = t3._eval$1("~(1)?")._as(new A.main_closure4());
-        type$.nullable_void_Function._as(null);
-        A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
-      }
-      t2 = t1.querySelector("#run_percolation");
-      if (t2 != null) {
-        t2 = J.get$onClick$x(t2);
-        t3 = t2.$ti;
-        t4 = t3._eval$1("~(1)?")._as(new A.main_closure5());
-        type$.nullable_void_Function._as(null);
-        A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
-      }
-      t2 = t1.querySelector("#stop_percolation");
-      if (t2 != null) {
-        t2 = J.get$onClick$x(t2);
-        t3 = t2.$ti;
-        t4 = t3._eval$1("~(1)?")._as(new A.main_closure6());
-        type$.nullable_void_Function._as(null);
-        A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
-      }
-      t2 = t1.querySelector("#run_oscillator");
-      if (t2 != null) {
-        t2 = J.get$onClick$x(t2);
-        t3 = t2.$ti;
-        t4 = t3._eval$1("~(1)?")._as(new A.main_closure7());
-        type$.nullable_void_Function._as(null);
-        A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
-      }
-      t2 = t1.querySelector("#stop_oscillator");
-      if (t2 != null) {
-        t2 = J.get$onClick$x(t2);
-        t3 = t2.$ti;
-        t4 = t3._eval$1("~(1)?")._as(new A.main_closure8());
-        type$.nullable_void_Function._as(null);
-        A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
-      }
-      t2 = t1.querySelector("#alpha");
-      if (t2 != null) {
-        t2 = J.get$onChange$x(t2);
-        t3 = t2.$ti;
-        t4 = t3._eval$1("~(1)?")._as(new A.main_closure9());
-        type$.nullable_void_Function._as(null);
-        A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
-      }
-      t1 = t1.querySelector("#epsilon");
+      t1 = t1.querySelector("#stop_boids");
       if (t1 != null) {
-        t1 = J.get$onChange$x(t1);
+        t1 = J.get$onClick$x(t1);
         t2 = t1.$ti;
-        t3 = t2._eval$1("~(1)?")._as(new A.main_closure10());
+        t3 = t2._eval$1("~(1)?")._as(new A.main_closure0());
         type$.nullable_void_Function._as(null);
         A._EventStreamSubscription$(t1._target, t1._eventType, t3, false, t2._precomputed1);
       }
-      A.readRulesFromJSON();
     },
-    readRulesFromJSON() {
-      var $async$goto = 0,
-        $async$completer = A._makeAsyncAwaitCompleter(type$.dynamic),
-        $async$handler = 1, $async$currentError, $async$next = [], jsonString, exception, t1, sel, t2, t3, t4, t5, $async$exception;
-      var $async$readRulesFromJSON = A._wrapJsFunctionForAsync(function($async$errorCode, $async$result) {
-        if ($async$errorCode === 1) {
-          $async$currentError = $async$result;
-          $async$goto = $async$handler;
-        }
-        while (true)
-          switch ($async$goto) {
-            case 0:
-              // Function start
-              $async$handler = 3;
-              $async$goto = 6;
-              return A._asyncAwait(A.HttpRequest_getString("https://raw.githubusercontent.com/petroniocandido/ALife/main/presentation/web/ca1d.json"), $async$readRulesFromJSON);
-            case 6:
-              // returning from await.
-              jsonString = $async$result;
-              $.rules = type$.Map_String_dynamic._as(B.C_JsonCodec.decode$1(0, jsonString));
-              $async$handler = 1;
-              // goto after finally
-              $async$goto = 5;
-              break;
-            case 3:
-              // catch
-              $async$handler = 2;
-              $async$exception = $async$currentError;
-              A.print("Couldn't open");
-              // goto after finally
-              $async$goto = 5;
-              break;
-            case 2:
-              // uncaught
-              // goto rethrow
-              $async$goto = 1;
-              break;
-            case 5:
-              // after finally
-              t1 = document;
-              sel = type$.SelectElement._as(t1.querySelector("#CellularAutomata1D"));
-              for (t2 = $.rules.get$keys(), t2 = t2.get$iterator(t2), t3 = type$.OptionElement; t2.moveNext$0();) {
-                t4 = t2.get$current();
-                t5 = t1.createElement("option");
-                t3._as(t5);
-                t5.value = t4;
-                t5.innerText = t4;
-                sel.appendChild(t5);
-              }
-              // implicit return
-              return A._asyncReturn(null, $async$completer);
-            case 1:
-              // rethrow
-              return A._asyncRethrow($async$currentError, $async$completer);
-          }
-      });
-      return A._asyncStartSync($async$readRulesFromJSON, $async$completer);
-    },
-    changeLabel(id_input, id_output) {
-      var t1 = "#" + id_output,
-        t2 = document;
-      t1 = t2.querySelector(t1);
-      if (t1 != null) {
-        t2 = type$.nullable_InputElement._as(t2.querySelector("#" + id_input));
-        J.set$text$x(t1, t2 == null ? null : t2.value);
-      }
-    },
-    conway_animation_boxes(timestamp) {
-      var canvas, t1, t2, canvasWidth, canvasHeight, t3, t4, t5, boxW, boxH, img, y, x, t6, state;
+    boids_animation(timestamp) {
+      var canvas, t1, t2, canvasWidth, canvasHeight, t3, t4, _i, boid, t5, t6, t7, t8, t9, angle;
       A._asNum(timestamp);
       canvas = type$.nullable_CanvasElement._as(document.querySelector("#canvas"));
       t1 = canvas == null;
@@ -4015,264 +3086,42 @@
       t1 = t2 == null;
       if (!t1)
         t2.clearRect(0, 0, canvasWidth, canvasHeight);
-      t3 = $.$get$ca();
-      t4 = t3._shape;
-      t5 = t4.length;
-      if (0 >= t5)
-        return A.ioore(t4, 0);
-      boxW = canvasWidth / t4[0];
-      if (1 >= t5)
-        return A.ioore(t4, 1);
-      boxH = canvasHeight / t4[1];
-      img = t3.next$0();
-      t3 = type$.JSArray_int;
-      y = 0;
-      while (true) {
-        t4 = $.$get$ca()._shape;
-        if (1 >= t4.length)
-          return A.ioore(t4, 1);
-        if (!(y < t4[1]))
-          break;
-        t4 = y * boxH;
-        x = 0;
-        while (true) {
-          t5 = $.$get$ca();
-          t6 = t5._shape;
-          if (0 >= t6.length)
-            return A.ioore(t6, 0);
-          if (!(x < t6[0]))
-            break;
-          t5 = t5.listIndex$1(A._setArrayType([x, y], t3));
-          if (!(t5 >= 0 && t5 < img.length))
-            return A.ioore(img, t5);
-          state = A._asInt(img[t5]);
-          if (!t1) {
-            t5 = state * 255;
-            B.CanvasRenderingContext2D_methods.set$fillStyle(t2, "rgba(" + t5 + ", " + t5 + ", " + t5 + ", 1)");
-          }
-          if (!t1)
-            t2.fillRect(x * boxW, t4, boxW, boxH);
-          ++x;
-        }
-        ++y;
+      $.$get$simulation().next$0();
+      for (t3 = $.$get$simulation()._boids, t4 = t3.length, _i = 0; _i < t3.length; t3.length === t4 || (0, A.throwConcurrentModificationError)(t3), ++_i) {
+        boid = t3[_i];
+        t5 = boid._position;
+        t6 = A._asInt(t5._x + 10 * Math.cos(boid._direction));
+        t7 = A._asInt(t5._y + 10 * Math.sin(boid._direction));
+        t8 = t5._x;
+        t5 = t5._y;
+        t9 = boid._direction;
+        if (!t1)
+          t2.beginPath();
+        angle = Math.atan2(t7 - t5, t6 - t8);
+        t5 = Math.cos(angle);
+        t8 = Math.sin(angle);
+        if (!t1)
+          t2.moveTo(t9 * t5 + t6, t9 * t8 + t7);
+        angle += 2.0943951023931953;
+        t5 = Math.cos(angle);
+        t8 = Math.sin(angle);
+        if (!t1)
+          t2.lineTo(t9 * t5 + t6, t9 * t8 + t7);
+        angle += 2.0943951023931953;
+        t5 = Math.cos(angle);
+        t8 = Math.sin(angle);
+        if (!t1)
+          t2.lineTo(t9 * t5 + t6, t9 * t8 + t7);
+        if (!t1)
+          t2.closePath();
+        if (!t1)
+          t2.fill();
       }
-      $.animation_request_id = B.Window_methods.requestAnimationFrame$1(window, A.controller__conway_animation_boxes$closure());
-    },
-    sierpinski_animation_boxes(timestamp) {
-      var canvas, t1, t2, canvasWidth, canvasHeight, t3, t4, boxW, boxH, y, img, x, t5, state;
-      $.animation_request_id = A._asNum(timestamp);
-      canvas = type$.nullable_CanvasElement._as(document.querySelector("#canvas"));
-      t1 = canvas == null;
-      t2 = t1 ? null : B.CanvasElement_methods.getContext$1(canvas, "2d");
-      type$.nullable_CanvasRenderingContext2D._as(t2);
-      canvasWidth = t1 ? null : canvas.width;
-      if (canvasWidth == null)
-        canvasWidth = 100;
-      canvasHeight = t1 ? null : canvas.height;
-      if (canvasHeight == null)
-        canvasHeight = 100;
-      t1 = t2 == null;
-      if (!t1)
-        t2.clearRect(0, 0, canvasWidth, canvasHeight);
-      t3 = $.$get$ca();
-      t4 = t3._shape;
-      if (0 >= t4.length)
-        return A.ioore(t4, 0);
-      t4 = t4[0];
-      boxW = canvasWidth / t4;
-      boxH = canvasHeight / t4;
-      for (y = 0; y < canvasHeight; ++y, t3 = t4) {
-        img = t3.next$0();
-        t3 = y * boxH;
-        x = 0;
-        while (true) {
-          t4 = $.$get$ca();
-          t5 = t4._shape;
-          if (0 >= t5.length)
-            return A.ioore(t5, 0);
-          if (!(x < t5[0]))
-            break;
-          if (!(x < img.length))
-            return A.ioore(img, x);
-          state = A._asInt(img[x]);
-          if (!t1) {
-            t4 = state * 255;
-            B.CanvasRenderingContext2D_methods.set$fillStyle(t2, "rgba(" + t4 + ", " + t4 + ", " + t4 + ", 1)");
-          }
-          if (!t1)
-            t2.fillRect(x * boxW, t3, boxW, boxH);
-          ++x;
-        }
-      }
-      $.animation_request_id = B.Window_methods.requestAnimationFrame$1(window, A.controller__sierpinski_animation_boxes$closure());
-    },
-    percolation_animation_boxes(timestamp) {
-      var canvas, t1, t2, canvasWidth, canvasHeight, t3, t4, t5, boxW, boxH, img, y, x, t6;
-      A._asNum(timestamp);
-      canvas = type$.nullable_CanvasElement._as(document.querySelector("#canvas"));
-      t1 = canvas == null;
-      t2 = t1 ? null : B.CanvasElement_methods.getContext$1(canvas, "2d");
-      type$.nullable_CanvasRenderingContext2D._as(t2);
-      canvasWidth = t1 ? null : canvas.width;
-      if (canvasWidth == null)
-        canvasWidth = 100;
-      canvasHeight = t1 ? null : canvas.height;
-      if (canvasHeight == null)
-        canvasHeight = 100;
-      t1 = t2 == null;
-      if (!t1)
-        t2.clearRect(0, 0, canvasWidth, canvasHeight);
-      t3 = $.$get$ca();
-      t4 = t3._shape;
-      t5 = t4.length;
-      if (0 >= t5)
-        return A.ioore(t4, 0);
-      boxW = canvasWidth / t4[0];
-      if (1 >= t5)
-        return A.ioore(t4, 1);
-      boxH = canvasHeight / t4[1];
-      img = t3.next$0();
-      t3 = type$.JSArray_int;
-      y = 0;
-      while (true) {
-        t4 = $.$get$ca()._shape;
-        if (1 >= t4.length)
-          return A.ioore(t4, 1);
-        if (!(y < t4[1]))
-          break;
-        t4 = y * boxH;
-        x = 0;
-        while (true) {
-          t5 = $.$get$ca();
-          t6 = t5._shape;
-          if (0 >= t6.length)
-            return A.ioore(t6, 0);
-          if (!(x < t6[0]))
-            break;
-          t5 = t5.listIndex$1(A._setArrayType([x, y], t3));
-          if (!(t5 >= 0 && t5 < img.length))
-            return A.ioore(img, t5);
-          switch (A._asInt(img[t5])) {
-            case 0:
-              if (!t1)
-                B.CanvasRenderingContext2D_methods.set$fillStyle(t2, "rgba(255, 255, 255, 1)");
-              break;
-            case 1:
-              if (!t1)
-                B.CanvasRenderingContext2D_methods.set$fillStyle(t2, "rgba(0, 0, 0, 1)");
-              break;
-            case 2:
-              if (!t1)
-                B.CanvasRenderingContext2D_methods.set$fillStyle(t2, "rgba(0, 0, 255, 1)");
-              break;
-          }
-          if (!t1)
-            t2.fillRect(x * boxW, t4, boxW, boxH);
-          ++x;
-        }
-        ++y;
-      }
-      $.animation_request_id = B.Window_methods.requestAnimationFrame$1(window, A.controller__percolation_animation_boxes$closure());
-    },
-    oscillator_animation_boxes(timestamp) {
-      var canvas, t1, t2, canvasWidth, canvasHeight, t3, t4, t5, boxW, boxH, img, y, x, t6, state;
-      A._asNum(timestamp);
-      canvas = type$.nullable_CanvasElement._as(document.querySelector("#canvas"));
-      t1 = canvas == null;
-      t2 = t1 ? null : B.CanvasElement_methods.getContext$1(canvas, "2d");
-      type$.nullable_CanvasRenderingContext2D._as(t2);
-      canvasWidth = t1 ? null : canvas.width;
-      if (canvasWidth == null)
-        canvasWidth = 100;
-      canvasHeight = t1 ? null : canvas.height;
-      if (canvasHeight == null)
-        canvasHeight = 100;
-      t1 = t2 == null;
-      if (!t1)
-        t2.clearRect(0, 0, canvasWidth, canvasHeight);
-      t3 = $.$get$ca();
-      t4 = t3._shape;
-      t5 = t4.length;
-      if (0 >= t5)
-        return A.ioore(t4, 0);
-      boxW = canvasWidth / t4[0];
-      if (1 >= t5)
-        return A.ioore(t4, 1);
-      boxH = canvasHeight / t4[1];
-      img = t3.next$0();
-      t3 = type$.JSArray_int;
-      y = 0;
-      while (true) {
-        t4 = $.$get$ca()._shape;
-        if (1 >= t4.length)
-          return A.ioore(t4, 1);
-        if (!(y < t4[1]))
-          break;
-        t4 = y * boxH;
-        x = 0;
-        while (true) {
-          t5 = $.$get$ca();
-          t6 = t5._shape;
-          if (0 >= t6.length)
-            return A.ioore(t6, 0);
-          if (!(x < t6[0]))
-            break;
-          t5 = t5.listIndex$1(A._setArrayType([x, y], t3));
-          if (!(t5 >= 0 && t5 < img.length))
-            return A.ioore(img, t5);
-          state = A._asInt(img[t5]);
-          if (!t1) {
-            t5 = 31 * state;
-            B.CanvasRenderingContext2D_methods.set$fillStyle(t2, "rgba(" + t5 + ", " + t5 + ", " + t5 + ", 1)");
-          }
-          if (!t1)
-            t2.fillRect(x * boxW, t4, boxW, boxH);
-          ++x;
-        }
-        ++y;
-      }
-      $.animation_request_id = B.Window_methods.requestAnimationFrame$1(window, A.controller__oscillator_animation_boxes$closure());
+      $.animation_request_id = B.Window_methods.requestAnimationFrame$1(window, A.boids_controller__boids_animation$closure());
     },
     main_closure: function main_closure() {
     },
     main_closure0: function main_closure0() {
-    },
-    main_closure1: function main_closure1() {
-    },
-    main_closure2: function main_closure2() {
-    },
-    main_closure3: function main_closure3() {
-    },
-    main_closure4: function main_closure4() {
-    },
-    main_closure5: function main_closure5() {
-    },
-    main_closure6: function main_closure6() {
-    },
-    main_closure7: function main_closure7() {
-    },
-    main_closure8: function main_closure8() {
-    },
-    main_closure9: function main_closure9() {
-    },
-    main_closure10: function main_closure10() {
-    },
-    printString(string) {
-      if (typeof dartPrint == "function") {
-        dartPrint(string);
-        return;
-      }
-      if (typeof console == "object" && typeof console.log != "undefined") {
-        console.log(string);
-        return;
-      }
-      if (typeof window == "object")
-        return;
-      if (typeof print == "function") {
-        print(string);
-        return;
-      }
-      throw "Unable to print message: " + String(string);
     },
     throwLateFieldADI(fieldName) {
       return A.throwExpression(new A.LateError("Field '" + fieldName + "' has been assigned during initialization."));
@@ -4332,85 +3181,9 @@
       }
       return B.UnknownJavaScriptObject_methods;
     },
-    JSArray_JSArray$fixed($length, $E) {
-      if ($length < 0 || $length > 4294967295)
-        throw A.wrapException(A.RangeError$range($length, 0, 4294967295, "length", null));
-      return J.JSArray_JSArray$markFixed(new Array($length), $E);
-    },
-    JSArray_JSArray$growable($length, $E) {
-      if ($length < 0)
-        throw A.wrapException(A.ArgumentError$("Length must be a non-negative integer: " + $length, null));
-      return A._setArrayType(new Array($length), $E._eval$1("JSArray<0>"));
-    },
-    JSArray_JSArray$markFixed(allocation, $E) {
-      return J.JSArray_markFixedList(A._setArrayType(allocation, $E._eval$1("JSArray<0>")), $E);
-    },
     JSArray_markFixedList(list, $T) {
       list.fixed$length = Array;
       return list;
-    },
-    JSArray__compareAny(a, b) {
-      var t1 = type$.Comparable_dynamic;
-      return J.compareTo$1$ns(t1._as(a), t1._as(b));
-    },
-    JSString__isWhitespace(codeUnit) {
-      if (codeUnit < 256)
-        switch (codeUnit) {
-          case 9:
-          case 10:
-          case 11:
-          case 12:
-          case 13:
-          case 32:
-          case 133:
-          case 160:
-            return true;
-          default:
-            return false;
-        }
-      switch (codeUnit) {
-        case 5760:
-        case 8192:
-        case 8193:
-        case 8194:
-        case 8195:
-        case 8196:
-        case 8197:
-        case 8198:
-        case 8199:
-        case 8200:
-        case 8201:
-        case 8202:
-        case 8232:
-        case 8233:
-        case 8239:
-        case 8287:
-        case 12288:
-        case 65279:
-          return true;
-        default:
-          return false;
-      }
-    },
-    JSString__skipLeadingWhitespace(string, index) {
-      var t1, codeUnit;
-      for (t1 = string.length; index < t1;) {
-        codeUnit = B.JSString_methods._codeUnitAt$1(string, index);
-        if (codeUnit !== 32 && codeUnit !== 13 && !J.JSString__isWhitespace(codeUnit))
-          break;
-        ++index;
-      }
-      return index;
-    },
-    JSString__skipTrailingWhitespace(string, index) {
-      var index0, codeUnit;
-      for (; index > 0; index = index0) {
-        index0 = index - 1;
-        codeUnit = B.JSString_methods.codeUnitAt$1(string, index0);
-        if (codeUnit !== 32 && codeUnit !== 13 && !J.JSString__isWhitespace(codeUnit))
-          break;
-      }
-      return index;
     },
     getInterceptor$(receiver) {
       if (typeof receiver == "number") {
@@ -4451,31 +3224,6 @@
         return receiver;
       return J.getNativeInterceptor(receiver);
     },
-    getInterceptor$ax(receiver) {
-      if (receiver == null)
-        return receiver;
-      if (receiver.constructor == Array)
-        return J.JSArray.prototype;
-      if (typeof receiver != "object") {
-        if (typeof receiver == "function")
-          return J.JavaScriptFunction.prototype;
-        return receiver;
-      }
-      if (receiver instanceof A.Object)
-        return receiver;
-      return J.getNativeInterceptor(receiver);
-    },
-    getInterceptor$ns(receiver) {
-      if (typeof receiver == "number")
-        return J.JSNumber.prototype;
-      if (typeof receiver == "string")
-        return J.JSString.prototype;
-      if (receiver == null)
-        return receiver;
-      if (!(receiver instanceof A.Object))
-        return J.UnknownJavaScriptObject.prototype;
-      return receiver;
-    },
     getInterceptor$x(receiver) {
       if (receiver == null)
         return receiver;
@@ -4488,20 +3236,11 @@
         return receiver;
       return J.getNativeInterceptor(receiver);
     },
-    set$text$x(receiver, value) {
-      return J.getInterceptor$x(receiver).set$text(receiver, value);
-    },
     get$hashCode$(receiver) {
       return J.getInterceptor$(receiver).get$hashCode(receiver);
     },
-    get$iterator$ax(receiver) {
-      return J.getInterceptor$ax(receiver).get$iterator(receiver);
-    },
     get$length$asx(receiver) {
       return J.getInterceptor$asx(receiver).get$length(receiver);
-    },
-    get$onChange$x(receiver) {
-      return J.getInterceptor$x(receiver).get$onChange(receiver);
     },
     get$onClick$x(receiver) {
       return J.getInterceptor$x(receiver).get$onClick(receiver);
@@ -4515,9 +3254,6 @@
     },
     _addEventListener$3$x(receiver, a0, a1, a2) {
       return J.getInterceptor$x(receiver)._addEventListener$3(receiver, a0, a1, a2);
-    },
-    compareTo$1$ns(receiver, a0) {
-      return J.getInterceptor$ns(receiver).compareTo$1(receiver, a0);
     },
     toString$0$(receiver) {
       return J.getInterceptor$(receiver).toString$0(receiver);
@@ -4595,8 +3331,7 @@
     },
     get$hashCode(receiver) {
       return 0;
-    },
-    $isNull: 1
+    }
   };
   J.JavaScriptObject.prototype = {};
   J.LegacyJavaScriptObject.prototype = {
@@ -4625,39 +3360,8 @@
         A.throwExpression(A.UnsupportedError$("add"));
       receiver.push(value);
     },
-    reduce$1(receiver, combine) {
-      var $length, value, i;
-      A._arrayInstanceType(receiver)._eval$1("1(1,1)")._as(combine);
-      $length = receiver.length;
-      if ($length === 0)
-        throw A.wrapException(A.IterableElementError_noElement());
-      if (0 >= $length)
-        return A.ioore(receiver, 0);
-      value = receiver[0];
-      for (i = 1; i < $length; ++i) {
-        value = combine.call$2(value, receiver[i]);
-        if ($length !== receiver.length)
-          throw A.wrapException(A.ConcurrentModificationError$(receiver));
-      }
-      return value;
-    },
-    any$1(receiver, test) {
-      var end, i;
-      A._arrayInstanceType(receiver)._eval$1("bool(1)")._as(test);
-      end = receiver.length;
-      for (i = 0; i < end; ++i) {
-        if (A.boolConversionCheck(test.call$1(receiver[i])))
-          return true;
-        if (receiver.length !== end)
-          throw A.wrapException(A.ConcurrentModificationError$(receiver));
-      }
-      return false;
-    },
     toString$0(receiver) {
       return A.IterableBase_iterableToFullString(receiver, "[", "]");
-    },
-    get$iterator(receiver) {
-      return new J.ArrayIterator(receiver, receiver.length, A._arrayInstanceType(receiver)._eval$1("ArrayIterator<1>"));
     },
     get$hashCode(receiver) {
       return A.Primitives_objectHashCode(receiver);
@@ -4665,27 +3369,11 @@
     get$length(receiver) {
       return receiver.length;
     },
-    $index(receiver, index) {
-      if (!(index >= 0 && index < receiver.length))
-        throw A.wrapException(A.diagnoseIndexError(receiver, index));
-      return receiver[index];
-    },
-    $indexSet(receiver, index, value) {
-      A._arrayInstanceType(receiver)._precomputed1._as(value);
-      if (!!receiver.immutable$list)
-        A.throwExpression(A.UnsupportedError$("indexed set"));
-      if (!(index >= 0 && index < receiver.length))
-        throw A.wrapException(A.diagnoseIndexError(receiver, index));
-      receiver[index] = value;
-    },
     $isIterable: 1,
     $isList: 1
   };
   J.JSUnmodifiableArray.prototype = {};
   J.ArrayIterator.prototype = {
-    get$current() {
-      return this.$ti._precomputed1._as(this._current);
-    },
     moveNext$0() {
       var t2, _this = this,
         t1 = _this._iterable,
@@ -4706,33 +3394,6 @@
     }
   };
   J.JSNumber.prototype = {
-    compareTo$1(receiver, b) {
-      var bIsNegative;
-      A._asNum(b);
-      if (receiver < b)
-        return -1;
-      else if (receiver > b)
-        return 1;
-      else if (receiver === b) {
-        if (receiver === 0) {
-          bIsNegative = this.get$isNegative(b);
-          if (this.get$isNegative(receiver) === bIsNegative)
-            return 0;
-          if (this.get$isNegative(receiver))
-            return -1;
-          return 1;
-        }
-        return 0;
-      } else if (isNaN(receiver)) {
-        if (isNaN(b))
-          return 0;
-        return 1;
-      } else
-        return -1;
-    },
-    get$isNegative(receiver) {
-      return receiver === 0 ? 1 / receiver < 0 : receiver < 0;
-    },
     toString$0(receiver) {
       if (receiver === 0 && 1 / receiver < 0)
         return "-0.0";
@@ -4750,37 +3411,6 @@
       scaled = absolute < 1 ? absolute / factor : factor / absolute;
       return ((scaled * 9007199254740992 | 0) + (scaled * 3542243181176521 | 0)) * 599197 + floorLog2 * 1259 & 536870911;
     },
-    $mod(receiver, other) {
-      var result = receiver % other;
-      if (result === 0)
-        return 0;
-      if (result > 0)
-        return result;
-      if (other < 0)
-        return result - other;
-      else
-        return result + other;
-    },
-    $tdiv(receiver, other) {
-      if ((receiver | 0) === receiver)
-        if (other >= 1 || other < -1)
-          return receiver / other | 0;
-      return this._tdivSlow$1(receiver, other);
-    },
-    _tdivFast$1(receiver, other) {
-      return (receiver | 0) === receiver ? receiver / other | 0 : this._tdivSlow$1(receiver, other);
-    },
-    _tdivSlow$1(receiver, other) {
-      var quotient = receiver / other;
-      if (quotient >= -2147483648 && quotient <= 2147483647)
-        return quotient | 0;
-      if (quotient > 0) {
-        if (quotient !== 1 / 0)
-          return Math.floor(quotient);
-      } else if (quotient > -1 / 0)
-        return Math.ceil(quotient);
-      throw A.wrapException(A.UnsupportedError$("Result of truncating division is " + A.S(quotient) + ": " + A.S(receiver) + " ~/ " + other));
-    },
     _shrOtherPositive$1(receiver, other) {
       var t1;
       if (receiver > 0)
@@ -4794,57 +3424,14 @@
     _shrBothPositive$1(receiver, other) {
       return other > 31 ? 0 : receiver >>> other;
     },
-    $isComparable: 1,
     $isdouble: 1,
     $isnum: 1
   };
   J.JSInt.prototype = {$isint: 1};
   J.JSNumNotInt.prototype = {};
   J.JSString.prototype = {
-    codeUnitAt$1(receiver, index) {
-      if (index < 0)
-        throw A.wrapException(A.diagnoseIndexError(receiver, index));
-      if (index >= receiver.length)
-        A.throwExpression(A.diagnoseIndexError(receiver, index));
-      return receiver.charCodeAt(index);
-    },
-    _codeUnitAt$1(receiver, index) {
-      if (index >= receiver.length)
-        throw A.wrapException(A.diagnoseIndexError(receiver, index));
-      return receiver.charCodeAt(index);
-    },
     $add(receiver, other) {
       return receiver + other;
-    },
-    substring$2(receiver, start, end) {
-      return receiver.substring(start, A.RangeError_checkValidRange(start, end, receiver.length));
-    },
-    trim$0(receiver) {
-      var startIndex, t1, endIndex0,
-        result = receiver.trim(),
-        endIndex = result.length;
-      if (endIndex === 0)
-        return result;
-      if (this._codeUnitAt$1(result, 0) === 133) {
-        startIndex = J.JSString__skipLeadingWhitespace(result, 1);
-        if (startIndex === endIndex)
-          return "";
-      } else
-        startIndex = 0;
-      t1 = endIndex - 1;
-      endIndex0 = this.codeUnitAt$1(result, t1) === 133 ? J.JSString__skipTrailingWhitespace(result, t1) : endIndex;
-      if (startIndex === 0 && endIndex0 === endIndex)
-        return result;
-      return result.substring(startIndex, endIndex0);
-    },
-    compareTo$1(receiver, other) {
-      var t1;
-      A._asString(other);
-      if (receiver === other)
-        t1 = 0;
-      else
-        t1 = receiver < other ? -1 : 1;
-      return t1;
     },
     toString$0(receiver) {
       return receiver;
@@ -4863,44 +3450,12 @@
     get$length(receiver) {
       return receiver.length;
     },
-    $isComparable: 1,
     $isString: 1
   };
   A.LateError.prototype = {
     toString$0(_) {
       var t1 = "LateInitializationError: " + this._message;
       return t1;
-    }
-  };
-  A.EfficientLengthIterable.prototype = {};
-  A.ListIterable.prototype = {
-    get$iterator(_) {
-      var _this = this;
-      return new A.ListIterator(_this, _this.get$length(_this), A._instanceType(_this)._eval$1("ListIterator<ListIterable.E>"));
-    }
-  };
-  A.ListIterator.prototype = {
-    get$current() {
-      return this.$ti._precomputed1._as(this.__internal$_current);
-    },
-    moveNext$0() {
-      var t3, _this = this,
-        t1 = _this.__internal$_iterable,
-        t2 = J.getInterceptor$asx(t1),
-        $length = t2.get$length(t1);
-      if (_this.__internal$_length !== $length)
-        throw A.wrapException(A.ConcurrentModificationError$(t1));
-      t3 = _this.__internal$_index;
-      if (t3 >= $length) {
-        _this.set$__internal$_current(null);
-        return false;
-      }
-      _this.set$__internal$_current(t2.elementAt$1(t1, t3));
-      ++_this.__internal$_index;
-      return true;
-    },
-    set$__internal$_current(_current) {
-      this.__internal$_current = this.$ti._eval$1("1?")._as(_current);
     }
   };
   A.TypeErrorDecoder.prototype = {
@@ -4960,7 +3515,6 @@
       return "Throw of null ('" + (this._irritant === null ? "null" : "undefined") + "' from JavaScript)";
     }
   };
-  A.ExceptionAndStackTrace.prototype = {};
   A._StackTrace.prototype = {
     toString$0(_) {
       var trace,
@@ -5020,17 +3574,9 @@
       return "RuntimeError: " + this.message;
     }
   };
-  A._AssertionError.prototype = {
-    toString$0(_) {
-      return "Assertion failed: " + A.Error_safeToString(this.message);
-    }
-  };
   A.JsLinkedHashMap.prototype = {
     get$length(_) {
       return this.__js_helper$_length;
-    },
-    get$keys() {
-      return new A.LinkedHashMapKeyIterable(this, A._instanceType(this)._eval$1("LinkedHashMapKeyIterable<1>"));
     },
     $index(_, key) {
       var strings, cell, t1, nums, _this = this, _null = null;
@@ -5062,6 +3608,34 @@
         return null;
       return bucket[index].hashMapCellValue;
     },
+    $indexSet(_, key, value) {
+      var strings, nums, rest, hash, bucket, index, _this = this,
+        t1 = A._instanceType(_this);
+      t1._precomputed1._as(key);
+      t1._rest[1]._as(value);
+      if (typeof key == "string") {
+        strings = _this._strings;
+        _this._addHashTableEntry$3(strings == null ? _this._strings = _this._newHashTable$0() : strings, key, value);
+      } else if (typeof key == "number" && (key & 0x3ffffff) === key) {
+        nums = _this._nums;
+        _this._addHashTableEntry$3(nums == null ? _this._nums = _this._newHashTable$0() : nums, key, value);
+      } else {
+        rest = _this.__js_helper$_rest;
+        if (rest == null)
+          rest = _this.__js_helper$_rest = _this._newHashTable$0();
+        hash = J.get$hashCode$(key) & 0x3ffffff;
+        bucket = _this._getTableBucket$2(rest, hash);
+        if (bucket == null)
+          _this._setTableEntry$3(rest, hash, [_this._newLinkedCell$2(key, value)]);
+        else {
+          index = _this.internalFindBucketIndex$2(bucket, key);
+          if (index >= 0)
+            bucket[index].hashMapCellValue = value;
+          else
+            bucket.push(_this._newLinkedCell$2(key, value));
+        }
+      }
+    },
     forEach$1(_, action) {
       var cell, modifications, _this = this;
       A._instanceType(_this)._eval$1("~(1,2)")._as(action);
@@ -5073,6 +3647,29 @@
           throw A.wrapException(A.ConcurrentModificationError$(_this));
         cell = cell._next;
       }
+    },
+    _addHashTableEntry$3(table, key, value) {
+      var cell, _this = this,
+        t1 = A._instanceType(_this);
+      t1._precomputed1._as(key);
+      t1._rest[1]._as(value);
+      cell = _this._getTableCell$2(table, key);
+      if (cell == null)
+        _this._setTableEntry$3(table, key, _this._newLinkedCell$2(key, value));
+      else
+        cell.hashMapCellValue = value;
+    },
+    _newLinkedCell$2(key, value) {
+      var _this = this,
+        t1 = A._instanceType(_this),
+        cell = new A.LinkedHashMapCell(t1._precomputed1._as(key), t1._rest[1]._as(value));
+      if (_this._first == null)
+        _this._first = _this._last = cell;
+      else
+        _this._last = _this._last._next = cell;
+      ++_this.__js_helper$_length;
+      _this._modifications = _this._modifications + 1 & 67108863;
+      return cell;
     },
     internalFindBucketIndex$2(bucket, key) {
       var $length, i;
@@ -5092,59 +3689,39 @@
     },
     _getTableBucket$2(table, key) {
       return table[key];
+    },
+    _setTableEntry$3(table, key, value) {
+      table[key] = value;
+    },
+    _deleteTableEntry$2(table, key) {
+      delete table[key];
+    },
+    _newHashTable$0() {
+      var _s20_ = "<non-identifier-key>",
+        table = Object.create(null);
+      this._setTableEntry$3(table, _s20_, table);
+      this._deleteTableEntry$2(table, _s20_);
+      return table;
     }
   };
-  A.LinkedHashMapKeyIterable.prototype = {
-    get$length(_) {
-      return this._map.__js_helper$_length;
-    },
-    get$iterator(_) {
-      var t1 = this._map,
-        t2 = new A.LinkedHashMapKeyIterator(t1, t1._modifications, this.$ti._eval$1("LinkedHashMapKeyIterator<1>"));
-      t2._cell = t1._first;
-      return t2;
-    }
-  };
-  A.LinkedHashMapKeyIterator.prototype = {
-    get$current() {
-      return this.__js_helper$_current;
-    },
-    moveNext$0() {
-      var cell, _this = this,
-        t1 = _this._map;
-      if (_this._modifications !== t1._modifications)
-        throw A.wrapException(A.ConcurrentModificationError$(t1));
-      cell = _this._cell;
-      if (cell == null) {
-        _this.set$__js_helper$_current(null);
-        return false;
-      } else {
-        _this.set$__js_helper$_current(cell.hashMapCellKey);
-        _this._cell = cell._next;
-        return true;
-      }
-    },
-    set$__js_helper$_current(_current) {
-      this.__js_helper$_current = this.$ti._eval$1("1?")._as(_current);
-    }
-  };
+  A.LinkedHashMapCell.prototype = {};
   A.initHooks_closure.prototype = {
     call$1(o) {
       return this.getTag(o);
     },
-    $signature: 8
+    $signature: 5
   };
   A.initHooks_closure0.prototype = {
     call$2(o, tag) {
       return this.getUnknownTag(o, tag);
     },
-    $signature: 9
+    $signature: 6
   };
   A.initHooks_closure1.prototype = {
     call$1(tag) {
       return this.prototypeForTag(A._asString(tag));
     },
-    $signature: 10
+    $signature: 7
   };
   A.Rti.prototype = {
     _eval$1(recipe) {
@@ -5168,7 +3745,7 @@
       t1.storedCallback = null;
       f.call$0();
     },
-    $signature: 6
+    $signature: 8
   };
   A._AsyncRun__initializeScheduleImmediate_closure.prototype = {
     call$1(callback) {
@@ -5178,19 +3755,19 @@
       t2 = this.span;
       t1.firstChild ? t1.removeChild(t2) : t1.appendChild(t2);
     },
-    $signature: 11
+    $signature: 9
   };
   A._AsyncRun__scheduleImmediateJsOverride_internalCallback.prototype = {
     call$0() {
       this.callback.call$0();
     },
-    $signature: 7
+    $signature: 3
   };
   A._AsyncRun__scheduleImmediateWithSetImmediate_internalCallback.prototype = {
     call$0() {
       this.callback.call$0();
     },
-    $signature: 7
+    $signature: 3
   };
   A._TimerImpl.prototype = {
     _TimerImpl$2(milliseconds, callback) {
@@ -5206,49 +3783,6 @@
     },
     $signature: 0
   };
-  A._AsyncAwaitCompleter.prototype = {
-    complete$1(_, value) {
-      var t2, _this = this,
-        t1 = _this.$ti;
-      t1._eval$1("1/?")._as(value);
-      if (value == null)
-        value = t1._precomputed1._as(value);
-      if (!_this.isSync)
-        _this._future._asyncComplete$1(value);
-      else {
-        t2 = _this._future;
-        if (t1._eval$1("Future<1>")._is(value))
-          t2._chainFuture$1(value);
-        else
-          t2._completeWithValue$1(t1._precomputed1._as(value));
-      }
-    },
-    completeError$2(e, st) {
-      var t1 = this._future;
-      if (this.isSync)
-        t1._completeError$2(e, st);
-      else
-        t1._asyncCompleteError$2(e, st);
-    }
-  };
-  A._awaitOnObject_closure.prototype = {
-    call$1(result) {
-      return this.bodyFunction.call$2(0, result);
-    },
-    $signature: 12
-  };
-  A._awaitOnObject_closure0.prototype = {
-    call$2(error, stackTrace) {
-      this.bodyFunction.call$2(1, new A.ExceptionAndStackTrace(error, type$.StackTrace._as(stackTrace)));
-    },
-    $signature: 13
-  };
-  A._wrapJsFunctionForAsync_closure.prototype = {
-    call$2(errorCode, result) {
-      this.$protected(A._asInt(errorCode), result);
-    },
-    $signature: 14
-  };
   A.AsyncError.prototype = {
     toString$0(_) {
       return A.S(this.error);
@@ -5256,32 +3790,6 @@
     $isError: 1,
     get$stackTrace() {
       return this.stackTrace;
-    }
-  };
-  A._Completer.prototype = {
-    completeError$2(error, stackTrace) {
-      var t1;
-      A.checkNotNullable(error, "error", type$.Object);
-      t1 = this.future;
-      if ((t1._state & 30) !== 0)
-        throw A.wrapException(A.StateError$("Future already completed"));
-      if (stackTrace == null)
-        stackTrace = A.AsyncError_defaultStackTrace(error);
-      t1._asyncCompleteError$2(error, stackTrace);
-    },
-    completeError$1(error) {
-      return this.completeError$2(error, null);
-    }
-  };
-  A._AsyncCompleter.prototype = {
-    complete$1(_, value) {
-      var t2,
-        t1 = this.$ti;
-      t1._eval$1("1/?")._as(value);
-      t2 = this.future;
-      if ((t2._state & 30) !== 0)
-        throw A.wrapException(A.StateError$("Future already completed"));
-      t2._asyncComplete$1(t1._eval$1("1/")._as(value));
     }
   };
   A._FutureListener.prototype = {
@@ -5336,18 +3844,6 @@
     },
     then$1$1(f, $R) {
       return this.then$1$2$onError(f, null, $R);
-    },
-    _thenAwait$1$2(f, onError, $E) {
-      var result,
-        t1 = this.$ti;
-      t1._bind$1($E)._eval$1("1/(2)")._as(f);
-      result = new A._Future($.Zone__current, $E._eval$1("_Future<0>"));
-      this._addListener$1(new A._FutureListener(result, 19, f, onError, t1._eval$1("@<1>")._bind$1($E)._eval$1("_FutureListener<1,2>")));
-      return result;
-    },
-    _setErrorObject$1(error) {
-      this._state = this._state & 1 | 16;
-      this._resultOrListeners = error;
     },
     _cloneResult$1(source) {
       this._state = source._state & 30 | this._state & 1;
@@ -5412,65 +3908,6 @@
       }
       return prev;
     },
-    _chainForeignFuture$1(source) {
-      var e, s, exception, _this = this;
-      _this._state ^= 2;
-      try {
-        source.then$1$2$onError(new A._Future__chainForeignFuture_closure(_this), new A._Future__chainForeignFuture_closure0(_this), type$.Null);
-      } catch (exception) {
-        e = A.unwrapException(exception);
-        s = A.getTraceFromException(exception);
-        A.scheduleMicrotask(new A._Future__chainForeignFuture_closure1(_this, e, s));
-      }
-    },
-    _completeWithValue$1(value) {
-      var listeners, _this = this;
-      _this.$ti._precomputed1._as(value);
-      listeners = _this._removeListeners$0();
-      _this._state = 8;
-      _this._resultOrListeners = value;
-      A._Future__propagateToListeners(_this, listeners);
-    },
-    _completeError$2(error, stackTrace) {
-      var listeners;
-      type$.StackTrace._as(stackTrace);
-      listeners = this._removeListeners$0();
-      this._setErrorObject$1(A.AsyncError$(error, stackTrace));
-      A._Future__propagateToListeners(this, listeners);
-    },
-    _asyncComplete$1(value) {
-      var t1 = this.$ti;
-      t1._eval$1("1/")._as(value);
-      if (t1._eval$1("Future<1>")._is(value)) {
-        this._chainFuture$1(value);
-        return;
-      }
-      this._asyncCompleteWithValue$1(t1._precomputed1._as(value));
-    },
-    _asyncCompleteWithValue$1(value) {
-      var _this = this;
-      _this.$ti._precomputed1._as(value);
-      _this._state ^= 2;
-      A._rootScheduleMicrotask(null, null, _this._zone, type$.void_Function._as(new A._Future__asyncCompleteWithValue_closure(_this, value)));
-    },
-    _chainFuture$1(value) {
-      var _this = this,
-        t1 = _this.$ti;
-      t1._eval$1("Future<1>")._as(value);
-      if (t1._is(value)) {
-        if ((value._state & 16) !== 0) {
-          _this._state ^= 2;
-          A._rootScheduleMicrotask(null, null, _this._zone, type$.void_Function._as(new A._Future__chainFuture_closure(_this, value)));
-        } else
-          A._Future__chainCoreFuture(value, _this);
-        return;
-      }
-      _this._chainForeignFuture$1(value);
-    },
-    _asyncCompleteError$2(error, stackTrace) {
-      this._state ^= 2;
-      A._rootScheduleMicrotask(null, null, this._zone, type$.void_Function._as(new A._Future__asyncCompleteError_closure(this, error, stackTrace)));
-    },
     $isFuture: 1
   };
   A._Future__addListener_closure.prototype = {
@@ -5482,51 +3919,6 @@
   A._Future__prependListeners_closure.prototype = {
     call$0() {
       A._Future__propagateToListeners(this.$this, this._box_0.listeners);
-    },
-    $signature: 0
-  };
-  A._Future__chainForeignFuture_closure.prototype = {
-    call$1(value) {
-      var error, stackTrace, exception,
-        t1 = this.$this;
-      t1._state ^= 2;
-      try {
-        t1._completeWithValue$1(t1.$ti._precomputed1._as(value));
-      } catch (exception) {
-        error = A.unwrapException(exception);
-        stackTrace = A.getTraceFromException(exception);
-        t1._completeError$2(error, stackTrace);
-      }
-    },
-    $signature: 6
-  };
-  A._Future__chainForeignFuture_closure0.prototype = {
-    call$2(error, stackTrace) {
-      this.$this._completeError$2(type$.Object._as(error), type$.StackTrace._as(stackTrace));
-    },
-    $signature: 16
-  };
-  A._Future__chainForeignFuture_closure1.prototype = {
-    call$0() {
-      this.$this._completeError$2(this.e, this.s);
-    },
-    $signature: 0
-  };
-  A._Future__asyncCompleteWithValue_closure.prototype = {
-    call$0() {
-      this.$this._completeWithValue$1(this.value);
-    },
-    $signature: 0
-  };
-  A._Future__chainFuture_closure.prototype = {
-    call$0() {
-      A._Future__chainCoreFuture(this.value, this.$this);
-    },
-    $signature: 0
-  };
-  A._Future__asyncCompleteError_closure.prototype = {
-    call$0() {
-      this.$this._completeError$2(this.error, this.stackTrace);
     },
     $signature: 0
   };
@@ -5569,7 +3961,7 @@
     call$1(_) {
       return this.originalSource;
     },
-    $signature: 17
+    $signature: 10
   };
   A._Future__propagateToListeners_handleValueCallback.prototype = {
     call$0() {
@@ -5621,7 +4013,7 @@
       var t2, t3, _this = this, t1 = {},
         future = new A._Future($.Zone__current, type$._Future_int);
       t1.count = 0;
-      t2 = A._instanceType(_this);
+      t2 = _this.$ti;
       t3 = t2._eval$1("~(1)?")._as(new A.Stream_length_closure(t1, _this));
       type$.nullable_void_Function._as(new A.Stream_length_closure0(t1, future));
       A._EventStreamSubscription$(_this._target, _this._eventType, t3, false, t2._precomputed1);
@@ -5630,11 +4022,11 @@
   };
   A.Stream_length_closure.prototype = {
     call$1(_) {
-      A._instanceType(this.$this)._precomputed1._as(_);
+      this.$this.$ti._precomputed1._as(_);
       ++this._box_0.count;
     },
     $signature() {
-      return A._instanceType(this.$this)._eval$1("~(1)");
+      return this.$this.$ti._eval$1("~(1)");
     }
   };
   A.Stream_length_closure0.prototype = {
@@ -5651,8 +4043,6 @@
     $signature: 0
   };
   A.StreamSubscription.prototype = {};
-  A.StreamTransformerBase.prototype = {};
-  A._StreamIterator.prototype = {};
   A._Zone.prototype = {$isZone: 1};
   A._rootHandleError_closure.prototype = {
     call$0() {
@@ -5722,9 +4112,6 @@
       if ($.Zone__current === B.C__RootZone)
         return f.call$2(arg1, arg2);
       return A._rootRunBinary(null, null, this, f, arg1, arg2, $R, T1, T2);
-    },
-    registerBinaryCallback$3$1(f, $R, T1, T2) {
-      return $R._eval$1("@<0>")._bind$1(T1)._bind$1(T2)._eval$1("1(2,3)")._as(f);
     }
   };
   A._RootZone_bindCallbackGuarded_closure.prototype = {
@@ -5742,33 +4129,6 @@
       return this.T._eval$1("~(0)");
     }
   };
-  A.ListBase.prototype = {$isIterable: 1, $isList: 1};
-  A.ListMixin.prototype = {
-    get$iterator(receiver) {
-      return new A.ListIterator(receiver, this.get$length(receiver), A.instanceType(receiver)._eval$1("ListIterator<ListMixin.E>"));
-    },
-    elementAt$1(receiver, index) {
-      return this.$index(receiver, index);
-    },
-    toList$1$growable(receiver, growable) {
-      var t1, first, result, i, _this = this;
-      if (_this.get$length(receiver) === 0) {
-        t1 = J.JSArray_JSArray$growable(0, A.instanceType(receiver)._eval$1("ListMixin.E"));
-        return t1;
-      }
-      first = _this.$index(receiver, 0);
-      result = A.List_List$filled(_this.get$length(receiver), first, true, A.instanceType(receiver)._eval$1("ListMixin.E"));
-      for (i = 1; i < _this.get$length(receiver); ++i)
-        B.JSArray_methods.$indexSet(result, i, _this.$index(receiver, i));
-      return result;
-    },
-    toList$0($receiver) {
-      return this.toList$1$growable($receiver, true);
-    },
-    toString$0(receiver) {
-      return A.IterableBase_iterableToFullString(receiver, "[", "]");
-    }
-  };
   A.MapBase.prototype = {};
   A.MapBase_mapToString_closure.prototype = {
     call$2(k, v) {
@@ -5782,124 +4142,17 @@
       t1._contents = t2 + ": ";
       t1._contents += A.S(v);
     },
-    $signature: 18
+    $signature: 11
   };
   A.MapMixin.prototype = {
-    forEach$1(_, action) {
-      var t2, key,
-        t1 = A._instanceType(this);
-      t1._eval$1("~(MapMixin.K,MapMixin.V)")._as(action);
-      for (t2 = this.get$keys(), t2 = t2.get$iterator(t2), t1 = t1._eval$1("MapMixin.V"); t2.moveNext$0();) {
-        key = t2.get$current();
-        action.call$2(key, t1._as(this.$index(0, key)));
-      }
-    },
     get$length(_) {
-      var t1 = this.get$keys();
-      return t1.get$length(t1);
+      return this.__js_helper$_length;
     },
     toString$0(_) {
       return A.MapBase_mapToString(this);
     },
     $isMap: 1
   };
-  A._ListBase_Object_ListMixin.prototype = {};
-  A._JsonMap.prototype = {
-    $index(_, key) {
-      var result,
-        t1 = this._processed;
-      if (t1 == null)
-        return this._data.$index(0, key);
-      else if (typeof key != "string")
-        return null;
-      else {
-        result = t1[key];
-        return typeof result == "undefined" ? this._process$1(key) : result;
-      }
-    },
-    get$length(_) {
-      return this._processed == null ? this._data.__js_helper$_length : this._computeKeys$0().length;
-    },
-    get$keys() {
-      if (this._processed == null) {
-        var t1 = this._data;
-        return new A.LinkedHashMapKeyIterable(t1, A._instanceType(t1)._eval$1("LinkedHashMapKeyIterable<1>"));
-      }
-      return new A._JsonMapKeyIterable(this);
-    },
-    forEach$1(_, f) {
-      var keys, i, key, value, _this = this;
-      type$.void_Function_String_dynamic._as(f);
-      if (_this._processed == null)
-        return _this._data.forEach$1(0, f);
-      keys = _this._computeKeys$0();
-      for (i = 0; i < keys.length; ++i) {
-        key = keys[i];
-        value = _this._processed[key];
-        if (typeof value == "undefined") {
-          value = A._convertJsonToDartLazy(_this._original[key]);
-          _this._processed[key] = value;
-        }
-        f.call$2(key, value);
-        if (keys !== _this._data)
-          throw A.wrapException(A.ConcurrentModificationError$(_this));
-      }
-    },
-    _computeKeys$0() {
-      var keys = type$.nullable_List_dynamic._as(this._data);
-      if (keys == null)
-        keys = this._data = A._setArrayType(Object.keys(this._original), type$.JSArray_String);
-      return keys;
-    },
-    _process$1(key) {
-      var result;
-      if (!Object.prototype.hasOwnProperty.call(this._original, key))
-        return null;
-      result = A._convertJsonToDartLazy(this._original[key]);
-      return this._processed[key] = result;
-    }
-  };
-  A._JsonMapKeyIterable.prototype = {
-    get$length(_) {
-      var t1 = this._parent;
-      return t1.get$length(t1);
-    },
-    elementAt$1(_, index) {
-      var t1 = this._parent;
-      if (t1._processed == null)
-        t1 = t1.get$keys().elementAt$1(0, index);
-      else {
-        t1 = t1._computeKeys$0();
-        if (!(index >= 0 && index < t1.length))
-          return A.ioore(t1, index);
-        t1 = t1[index];
-      }
-      return t1;
-    },
-    get$iterator(_) {
-      var t1 = this._parent;
-      if (t1._processed == null) {
-        t1 = t1.get$keys();
-        t1 = t1.get$iterator(t1);
-      } else {
-        t1 = t1._computeKeys$0();
-        t1 = new J.ArrayIterator(t1, t1.length, A._arrayInstanceType(t1)._eval$1("ArrayIterator<1>"));
-      }
-      return t1;
-    }
-  };
-  A.Codec.prototype = {};
-  A.Converter.prototype = {};
-  A.JsonCodec.prototype = {
-    decode$1(_, source) {
-      var t1 = A._parseJson(source, this.get$decoder()._reviver);
-      return t1;
-    },
-    get$decoder() {
-      return B.JsonDecoder_null;
-    }
-  };
-  A.JsonDecoder.prototype = {};
   A.Error.prototype = {
     get$stackTrace() {
       return A.getTraceFromException(this.$thrownJsError);
@@ -5945,18 +4198,7 @@
       return "RangeError";
     },
     get$_errorExplanation() {
-      var explanation,
-        start = this.start,
-        end = this.end;
-      if (start == null)
-        explanation = end != null ? ": Not less than or equal to " + A.S(end) : "";
-      else if (end == null)
-        explanation = ": Not greater than or equal to " + A.S(start);
-      else if (end > start)
-        explanation = ": Not in inclusive range " + A.S(start) + ".." + A.S(end);
-      else
-        explanation = end < start ? ": Valid value range is empty" : ": Only valid value is " + A.S(start);
-      return explanation;
+      return "";
     }
   };
   A.IndexError.prototype = {
@@ -5986,11 +4228,6 @@
       return t1;
     }
   };
-  A.StateError.prototype = {
-    toString$0(_) {
-      return "Bad state: " + this.message;
-    }
-  };
   A.ConcurrentModificationError.prototype = {
     toString$0(_) {
       var t1 = this.modifiedObject;
@@ -6017,42 +4254,6 @@
   A._Exception.prototype = {
     toString$0(_) {
       return "Exception: " + this.message;
-    }
-  };
-  A.FormatException.prototype = {
-    toString$0(_) {
-      var message = this.message,
-        report = "" !== message ? "FormatException: " + message : "FormatException",
-        source = this.source;
-      if (typeof source == "string") {
-        if (source.length > 78)
-          source = B.JSString_methods.substring$2(source, 0, 75) + "...";
-        return report + "\n" + source;
-      } else
-        return report;
-    }
-  };
-  A.Iterable.prototype = {
-    get$length(_) {
-      var count,
-        it = this.get$iterator(this);
-      for (count = 0; it.moveNext$0();)
-        ++count;
-      return count;
-    },
-    elementAt$1(_, index) {
-      var t1, elementIndex, element;
-      A.RangeError_checkNotNegative(index, "index");
-      for (t1 = this.get$iterator(this), elementIndex = 0; t1.moveNext$0();) {
-        element = t1.get$current();
-        if (index === elementIndex)
-          return element;
-        ++elementIndex;
-      }
-      throw A.wrapException(A.IndexError$(index, this, "index", null, elementIndex));
-    },
-    toString$0(_) {
-      return A.IterableBase_iterableToShortString(this, "(", ")");
     }
   };
   A.Null.prototype = {
@@ -6109,43 +4310,15 @@
     },
     $isCanvasElement: 1
   };
-  A.CanvasRenderingContext2D.prototype = {
-    set$fillStyle(receiver, value) {
-      receiver.fillStyle = value;
-    },
-    $isCanvasRenderingContext2D: 1
-  };
-  A.CharacterData.prototype = {
-    get$length(receiver) {
-      return receiver.length;
-    }
-  };
+  A.CanvasRenderingContext2D.prototype = {$isCanvasRenderingContext2D: 1};
   A.DomException.prototype = {
     toString$0(receiver) {
       return String(receiver);
     }
   };
-  A._FrozenElementList.prototype = {
-    get$length(_) {
-      return this._nodeList.length;
-    },
-    $index(_, index) {
-      var t1 = this._nodeList;
-      if (!(index >= 0 && index < t1.length))
-        return A.ioore(t1, index);
-      return this.$ti._precomputed1._as(t1[index]);
-    },
-    $indexSet(_, index, value) {
-      this.$ti._precomputed1._as(value);
-      throw A.wrapException(A.UnsupportedError$("Cannot modify list"));
-    }
-  };
   A.Element.prototype = {
     toString$0(receiver) {
       return receiver.localName;
-    },
-    get$onChange(receiver) {
-      return new A._ElementEventStreamImpl(receiver, "change", false, type$._ElementEventStreamImpl_Event);
     },
     get$onClick(receiver) {
       return new A._ElementEventStreamImpl(receiver, "click", false, type$._ElementEventStreamImpl_MouseEvent);
@@ -6164,80 +4337,17 @@
       return receiver.length;
     }
   };
-  A.HttpRequest.prototype = {
-    open$3$async(receiver, method, url, async) {
-      return receiver.open(method, url, true);
-    },
-    $isHttpRequest: 1
-  };
-  A.HttpRequest_getString_closure.prototype = {
-    call$1(xhr) {
-      var t1 = type$.HttpRequest._as(xhr).responseText;
-      t1.toString;
-      return t1;
-    },
-    $signature: 19
-  };
-  A.HttpRequest_request_closure.prototype = {
-    call$1(e) {
-      var t1, t2, accepted, unknownRedirect, t3;
-      type$.ProgressEvent._as(e);
-      t1 = this.xhr;
-      t2 = t1.status;
-      t2.toString;
-      accepted = t2 >= 200 && t2 < 300;
-      unknownRedirect = t2 > 307 && t2 < 400;
-      t2 = accepted || t2 === 0 || t2 === 304 || unknownRedirect;
-      t3 = this.completer;
-      if (t2)
-        t3.complete$1(0, t1);
-      else
-        t3.completeError$1(e);
-    },
-    $signature: 20
-  };
-  A.HttpRequestEventTarget.prototype = {};
-  A.InputElement.prototype = {$isInputElement: 1};
   A.MouseEvent.prototype = {$isMouseEvent: 1};
   A.Node.prototype = {
     toString$0(receiver) {
       var value = receiver.nodeValue;
       return value == null ? this.super$Interceptor$toString(receiver) : value;
-    },
-    set$text(receiver, value) {
-      receiver.textContent = value;
-    },
-    $isNode: 1
+    }
   };
-  A.NodeList.prototype = {
-    get$length(receiver) {
-      return receiver.length;
-    },
-    $index(receiver, index) {
-      if (index >>> 0 !== index || index >= receiver.length)
-        throw A.wrapException(A.IndexError$(index, receiver, null, null, null));
-      return receiver[index];
-    },
-    $indexSet(receiver, index, value) {
-      type$.Node._as(value);
-      throw A.wrapException(A.UnsupportedError$("Cannot assign element of immutable List."));
-    },
-    elementAt$1(receiver, index) {
-      if (!(index >= 0 && index < receiver.length))
-        return A.ioore(receiver, index);
-      return receiver[index];
-    },
-    $isJavaScriptIndexingBehavior: 1,
-    $isIterable: 1,
-    $isList: 1
-  };
-  A.OptionElement.prototype = {$isOptionElement: 1};
-  A.ProgressEvent.prototype = {$isProgressEvent: 1};
   A.SelectElement.prototype = {
     get$length(receiver) {
       return receiver.length;
-    },
-    $isSelectElement: 1
+    }
   };
   A.UIEvent.prototype = {};
   A.Window.prototype = {
@@ -6282,39 +4392,8 @@
     call$1(e) {
       return this.onData.call$1(type$.Event._as(e));
     },
-    $signature: 2
+    $signature: 12
   };
-  A.ImmutableListMixin.prototype = {
-    get$iterator(receiver) {
-      return new A.FixedSizeListIterator(receiver, receiver.length, A.instanceType(receiver)._eval$1("FixedSizeListIterator<ImmutableListMixin.E>"));
-    }
-  };
-  A.FixedSizeListIterator.prototype = {
-    moveNext$0() {
-      var _this = this,
-        nextPosition = _this._position + 1,
-        t1 = _this._html$_length;
-      if (nextPosition < t1) {
-        t1 = _this._array;
-        if (!(nextPosition >= 0 && nextPosition < t1.length))
-          return A.ioore(t1, nextPosition);
-        _this.set$_html$_current(t1[nextPosition]);
-        _this._position = nextPosition;
-        return true;
-      }
-      _this.set$_html$_current(null);
-      _this._position = t1;
-      return false;
-    },
-    get$current() {
-      return this.$ti._precomputed1._as(this._html$_current);
-    },
-    set$_html$_current(_current) {
-      this._html$_current = this.$ti._eval$1("1?")._as(_current);
-    }
-  };
-  A._NodeList_JavaScriptObject_ListMixin.prototype = {};
-  A._NodeList_JavaScriptObject_ListMixin_ImmutableListMixin.prototype = {};
   A._JSRandom.prototype = {
     nextInt$1(max) {
       if (max <= 0 || max > 4294967296)
@@ -6326,721 +4405,211 @@
     }
   };
   A.SvgElement.prototype = {
-    get$onChange(receiver) {
-      return new A._ElementEventStreamImpl(receiver, "change", false, type$._ElementEventStreamImpl_Event);
-    },
     get$onClick(receiver) {
       return new A._ElementEventStreamImpl(receiver, "click", false, type$._ElementEventStreamImpl_MouseEvent);
     }
   };
-  A.CellularAutomata.prototype = {
-    CellularAutomata$1(_shape, $T) {
-      var t2, i, t3, j, j0, tmp,
-        t1 = this._shape;
-      this.set$num_cells(B.JSArray_methods.reduce$1(t1, new A.CellularAutomata_closure()));
-      for (t2 = this._shape_dimensions, i = 0; t3 = t1.length, i < t3 - 1; i = j) {
-        for (j = i + 1, j0 = j, tmp = 1; j0 < t3; ++j0)
-          tmp *= t1[j0];
-        B.JSArray_methods.add$1(t2, tmp);
-      }
-    },
+  A.Boid.prototype = {};
+  A.BoidSimulation.prototype = {
     initialize$0() {
-      var i, _this = this,
-        t1 = A._instanceType(_this)._eval$1("JSArray<CellularAutomata.T>");
-      _this.set$_cellsCurrent(A._setArrayType([], t1));
-      _this.set$_cellsWorking(A._setArrayType([], t1));
-      for (i = 0; i < _this.num_cells; ++i)
-        B.JSArray_methods.add$1(_this._cellsCurrent, _this.cellCreate$0());
-    },
-    begin$0() {
-      var t1 = this._cellsCurrent;
-      t1 = A._setArrayType(t1.slice(0), A._arrayInstanceType(t1));
-      this.set$_cellsWorking(t1);
-    },
-    commit$0(_) {
-      var t1 = this._cellsWorking;
-      t1 = A._setArrayType(t1.slice(0), A._arrayInstanceType(t1));
-      this.set$_cellsCurrent(t1);
-    },
-    isValidGridIndex$1(index) {
-      var t1, di, t2;
-      type$.List_int._as(index);
-      for (t1 = this._shape, di = 0; di < t1.length; ++di) {
-        if (!(di < index.length))
-          return A.ioore(index, di);
-        t2 = index[di];
-        if (typeof t2 !== "number")
-          return t2.$lt();
-        if (t2 < 0 || t2 === t1[di])
-          return false;
-      }
-      return true;
-    },
-    gridIndex$1(list_index) {
-      var t1, t2, tmp, i,
-        index = A._setArrayType([], type$.JSArray_int);
-      for (t1 = this._shape, t2 = this._shape_dimensions, tmp = list_index, i = 0; i < t1.length - 1; ++i) {
-        if (!(i < t2.length))
-          return A.ioore(t2, i);
-        B.JSArray_methods.add$1(index, B.JSInt_methods.$tdiv(tmp, t2[i]));
-        if (!(i < t2.length))
-          return A.ioore(t2, i);
-        tmp = B.JSInt_methods.$mod(tmp, t2[i]);
-      }
-      B.JSArray_methods.add$1(index, tmp);
-      return index;
-    },
-    listIndex$1(grid_index) {
-      var t1, t2, t3, index, i, t4, t5;
-      type$.List_int._as(grid_index);
-      for (t1 = this._shape, t2 = J.getInterceptor$ax(grid_index), t3 = this._shape_dimensions, index = 0, i = 0; t4 = t1.length - 1, i < t4; ++i) {
-        t4 = t2.$index(grid_index, i);
-        if (!(i < t3.length))
-          return A.ioore(t3, i);
-        t5 = t3[i];
-        if (typeof t4 !== "number")
-          return t4.$mul();
-        index += t4 * t5;
-      }
-      t1 = t2.$index(grid_index, t4);
-      if (typeof t1 !== "number")
-        return A.iae(t1);
-      return index + t1;
-    },
-    next$0() {
-      var i, t1, _this = this;
-      _this.begin$0();
-      for (i = 0; i < _this.num_cells; ++i)
-        _this.cellUpdate$1(i);
-      _this.commit$0(0);
-      t1 = _this._cellsCurrent;
-      t1 = A._setArrayType(t1.slice(0), A._arrayInstanceType(t1));
-      return t1;
-    },
-    nextDimensionNeighbors$2(dim, grid_index) {
-      var neigh, t1, t2, t3, neigh2, _i, tmp1, t4, tmp2, _this = this;
-      type$.List_int._as(grid_index);
-      neigh = [];
-      t1 = dim + 1;
-      t2 = _this._shape;
-      if (t1 < t2.length) {
-        t3 = A._setArrayType(grid_index.slice(0), A._arrayInstanceType(grid_index));
-        neigh2 = _this.nextDimensionNeighbors$2(t1, t3);
-        for (t3 = neigh2.length, _i = 0; _i < neigh2.length; neigh2.length === t3 || (0, A.throwConcurrentModificationError)(neigh2), ++_i)
-          neigh.push(neigh2[_i]);
-      }
-      t3 = A._arrayInstanceType(grid_index);
-      tmp1 = A._setArrayType(grid_index.slice(0), t3);
-      if (!(dim < tmp1.length))
-        return A.ioore(tmp1, dim);
-      t4 = tmp1[dim];
-      if (typeof t4 !== "number")
-        return t4.$add();
-      B.JSArray_methods.$indexSet(tmp1, dim, t4 + 1);
-      if (_this.isValidGridIndex$1(tmp1)) {
-        neigh.push(tmp1);
-        if (t1 < t2.length) {
-          neigh2 = _this.nextDimensionNeighbors$2(t1, tmp1);
-          for (t4 = neigh2.length, _i = 0; _i < neigh2.length; neigh2.length === t4 || (0, A.throwConcurrentModificationError)(neigh2), ++_i)
-            neigh.push(neigh2[_i]);
-        }
-      }
-      tmp2 = A._setArrayType(grid_index.slice(0), t3);
-      if (!(dim < tmp2.length))
-        return A.ioore(tmp2, dim);
-      t3 = tmp2[dim];
-      if (typeof t3 !== "number")
-        return t3.$sub();
-      B.JSArray_methods.$indexSet(tmp2, dim, t3 - 1);
-      if (_this.isValidGridIndex$1(tmp2)) {
-        neigh.push(tmp2);
-        if (t1 < t2.length) {
-          neigh2 = _this.nextDimensionNeighbors$2(t1, tmp2);
-          for (t1 = neigh2.length, _i = 0; _i < neigh2.length; neigh2.length === t1 || (0, A.throwConcurrentModificationError)(neigh2), ++_i)
-            neigh.push(neigh2[_i]);
-        }
-      }
-      return neigh;
-    },
-    set$num_cells(num_cells) {
-      this.num_cells = A._asInt(num_cells);
-    },
-    set$_cellsCurrent(_cellsCurrent) {
-      this._cellsCurrent = A._instanceType(this)._eval$1("List<CellularAutomata.T>")._as(_cellsCurrent);
-    },
-    set$_cellsWorking(_cellsWorking) {
-      this._cellsWorking = A._instanceType(this)._eval$1("List<CellularAutomata.T>")._as(_cellsWorking);
-    }
-  };
-  A.CellularAutomata_closure.prototype = {
-    call$2(i, j) {
-      return A._asInt(i) * A._asInt(j);
-    },
-    $signature: 4
-  };
-  A.ComplexCellularAutomata.prototype = {
-    initialize$0() {
-      var i, t1, t2;
-      for (i = 0; i < this.num_cells; ++i) {
-        t1 = this._cellsCurrentInternal;
+      var t1, id, t2, _this = this;
+      for (t1 = _this._boids, id = 0; false; ++id) {
         t2 = $.$get$_random();
-        B.JSArray_methods.add$1(t1, new A.Oscillator(2 * t2.nextDouble$0(), t2.nextDouble$0(), 2 * t2.nextDouble$0() - 1));
-        B.JSArray_methods.add$1(this._cellsCurrent, 0);
+        B.JSArray_methods.add$1(t1, new A.Boid(new A.Point2D(t2.nextInt$1(_this._shape_dimensions._x), t2.nextInt$1(_this._shape_dimensions._y)), 12.566370614359172 * t2.nextDouble$0() - 6.283185307179586, id));
       }
+      t1 = _this._actions;
+      B.JSArray_methods.add$1(t1, _this.get$coherence());
+      B.JSArray_methods.add$1(t1, _this.get$separation());
+      B.JSArray_methods.add$1(t1, _this.get$move());
     },
-    begin$0() {
-      this.super$CellularAutomata$begin();
-      var t1 = this._cellsCurrentInternal;
-      t1 = A._setArrayType(t1.slice(0), A._arrayInstanceType(t1));
-      this.set$_cellsWorkingInternal(t1);
+    coherence$2(obj, sim) {
+      var a, t1;
+      type$.Boid._as(obj);
+      a = obj._position.angle$1(type$.BoidSimulation._as(sim)._swarmMidPoint);
+      t1 = obj._direction;
+      obj._direction = t1 + (t1 - a);
+      return obj;
     },
-    commit$0(_) {
-      var t1;
-      this.super$CellularAutomata$commit(0);
-      t1 = this._cellsWorkingInternal;
-      t1 = A._setArrayType(t1.slice(0), A._arrayInstanceType(t1));
-      this.set$_cellsCurrentInternal(t1);
-    },
-    set$_cellsCurrentInternal(_cellsCurrentInternal) {
-      this._cellsCurrentInternal = A._instanceType(this)._eval$1("List<ComplexCellularAutomata.1>")._as(_cellsCurrentInternal);
-    },
-    set$_cellsWorkingInternal(_cellsWorkingInternal) {
-      this._cellsWorkingInternal = A._instanceType(this)._eval$1("List<ComplexCellularAutomata.1>")._as(_cellsWorkingInternal);
-    }
-  };
-  A.GameOfLife.prototype = {
-    cellCreate$0() {
-      return $.$get$_random1().nextInt$1(2);
-    },
-    cellNeighborhood$1(list_index) {
-      var t1, t2, _i,
-        ix_grid = this.nextDimensionNeighbors$2(0, this.gridIndex$1(list_index)),
-        ret = A._setArrayType([], type$.JSArray_int);
-      for (t1 = ix_grid.length, t2 = type$.List_int, _i = 0; _i < ix_grid.length; ix_grid.length === t1 || (0, A.throwConcurrentModificationError)(ix_grid), ++_i)
-        B.JSArray_methods.add$1(ret, this.listIndex$1(t2._as(ix_grid[_i])));
-      type$.nullable_int_Function_int_int._as(null);
-      if (!!ret.immutable$list)
-        A.throwExpression(A.UnsupportedError$("sort"));
-      A.Sort_sort(ret, J._interceptors_JSArray__compareAny$closure(), type$.int);
-      return ret;
-    },
-    cellUpdate$1(list_index) {
-      var t1, i, t2, t3, num, _this = this,
-        neighbors = _this.cellNeighborhood$1(list_index);
-      if (neighbors.length > 0) {
-        t1 = A._setArrayType([], type$.JSArray_int);
-        for (i = 0; i <= neighbors.length - 1; ++i) {
-          t2 = _this._cellsCurrent;
-          t3 = neighbors[i];
-          if (!(t3 >= 0 && t3 < t2.length))
-            return A.ioore(t2, t3);
-          t1.push(t2[t3]);
+    neighbors$1(boid) {
+      var t1, t2, t3, j, t4,
+        ix = A._setArrayType([], type$.JSArray_Boid);
+      for (t1 = this._boids, t2 = boid._id, t3 = this._distances, j = 0; j < t1.length; ++j) {
+        if (j !== t2) {
+          t4 = t3.$index(0, t2);
+          t4 = t4 == null ? null : t4.$index(0, j);
+          if (t4 == null)
+            t4 = 0;
+          if (typeof t4 !== "number")
+            return t4.$le();
+          t4 = t4 <= 2;
+        } else
+          t4 = false;
+        if (t4) {
+          if (!(j < t1.length))
+            return A.ioore(t1, j);
+          B.JSArray_methods.add$1(ix, t1[j]);
         }
-        num = B.JSArray_methods.reduce$1(t1, new A.GameOfLife_cellUpdate_closure());
-        if (num < 2)
-          B.JSArray_methods.$indexSet(_this._cellsWorking, list_index, 0);
-        else if (num > 3)
-          B.JSArray_methods.$indexSet(_this._cellsWorking, list_index, 0);
-        else if (num === 3)
-          B.JSArray_methods.$indexSet(_this._cellsWorking, list_index, 1);
       }
-    }
-  };
-  A.GameOfLife_cellUpdate_closure.prototype = {
-    call$2(i, j) {
-      return A._asInt(i) + A._asInt(j);
+      return ix;
     },
-    $signature: 4
-  };
-  A.Oscillator.prototype = {
-    wave$1(t) {
-      return this._amplitude * Math.sin(t * this._frequency + this._phase);
+    separation$2(obj, sim) {
+      var a, t1;
+      type$.Boid._as(obj);
+      type$.BoidSimulation._as(sim);
+      a = obj._position.angle$1(sim.midPoint$1(sim.neighbors$1(obj)));
+      t1 = obj._direction;
+      obj._direction = t1 + -(t1 - a);
+      return obj;
     },
-    toString$0(_) {
-      return "y(t) = " + A.S(this._amplitude) + " * sin(t * " + A.S(this._frequency) + " + " + A.S(this._phase) + ")";
-    }
-  };
-  A.OscillatorCA.prototype = {
-    cellCreate$0() {
-      return 0;
+    move$2(obj, sim) {
+      var t1;
+      type$.Boid._as(obj);
+      type$.BoidSimulation._as(sim);
+      t1 = obj._position;
+      t1._x = t1._x + A._asInt(Math.cos(obj._direction));
+      t1._y = t1._y + A._asInt(Math.sin(obj._direction));
+      return obj;
     },
-    cellUpdate$1(list_index) {
-      var wphase, neigh, t2, _i, i, t3, t4, state, _this = this,
-        t1 = _this._cellsCurrentInternal;
-      if (!(list_index < t1.length))
-        return A.ioore(t1, list_index);
-      wphase = t1[list_index].wave$1(_this.time);
-      neigh = _this.cellNeighborhood$1(list_index);
-      t1 = A._setArrayType([], type$.JSArray_double);
-      for (t2 = neigh.length, _i = 0; _i < neigh.length; neigh.length === t2 || (0, A.throwConcurrentModificationError)(neigh), ++_i) {
-        i = neigh[_i];
-        t3 = _this._cellsCurrentInternal;
-        if (!(i >= 0 && i < t3.length))
-          return A.ioore(t3, i);
-        t3 = t3[i];
-        t4 = _this.time;
-        t1.push(t3._amplitude * Math.sin(t4 * t3._frequency + t3._phase));
-      }
-      t2 = A._setArrayType([], type$.JSArray_int);
-      for (t3 = t1.length, _i = 0; _i < t1.length; t1.length === t3 || (0, A.throwConcurrentModificationError)(t1), ++_i) {
-        i = t1[_i];
-        t4 = _this._epsilon;
-        t2.push(i >= wphase - t4 && i <= wphase + t4 ? 1 : 0);
-      }
-      state = B.JSArray_methods.reduce$1(t2, new A.OscillatorCA_cellUpdate_closure());
-      B.JSArray_methods.$indexSet(_this._cellsWorking, list_index, state);
-      _this.gradientAdaption$4(list_index, wphase, neigh, t1);
-      _this.averageAdaption$2(list_index, neigh);
-    },
-    gradientAdaption$4(list_index, wphase, neigh, n_wphases) {
-      var t1, t2, deriv, i, error, t3, _this = this;
-      type$.List_int._as(neigh);
-      type$.List_double._as(n_wphases);
-      t1 = _this._cellsCurrentInternal;
-      if (!(list_index < t1.length))
-        return A.ioore(t1, list_index);
-      t1 = t1[list_index];
-      t2 = _this.time;
-      deriv = [Math.sin(t1._frequency * t2 + t1._phase), t1._amplitude * t2 * Math.cos(t1._frequency * t2 + t1._phase), t1._amplitude * Math.cos(t1._frequency * t2 + t1._phase)];
-      for (i = 0; i < neigh.length; ++i) {
-        if (!(i < n_wphases.length))
-          return A.ioore(n_wphases, i);
-        error = wphase - n_wphases[i];
-        t1 = _this._cellsWorkingInternal;
-        if (!(list_index < t1.length))
-          return A.ioore(t1, list_index);
-        t1 = t1[list_index];
-        t2 = t1._amplitude;
-        t3 = _this._alpha;
-        t1._amplitude = t2 + t3 * -deriv[0] * error;
-        t1._frequency = t1._frequency + t3 * -deriv[1] * error;
-        t1._phase = t1._phase + t3 * -deriv[2] * error;
+    mapDistances$0() {
+      var t1, t2, t3, t4, i, boidA, t5, j, j0, t6, d;
+      for (t1 = this._boids, t2 = this._distances, t3 = type$.int, t4 = type$.double, i = 0; i < t1.length; i = j) {
+        boidA = t1[i];
+        t2.$indexSet(0, boidA._id, A.LinkedHashMap_LinkedHashMap$_empty(t3, t4));
+        t5 = t2.$index(0, i);
+        if (t5 != null)
+          t5.$indexSet(0, i, -1);
+        for (j = i + 1, t5 = boidA._position, j0 = j; j0 < t1.length; ++j0) {
+          t6 = t1[j0]._position;
+          d = Math.sqrt((t5._x - t6._x ^ 2 + (t5._y - t6._y) ^ 2) >>> 0);
+          t6 = t2.$index(0, i);
+          if (t6 != null)
+            t6.$indexSet(0, j0, d);
+          t6 = t2.$index(0, j0);
+          if (t6 != null)
+            t6.$indexSet(0, i, d);
+        }
       }
     },
-    averageAdaption$2(list_index, neigh) {
-      var t1, _i, i, t2, t3, t4, t5;
-      type$.List_int._as(neigh);
-      for (t1 = neigh.length, _i = 0; _i < t1; ++_i) {
-        i = neigh[_i];
-        t2 = this._cellsWorkingInternal;
-        if (!(list_index < t2.length))
-          return A.ioore(t2, list_index);
-        t2 = t2[list_index];
-        t3 = t2._amplitude;
-        t4 = this._alpha;
-        t5 = this._cellsCurrentInternal;
-        if (!(i >= 0 && i < t5.length))
-          return A.ioore(t5, i);
-        t5 = t5[i];
-        t2._amplitude = t3 + t4 * (t5._amplitude - t3);
-        t3 = t2._frequency;
-        t2._frequency = t3 + t4 * (t5._frequency - t3);
-        t3 = t2._phase;
-        t2._phase = t3 + t4 * (t5._phase - t3);
+    midPoint$1(swarm) {
+      var t1, px, py, _i, t2;
+      type$.List_Boid._as(swarm);
+      for (t1 = swarm.length, px = 0, py = 0, _i = 0; _i < t1; ++_i) {
+        t2 = swarm[_i]._position;
+        px += t2._x;
+        py += t2._y;
       }
-    },
-    cellNeighborhood$1(list_index) {
-      var t1, t2, _i,
-        ix_grid = this.nextDimensionNeighbors$2(0, this.gridIndex$1(list_index)),
-        ret = A._setArrayType([], type$.JSArray_int);
-      for (t1 = ix_grid.length, t2 = type$.List_int, _i = 0; _i < ix_grid.length; ix_grid.length === t1 || (0, A.throwConcurrentModificationError)(ix_grid), ++_i)
-        B.JSArray_methods.add$1(ret, this.listIndex$1(t2._as(ix_grid[_i])));
-      return ret;
+      return new A.Point2D(A._asInt(px / t1), A._asInt(py / t1));
     },
     next$0() {
-      var t1, i, _this = this;
-      ++_this.time;
-      _this.super$CellularAutomata$begin();
-      t1 = _this._cellsCurrentInternal;
-      t1 = A._setArrayType(t1.slice(0), A._arrayInstanceType(t1));
-      _this.set$_cellsWorkingInternal(t1);
-      for (i = 0; i < _this.num_cells; ++i)
-        _this.cellUpdate$1(i);
-      _this.super$CellularAutomata$commit(0);
-      t1 = _this._cellsWorkingInternal;
-      t1 = A._setArrayType(t1.slice(0), A._arrayInstanceType(t1));
-      _this.set$_cellsCurrentInternal(t1);
-      t1 = _this._cellsCurrent;
-      t1 = A._setArrayType(t1.slice(0), A._arrayInstanceType(t1));
-      return t1;
+      var t1, t2, t3, _i, boid, t4, _i0, _this = this;
+      _this.mapDistances$0();
+      t1 = _this._boids;
+      _this._swarmMidPoint = _this.midPoint$1(t1);
+      for (t2 = t1.length, t3 = _this._actions, _i = 0; _i < t1.length; t1.length === t2 || (0, A.throwConcurrentModificationError)(t1), ++_i) {
+        boid = t1[_i];
+        for (t4 = t3.length, _i0 = 0; _i0 < t3.length; t3.length === t4 || (0, A.throwConcurrentModificationError)(t3), ++_i0)
+          t3[_i0].call$2(boid, _this);
+      }
     }
   };
-  A.OscillatorCA_cellUpdate_closure.prototype = {
-    call$2(i, j) {
-      return A._asInt(i) + A._asInt(j);
+  A.Point2D.prototype = {
+    angle$1(obj) {
+      return Math.atan(this.dot$1(obj) / (this.dot$1(this) + obj.dot$1(obj)));
     },
-    $signature: 4
-  };
-  A.PercolationCA.prototype = {
-    cellCreate$0() {
-      if ($.$get$_random0().nextDouble$0() < 0.6)
-        return 1;
-      return 0;
-    },
-    cellUpdate$1(list_index) {
-      var neighbors, i, t2, t3, _this = this,
-        t1 = _this._cellsCurrent;
-      if (!(list_index < t1.length))
-        return A.ioore(t1, list_index);
-      if (J.$eq$(t1[list_index], 0)) {
-        neighbors = _this.cellNeighborhood$1(list_index);
-        if (neighbors.length > 0) {
-          t1 = A._setArrayType([], type$.JSArray_int);
-          for (i = 0; i <= neighbors.length - 1; ++i) {
-            t2 = _this._cellsCurrent;
-            t3 = neighbors[i];
-            if (!(t3 >= 0 && t3 < t2.length))
-              return A.ioore(t2, t3);
-            t1.push(t2[t3]);
-          }
-          if (B.JSArray_methods.any$1(t1, new A.PercolationCA_cellUpdate_closure()))
-            B.JSArray_methods.$indexSet(_this._cellsWorking, list_index, 2);
-        }
-      }
-    },
-    cellNeighborhood$1(list_index) {
-      var t1, t2, _i,
-        ix_grid = this.nextDimensionNeighbors$2(0, this.gridIndex$1(list_index)),
-        ret = A._setArrayType([], type$.JSArray_int);
-      for (t1 = ix_grid.length, t2 = type$.List_int, _i = 0; _i < ix_grid.length; ix_grid.length === t1 || (0, A.throwConcurrentModificationError)(ix_grid), ++_i)
-        B.JSArray_methods.add$1(ret, this.listIndex$1(t2._as(ix_grid[_i])));
-      return ret;
-    },
-    initialize$0() {
-      var t1, initial, t2, _this = this;
-      _this.super$CellularAutomata$initialize();
-      t1 = $.$get$_random0();
-      initial = t1.nextInt$1(_this._cellsCurrent.length - 1);
-      while (true) {
-        t2 = _this._cellsCurrent;
-        if (!(initial >= 0 && initial < t2.length))
-          return A.ioore(t2, initial);
-        if (!!J.$eq$(t2[initial], 0))
-          break;
-        initial = t1.nextInt$1(_this._cellsCurrent.length - 1);
-      }
-      A.print(initial);
-      t1 = _this._cellsCurrent;
-      t1 = A._setArrayType(t1.slice(0), A._arrayInstanceType(t1));
-      _this.set$_cellsWorking(t1);
-      B.JSArray_methods.$indexSet(_this._cellsWorking, initial, 2);
-      t1 = _this._cellsWorking;
-      t1 = A._setArrayType(t1.slice(0), A._arrayInstanceType(t1));
-      _this.set$_cellsCurrent(t1);
-    }
-  };
-  A.PercolationCA_cellUpdate_closure.prototype = {
-    call$1(element) {
-      return A._asInt(element) === 2;
-    },
-    $signature: 21
-  };
-  A.SimpleCellularAutomata1D.prototype = {
-    initialize$0() {
-      var t1, w, init_cells, i, list_index, _this = this;
-      _this.super$CellularAutomata$initialize();
-      t1 = _this._shape;
-      if (0 >= t1.length)
-        return A.ioore(t1, 0);
-      w = t1[0];
-      t1 = _this._rules.$index(0, "start");
-      init_cells = A._asInt(Math.max(w * A._asNum(t1 == null ? 0.1 : t1), 1));
-      for (i = 0; i < init_cells; ++i) {
-        list_index = $.$get$_random2().nextInt$1(w);
-        B.JSArray_methods.$indexSet(_this._cellsCurrent, list_index, 1);
-      }
-    },
-    cellCreate$0() {
-      return 0;
-    },
-    cellNeighborhood$1(list_index) {
-      var t1, t2, _i,
-        ix_grid = this.nextDimensionNeighbors$2(0, this.gridIndex$1(list_index)),
-        ret = A._setArrayType([], type$.JSArray_int);
-      for (t1 = ix_grid.length, t2 = type$.List_int, _i = 0; _i < ix_grid.length; ix_grid.length === t1 || (0, A.throwConcurrentModificationError)(ix_grid), ++_i)
-        B.JSArray_methods.add$1(ret, this.listIndex$1(t2._as(ix_grid[_i])));
-      return ret;
-    },
-    cellUpdate$1(list_index) {
-      var t1, i, t2, t3, _this = this,
-        neighbors = _this.cellNeighborhood$1(list_index);
-      if (neighbors.length > 1) {
-        t1 = A._setArrayType([], type$.JSArray_int);
-        for (i = 0; i <= neighbors.length - 1; ++i) {
-          t2 = _this._cellsCurrent;
-          t3 = neighbors[i];
-          if (!(t3 >= 0 && t3 < t2.length))
-            return A.ioore(t2, t3);
-          t1.push(t2[t3]);
-        }
-        t2 = _this._cellsCurrent;
-        if (!(list_index < t2.length))
-          return A.ioore(t2, list_index);
-        t2 = A._asInt(t2[list_index]);
-        if (!!t1.fixed$length)
-          A.throwExpression(A.UnsupportedError$("insert"));
-        t3 = t1.length;
-        if (1 > t3)
-          A.throwExpression(A.RangeError$value(1, null));
-        t1.splice(1, 0, t2);
-        t2 = _this._cellsWorking;
-        t1 = _this._rules.$index(0, A.IterableBase_iterableToFullString(t1, "[", "]"));
-        B.JSArray_methods.$indexSet(t2, list_index, A._asInt(t1 == null ? 0 : t1));
-      }
-    },
-    set$_rules(_rules) {
-      this._rules = type$.Map_String_dynamic._as(_rules);
+    dot$1(obj) {
+      return this._x * obj._x + this._y * obj._y;
     }
   };
   A.main_closure.prototype = {
     call$1($event) {
-      A.changeLabel("caWidth", "lblcaWidth");
+      var canvas, t1, canvasWidth, canvasHeight;
+      type$.MouseEvent._as($event);
+      canvas = type$.nullable_CanvasElement._as(document.querySelector("#canvas"));
+      t1 = canvas == null;
+      canvasWidth = t1 ? null : canvas.width;
+      if (canvasWidth == null)
+        canvasWidth = 100;
+      canvasHeight = t1 ? null : canvas.height;
+      t1 = A.BoidSimulation$(canvasWidth, canvasHeight == null ? 100 : canvasHeight);
+      $.simulation = t1;
+      t1.initialize$0();
+      B.Window_methods.requestAnimationFrame$1(window, A.boids_controller__boids_animation$closure());
     },
-    $signature: 2
+    $signature: 4
   };
   A.main_closure0.prototype = {
     call$1($event) {
-      A.changeLabel("caHeight", "lblcaHeight");
-    },
-    $signature: 2
-  };
-  A.main_closure1.prototype = {
-    call$1($event) {
-      var t1, w_ele, t2, w, t, sel, options, key, r;
-      type$.MouseEvent._as($event);
-      t1 = document;
-      w_ele = type$.nullable_InputElement._as(t1.querySelector("#caWidth"));
-      t2 = w_ele == null ? null : w_ele.value;
-      w = A.int_parse(t2 == null ? "0" : t2);
-      t2 = type$.Element;
-      t = t2._as(t1.querySelector("#teste"));
-      sel = type$.SelectElement._as(t1.querySelector("#CellularAutomata1D"));
-      A.checkTypeBound(type$.OptionElement, t2, "T", "querySelectorAll");
-      options = new A._FrozenElementList(sel.querySelectorAll("option"), type$._FrozenElementList_OptionElement);
-      t2 = options.toList$0(options);
-      t1 = sel.selectedIndex;
-      if (t1 == null)
-        t1 = 0;
-      if (!(t1 >= 0 && t1 < t2.length))
-        return A.ioore(t2, t1);
-      key = t2[t1].value;
-      r = type$.Map_String_dynamic._as($.rules.$index(0, key));
-      J.set$text$x(t, r.toString$0(0));
-      t1 = A.SimpleCellularAutomata1D$(w, r);
-      $.ca = t1;
-      t1.initialize$0();
-      B.Window_methods.requestAnimationFrame$1(window, A.controller__sierpinski_animation_boxes$closure());
-    },
-    $signature: 1
-  };
-  A.main_closure2.prototype = {
-    call$1($event) {
       var t1, t2;
       type$.MouseEvent._as($event);
       t1 = window;
-      t2 = A._asInt($.animation_request_id);
+      t2 = $.animation_request_id;
       B.Window_methods._ensureRequestAnimationFrame$0(t1);
       t1.cancelAnimationFrame(t2);
     },
-    $signature: 1
-  };
-  A.main_closure3.prototype = {
-    call$1($event) {
-      var t1, t2, w_ele, h_ele, w;
-      type$.MouseEvent._as($event);
-      t1 = document;
-      t2 = type$.nullable_InputElement;
-      w_ele = t2._as(t1.querySelector("#caWidth"));
-      h_ele = t2._as(t1.querySelector("#caHeight"));
-      t1 = w_ele == null ? null : w_ele.value;
-      w = A.int_parse(t1 == null ? "0" : t1);
-      t1 = h_ele == null ? null : h_ele.value;
-      t1 = A.GameOfLife$(w, A.int_parse(t1 == null ? "0" : t1));
-      $.ca = t1;
-      t1.initialize$0();
-      B.Window_methods.requestAnimationFrame$1(window, A.controller__conway_animation_boxes$closure());
-    },
-    $signature: 1
-  };
-  A.main_closure4.prototype = {
-    call$1($event) {
-      var t1, t2;
-      type$.MouseEvent._as($event);
-      t1 = window;
-      t2 = A._asInt($.animation_request_id);
-      B.Window_methods._ensureRequestAnimationFrame$0(t1);
-      t1.cancelAnimationFrame(t2);
-    },
-    $signature: 1
-  };
-  A.main_closure5.prototype = {
-    call$1($event) {
-      var t1, t2, w_ele, h_ele, w;
-      type$.MouseEvent._as($event);
-      t1 = document;
-      t2 = type$.nullable_InputElement;
-      w_ele = t2._as(t1.querySelector("#caWidth"));
-      h_ele = t2._as(t1.querySelector("#caHeight"));
-      t1 = w_ele == null ? null : w_ele.value;
-      w = A.int_parse(t1 == null ? "0" : t1);
-      t1 = h_ele == null ? null : h_ele.value;
-      t1 = A.PercolationCA$(A._setArrayType([w, A.int_parse(t1 == null ? "0" : t1)], type$.JSArray_int));
-      $.ca = t1;
-      t1.initialize$0();
-      $.animation_request_id = B.Window_methods.requestAnimationFrame$1(window, A.controller__percolation_animation_boxes$closure());
-    },
-    $signature: 1
-  };
-  A.main_closure6.prototype = {
-    call$1($event) {
-      var t1, t2;
-      type$.MouseEvent._as($event);
-      t1 = window;
-      t2 = A._asInt($.animation_request_id);
-      B.Window_methods._ensureRequestAnimationFrame$0(t1);
-      t1.cancelAnimationFrame(t2);
-    },
-    $signature: 1
-  };
-  A.main_closure7.prototype = {
-    call$1($event) {
-      var t1, t2, w_ele, h_ele, t3, w, a_ele, e_ele, t4, t_ele, _null = null;
-      type$.MouseEvent._as($event);
-      t1 = document;
-      t2 = type$.nullable_InputElement;
-      w_ele = t2._as(t1.querySelector("#caWidth"));
-      h_ele = t2._as(t1.querySelector("#caHeight"));
-      t3 = w_ele == null ? _null : w_ele.value;
-      w = A.int_parse(t3 == null ? "0" : t3);
-      t3 = h_ele == null ? _null : h_ele.value;
-      $.ca = A.OscillatorCA$(w, A.int_parse(t3 == null ? "0" : t3));
-      a_ele = t2._as(t1.querySelector("#alpha"));
-      e_ele = t2._as(t1.querySelector("#epsilon"));
-      t3 = a_ele == null ? _null : a_ele.value;
-      t3 = A.double_parse(t3 == null ? "1" : t3);
-      t4 = e_ele == null ? _null : e_ele.value;
-      t4 = A.double_parse(t4 == null ? "5" : t4);
-      t_ele = t2._as(t1.querySelector("#adaption_type"));
-      t1 = t_ele == null ? _null : t_ele.value;
-      A.int_parse(t1 == null ? "0" : t1);
-      t1 = type$.OscillatorCA._as($.$get$ca());
-      t1._alpha = t3 / 1000;
-      t1._epsilon = t4 / 100;
-      t1.initialize$0();
-      $.animation_request_id = B.Window_methods.requestAnimationFrame$1(window, A.controller__oscillator_animation_boxes$closure());
-    },
-    $signature: 1
-  };
-  A.main_closure8.prototype = {
-    call$1($event) {
-      var t1, t2;
-      type$.MouseEvent._as($event);
-      t1 = window;
-      t2 = A._asInt($.animation_request_id);
-      B.Window_methods._ensureRequestAnimationFrame$0(t1);
-      t1.cancelAnimationFrame(t2);
-    },
-    $signature: 1
-  };
-  A.main_closure9.prototype = {
-    call$1($event) {
-      A.changeLabel("alpha", "lblAlpha");
-    },
-    $signature: 2
-  };
-  A.main_closure10.prototype = {
-    call$1($event) {
-      A.changeLabel("epsilon", "lblEpsilon");
-    },
-    $signature: 2
+    $signature: 4
   };
   (function aliases() {
     var _ = J.Interceptor.prototype;
     _.super$Interceptor$toString = _.toString$0;
     _ = J.LegacyJavaScriptObject.prototype;
     _.super$LegacyJavaScriptObject$toString = _.toString$0;
-    _ = A.CellularAutomata.prototype;
-    _.super$CellularAutomata$initialize = _.initialize$0;
-    _.super$CellularAutomata$begin = _.begin$0;
-    _.super$CellularAutomata$commit = _.commit$0;
   })();
   (function installTearOffs() {
-    var _static_2 = hunkHelpers._static_2,
-      _static_1 = hunkHelpers._static_1,
+    var _static_1 = hunkHelpers._static_1,
       _static_0 = hunkHelpers._static_0,
-      _instance = hunkHelpers.installInstanceTearOff;
-    _static_2(J, "_interceptors_JSArray__compareAny$closure", "JSArray__compareAny", 22);
-    _static_1(A, "async__AsyncRun__scheduleImmediateJsOverride$closure", "_AsyncRun__scheduleImmediateJsOverride", 5);
-    _static_1(A, "async__AsyncRun__scheduleImmediateWithSetImmediate$closure", "_AsyncRun__scheduleImmediateWithSetImmediate", 5);
-    _static_1(A, "async__AsyncRun__scheduleImmediateWithTimer$closure", "_AsyncRun__scheduleImmediateWithTimer", 5);
+      _instance_2_u = hunkHelpers._instance_2u;
+    _static_1(A, "async__AsyncRun__scheduleImmediateJsOverride$closure", "_AsyncRun__scheduleImmediateJsOverride", 2);
+    _static_1(A, "async__AsyncRun__scheduleImmediateWithSetImmediate$closure", "_AsyncRun__scheduleImmediateWithSetImmediate", 2);
+    _static_1(A, "async__AsyncRun__scheduleImmediateWithTimer$closure", "_AsyncRun__scheduleImmediateWithTimer", 2);
     _static_0(A, "async___startMicrotaskLoop$closure", "_startMicrotaskLoop", 0);
-    _instance(A._Completer.prototype, "get$completeError", 0, 1, null, ["call$2", "call$1"], ["completeError$2", "completeError$1"], 15, 0, 0);
-    _static_1(A, "controller__conway_animation_boxes$closure", "conway_animation_boxes", 3);
-    _static_1(A, "controller__sierpinski_animation_boxes$closure", "sierpinski_animation_boxes", 3);
-    _static_1(A, "controller__percolation_animation_boxes$closure", "percolation_animation_boxes", 3);
-    _static_1(A, "controller__oscillator_animation_boxes$closure", "oscillator_animation_boxes", 3);
+    var _;
+    _instance_2_u(_ = A.BoidSimulation.prototype, "get$coherence", "coherence$2", 1);
+    _instance_2_u(_, "get$separation", "separation$2", 1);
+    _instance_2_u(_, "get$move", "move$2", 1);
+    _static_1(A, "boids_controller__boids_animation$closure", "boids_animation", 13);
   })();
   (function inheritance() {
-    var _mixin = hunkHelpers.mixin,
-      _inherit = hunkHelpers.inherit,
+    var _inherit = hunkHelpers.inherit,
       _inheritMany = hunkHelpers.inheritMany;
     _inherit(A.Object, null);
-    _inheritMany(A.Object, [A.JS_CONST, J.Interceptor, J.ArrayIterator, A.Error, A.Iterable, A.ListIterator, A.TypeErrorDecoder, A.NullThrownFromJavaScriptException, A.ExceptionAndStackTrace, A._StackTrace, A.Closure, A.MapMixin, A.LinkedHashMapKeyIterator, A.Rti, A._FunctionParameters, A._TimerImpl, A._AsyncAwaitCompleter, A.AsyncError, A._Completer, A._FutureListener, A._Future, A._AsyncCallbackEntry, A.Stream, A.StreamSubscription, A.StreamTransformerBase, A._StreamIterator, A._Zone, A._ListBase_Object_ListMixin, A.ListMixin, A.Codec, A.StackOverflowError, A._Exception, A.FormatException, A.Null, A._StringStackTrace, A.StringBuffer, A.EventStreamProvider, A.ImmutableListMixin, A.FixedSizeListIterator, A._JSRandom, A.CellularAutomata, A.Oscillator]);
+    _inheritMany(A.Object, [A.JS_CONST, J.Interceptor, J.ArrayIterator, A.Error, A.TypeErrorDecoder, A.NullThrownFromJavaScriptException, A._StackTrace, A.Closure, A.MapMixin, A.LinkedHashMapCell, A.Rti, A._FunctionParameters, A._TimerImpl, A.AsyncError, A._FutureListener, A._Future, A._AsyncCallbackEntry, A.Stream, A.StreamSubscription, A._Zone, A.StackOverflowError, A._Exception, A.Null, A._StringStackTrace, A.StringBuffer, A.EventStreamProvider, A._JSRandom, A.Boid, A.BoidSimulation, A.Point2D]);
     _inheritMany(J.Interceptor, [J.JSBool, J.JSNull, J.JavaScriptObject, J.JSArray, J.JSNumber, J.JSString]);
-    _inheritMany(J.JavaScriptObject, [J.LegacyJavaScriptObject, A.EventTarget, A.CanvasRenderingContext2D, A.DomException, A.Event, A._NodeList_JavaScriptObject_ListMixin]);
+    _inheritMany(J.JavaScriptObject, [J.LegacyJavaScriptObject, A.EventTarget, A.CanvasRenderingContext2D, A.DomException, A.Event]);
     _inheritMany(J.LegacyJavaScriptObject, [J.PlainJavaScriptObject, J.UnknownJavaScriptObject, J.JavaScriptFunction]);
     _inherit(J.JSUnmodifiableArray, J.JSArray);
     _inheritMany(J.JSNumber, [J.JSInt, J.JSNumNotInt]);
-    _inheritMany(A.Error, [A.LateError, A.TypeError, A.JsNoSuchMethodError, A.UnknownJsTypeError, A.RuntimeError, A.AssertionError, A._Error, A.NullThrownError, A.ArgumentError, A.UnsupportedError, A.UnimplementedError, A.StateError, A.ConcurrentModificationError, A.CyclicInitializationError]);
-    _inherit(A.EfficientLengthIterable, A.Iterable);
-    _inheritMany(A.EfficientLengthIterable, [A.ListIterable, A.LinkedHashMapKeyIterable]);
+    _inheritMany(A.Error, [A.LateError, A.TypeError, A.JsNoSuchMethodError, A.UnknownJsTypeError, A.RuntimeError, A._Error, A.AssertionError, A.NullThrownError, A.ArgumentError, A.UnsupportedError, A.UnimplementedError, A.ConcurrentModificationError, A.CyclicInitializationError]);
     _inherit(A.NullError, A.TypeError);
-    _inheritMany(A.Closure, [A.Closure0Args, A.Closure2Args, A.TearOffClosure, A.initHooks_closure, A.initHooks_closure1, A._AsyncRun__initializeScheduleImmediate_internalCallback, A._AsyncRun__initializeScheduleImmediate_closure, A._awaitOnObject_closure, A._Future__chainForeignFuture_closure, A._Future__propagateToListeners_handleWhenCompleteCallback_closure, A.Stream_length_closure, A._RootZone_bindUnaryCallbackGuarded_closure, A.HttpRequest_getString_closure, A.HttpRequest_request_closure, A._EventStreamSubscription_closure, A.PercolationCA_cellUpdate_closure, A.main_closure, A.main_closure0, A.main_closure1, A.main_closure2, A.main_closure3, A.main_closure4, A.main_closure5, A.main_closure6, A.main_closure7, A.main_closure8, A.main_closure9, A.main_closure10]);
+    _inheritMany(A.Closure, [A.Closure0Args, A.Closure2Args, A.TearOffClosure, A.initHooks_closure, A.initHooks_closure1, A._AsyncRun__initializeScheduleImmediate_internalCallback, A._AsyncRun__initializeScheduleImmediate_closure, A._Future__propagateToListeners_handleWhenCompleteCallback_closure, A.Stream_length_closure, A._RootZone_bindUnaryCallbackGuarded_closure, A._EventStreamSubscription_closure, A.main_closure, A.main_closure0]);
     _inheritMany(A.TearOffClosure, [A.StaticClosure, A.BoundClosure]);
-    _inherit(A._AssertionError, A.AssertionError);
     _inherit(A.MapBase, A.MapMixin);
-    _inheritMany(A.MapBase, [A.JsLinkedHashMap, A._JsonMap]);
-    _inheritMany(A.Closure2Args, [A.initHooks_closure0, A._awaitOnObject_closure0, A._wrapJsFunctionForAsync_closure, A._Future__chainForeignFuture_closure0, A.MapBase_mapToString_closure, A.CellularAutomata_closure, A.GameOfLife_cellUpdate_closure, A.OscillatorCA_cellUpdate_closure]);
+    _inherit(A.JsLinkedHashMap, A.MapBase);
+    _inheritMany(A.Closure2Args, [A.initHooks_closure0, A.MapBase_mapToString_closure]);
     _inherit(A._TypeError, A._Error);
-    _inheritMany(A.Closure0Args, [A._AsyncRun__scheduleImmediateJsOverride_internalCallback, A._AsyncRun__scheduleImmediateWithSetImmediate_internalCallback, A._TimerImpl_internalCallback, A._Future__addListener_closure, A._Future__prependListeners_closure, A._Future__chainForeignFuture_closure1, A._Future__asyncCompleteWithValue_closure, A._Future__chainFuture_closure, A._Future__asyncCompleteError_closure, A._Future__propagateToListeners_handleWhenCompleteCallback, A._Future__propagateToListeners_handleValueCallback, A._Future__propagateToListeners_handleError, A.Stream_length_closure0, A._rootHandleError_closure, A._RootZone_bindCallbackGuarded_closure]);
-    _inherit(A._AsyncCompleter, A._Completer);
+    _inheritMany(A.Closure0Args, [A._AsyncRun__scheduleImmediateJsOverride_internalCallback, A._AsyncRun__scheduleImmediateWithSetImmediate_internalCallback, A._TimerImpl_internalCallback, A._Future__addListener_closure, A._Future__prependListeners_closure, A._Future__propagateToListeners_handleWhenCompleteCallback, A._Future__propagateToListeners_handleValueCallback, A._Future__propagateToListeners_handleError, A.Stream_length_closure0, A._rootHandleError_closure, A._RootZone_bindCallbackGuarded_closure]);
     _inherit(A._RootZone, A._Zone);
-    _inherit(A.ListBase, A._ListBase_Object_ListMixin);
-    _inherit(A._JsonMapKeyIterable, A.ListIterable);
-    _inherit(A.Converter, A.StreamTransformerBase);
-    _inherit(A.JsonCodec, A.Codec);
-    _inherit(A.JsonDecoder, A.Converter);
     _inheritMany(A.ArgumentError, [A.RangeError, A.IndexError]);
-    _inheritMany(A.EventTarget, [A.Node, A.HttpRequestEventTarget, A.Window]);
-    _inheritMany(A.Node, [A.Element, A.CharacterData]);
+    _inheritMany(A.EventTarget, [A.Node, A.Window]);
+    _inherit(A.Element, A.Node);
     _inheritMany(A.Element, [A.HtmlElement, A.SvgElement]);
-    _inheritMany(A.HtmlElement, [A.AnchorElement, A.AreaElement, A.CanvasElement, A.FormElement, A.InputElement, A.OptionElement, A.SelectElement]);
-    _inherit(A._FrozenElementList, A.ListBase);
-    _inherit(A.HttpRequest, A.HttpRequestEventTarget);
-    _inheritMany(A.Event, [A.UIEvent, A.ProgressEvent]);
+    _inheritMany(A.HtmlElement, [A.AnchorElement, A.AreaElement, A.CanvasElement, A.FormElement, A.SelectElement]);
+    _inherit(A.UIEvent, A.Event);
     _inherit(A.MouseEvent, A.UIEvent);
-    _inherit(A._NodeList_JavaScriptObject_ListMixin_ImmutableListMixin, A._NodeList_JavaScriptObject_ListMixin);
-    _inherit(A.NodeList, A._NodeList_JavaScriptObject_ListMixin_ImmutableListMixin);
     _inherit(A._EventStream, A.Stream);
     _inherit(A._ElementEventStreamImpl, A._EventStream);
     _inherit(A._EventStreamSubscription, A.StreamSubscription);
-    _inheritMany(A.CellularAutomata, [A.ComplexCellularAutomata, A.GameOfLife, A.PercolationCA, A.SimpleCellularAutomata1D]);
-    _inherit(A.OscillatorCA, A.ComplexCellularAutomata);
-    _mixin(A._ListBase_Object_ListMixin, A.ListMixin);
-    _mixin(A._NodeList_JavaScriptObject_ListMixin, A.ListMixin);
-    _mixin(A._NodeList_JavaScriptObject_ListMixin_ImmutableListMixin, A.ImmutableListMixin);
   })();
   var init = {
     typeUniverse: {eC: new Map(), tR: {}, eT: {}, tPV: {}, sEA: []},
     mangledGlobalNames: {int: "int", double: "double", num: "num", String: "String", bool: "bool", Null: "Null", List: "List"},
     mangledNames: {},
-    types: ["~()", "~(MouseEvent)", "~(Event)", "~(num)", "int(int,int)", "~(~())", "Null(@)", "Null()", "@(@)", "@(@,String)", "@(String)", "Null(~())", "~(@)", "Null(@,StackTrace)", "~(int,@)", "~(Object[StackTrace?])", "Null(Object,StackTrace)", "_Future<@>(@)", "~(Object?,Object?)", "String(HttpRequest)", "~(ProgressEvent)", "bool(int)", "int(@,@)"],
+    types: ["~()", "Boid(Boid,BoidSimulation)", "~(~())", "Null()", "~(MouseEvent)", "@(@)", "@(@,String)", "@(String)", "Null(@)", "Null(~())", "_Future<@>(@)", "~(Object?,Object?)", "~(Event)", "~(num)"],
     interceptorsByTag: null,
     leafTags: null,
     arrayRti: Symbol("$ti")
   };
-  A._Universe_addRules(init.typeUniverse, JSON.parse('{"PlainJavaScriptObject":"LegacyJavaScriptObject","UnknownJavaScriptObject":"LegacyJavaScriptObject","JavaScriptFunction":"LegacyJavaScriptObject","AbortPaymentEvent":"Event","ExtendableEvent":"Event","AElement":"SvgElement","GraphicsElement":"SvgElement","_ResourceProgressEvent":"ProgressEvent","AudioElement":"HtmlElement","MediaElement":"HtmlElement","HtmlDocument":"Node","Document":"Node","PointerEvent":"MouseEvent","CompositionEvent":"UIEvent","CDataSection":"CharacterData","Text":"CharacterData","JSBool":{"bool":[]},"JSNull":{"Null":[]},"JSArray":{"List":["1"],"Iterable":["1"]},"JSUnmodifiableArray":{"JSArray":["1"],"List":["1"],"Iterable":["1"]},"JSNumber":{"double":[],"num":[],"Comparable":["num"]},"JSInt":{"double":[],"int":[],"num":[],"Comparable":["num"]},"JSNumNotInt":{"double":[],"num":[],"Comparable":["num"]},"JSString":{"String":[],"Comparable":["String"]},"LateError":{"Error":[]},"EfficientLengthIterable":{"Iterable":["1"]},"ListIterable":{"Iterable":["1"]},"NullError":{"TypeError":[],"Error":[]},"JsNoSuchMethodError":{"Error":[]},"UnknownJsTypeError":{"Error":[]},"_StackTrace":{"StackTrace":[]},"Closure":{"Function":[]},"Closure0Args":{"Function":[]},"Closure2Args":{"Function":[]},"TearOffClosure":{"Function":[]},"StaticClosure":{"Function":[]},"BoundClosure":{"Function":[]},"RuntimeError":{"Error":[]},"_AssertionError":{"Error":[]},"JsLinkedHashMap":{"MapMixin":["1","2"],"Map":["1","2"],"MapMixin.K":"1","MapMixin.V":"2"},"LinkedHashMapKeyIterable":{"Iterable":["1"]},"_Error":{"Error":[]},"_TypeError":{"TypeError":[],"Error":[]},"_Future":{"Future":["1"]},"AsyncError":{"Error":[]},"_AsyncCompleter":{"_Completer":["1"]},"_Zone":{"Zone":[]},"_RootZone":{"_Zone":[],"Zone":[]},"ListBase":{"ListMixin":["1"],"List":["1"],"Iterable":["1"]},"MapBase":{"MapMixin":["1","2"],"Map":["1","2"]},"MapMixin":{"Map":["1","2"]},"_JsonMap":{"MapMixin":["String","@"],"Map":["String","@"],"MapMixin.K":"String","MapMixin.V":"@"},"_JsonMapKeyIterable":{"ListIterable":["String"],"Iterable":["String"],"ListIterable.E":"String"},"JsonCodec":{"Codec":["Object?","String"]},"JsonDecoder":{"Converter":["String","Object?"]},"double":{"num":[],"Comparable":["num"]},"int":{"num":[],"Comparable":["num"]},"num":{"Comparable":["num"]},"String":{"Comparable":["String"]},"AssertionError":{"Error":[]},"TypeError":{"Error":[]},"NullThrownError":{"Error":[]},"ArgumentError":{"Error":[]},"RangeError":{"Error":[]},"IndexError":{"Error":[]},"UnsupportedError":{"Error":[]},"UnimplementedError":{"Error":[]},"StateError":{"Error":[]},"ConcurrentModificationError":{"Error":[]},"StackOverflowError":{"Error":[]},"CyclicInitializationError":{"Error":[]},"_StringStackTrace":{"StackTrace":[]},"HttpRequest":{"EventTarget":[]},"MouseEvent":{"Event":[]},"Node":{"EventTarget":[]},"OptionElement":{"Element":[],"Node":[],"EventTarget":[]},"ProgressEvent":{"Event":[]},"HtmlElement":{"Element":[],"Node":[],"EventTarget":[]},"AnchorElement":{"Element":[],"Node":[],"EventTarget":[]},"AreaElement":{"Element":[],"Node":[],"EventTarget":[]},"CanvasElement":{"Element":[],"Node":[],"EventTarget":[]},"CharacterData":{"Node":[],"EventTarget":[]},"_FrozenElementList":{"ListMixin":["1"],"List":["1"],"Iterable":["1"],"ListMixin.E":"1"},"Element":{"Node":[],"EventTarget":[]},"FormElement":{"Element":[],"Node":[],"EventTarget":[]},"HttpRequestEventTarget":{"EventTarget":[]},"InputElement":{"Element":[],"Node":[],"EventTarget":[]},"NodeList":{"ListMixin":["Node"],"ImmutableListMixin":["Node"],"List":["Node"],"JavaScriptIndexingBehavior":["Node"],"Iterable":["Node"],"ListMixin.E":"Node","ImmutableListMixin.E":"Node"},"SelectElement":{"Element":[],"Node":[],"EventTarget":[]},"UIEvent":{"Event":[]},"Window":{"EventTarget":[]},"_EventStream":{"Stream":["1"]},"_ElementEventStreamImpl":{"_EventStream":["1"],"Stream":["1"]},"_EventStreamSubscription":{"StreamSubscription":["1"]},"SvgElement":{"Element":[],"Node":[],"EventTarget":[]},"ComplexCellularAutomata":{"CellularAutomata":["1"]},"GameOfLife":{"CellularAutomata":["int"],"CellularAutomata.T":"int"},"OscillatorCA":{"ComplexCellularAutomata":["int","Oscillator"],"CellularAutomata":["int"],"CellularAutomata.T":"int","ComplexCellularAutomata.1":"Oscillator"},"PercolationCA":{"CellularAutomata":["int"],"CellularAutomata.T":"int"},"SimpleCellularAutomata1D":{"CellularAutomata":["int"],"CellularAutomata.T":"int"}}'));
-  A._Universe_addErasedTypes(init.typeUniverse, JSON.parse('{"EfficientLengthIterable":1,"StreamTransformerBase":2,"ListBase":1,"MapBase":2,"_ListBase_Object_ListMixin":1}'));
+  A._Universe_addRules(init.typeUniverse, JSON.parse('{"PlainJavaScriptObject":"LegacyJavaScriptObject","UnknownJavaScriptObject":"LegacyJavaScriptObject","JavaScriptFunction":"LegacyJavaScriptObject","AbortPaymentEvent":"Event","ExtendableEvent":"Event","AElement":"SvgElement","GraphicsElement":"SvgElement","AudioElement":"HtmlElement","MediaElement":"HtmlElement","PointerEvent":"MouseEvent","CompositionEvent":"UIEvent","HtmlDocument":"Node","Document":"Node","JSBool":{"bool":[]},"JSArray":{"List":["1"],"Iterable":["1"]},"JSUnmodifiableArray":{"JSArray":["1"],"List":["1"],"Iterable":["1"]},"JSNumber":{"double":[],"num":[]},"JSInt":{"double":[],"int":[],"num":[]},"JSNumNotInt":{"double":[],"num":[]},"JSString":{"String":[]},"LateError":{"Error":[]},"NullError":{"TypeError":[],"Error":[]},"JsNoSuchMethodError":{"Error":[]},"UnknownJsTypeError":{"Error":[]},"_StackTrace":{"StackTrace":[]},"Closure":{"Function":[]},"Closure0Args":{"Function":[]},"Closure2Args":{"Function":[]},"TearOffClosure":{"Function":[]},"StaticClosure":{"Function":[]},"BoundClosure":{"Function":[]},"RuntimeError":{"Error":[]},"JsLinkedHashMap":{"MapMixin":["1","2"],"Map":["1","2"]},"_Error":{"Error":[]},"_TypeError":{"TypeError":[],"Error":[]},"_Future":{"Future":["1"]},"AsyncError":{"Error":[]},"_Zone":{"Zone":[]},"_RootZone":{"_Zone":[],"Zone":[]},"MapBase":{"MapMixin":["1","2"],"Map":["1","2"]},"MapMixin":{"Map":["1","2"]},"double":{"num":[]},"int":{"num":[]},"AssertionError":{"Error":[]},"TypeError":{"Error":[]},"NullThrownError":{"Error":[]},"ArgumentError":{"Error":[]},"RangeError":{"Error":[]},"IndexError":{"Error":[]},"UnsupportedError":{"Error":[]},"UnimplementedError":{"Error":[]},"ConcurrentModificationError":{"Error":[]},"StackOverflowError":{"Error":[]},"CyclicInitializationError":{"Error":[]},"_StringStackTrace":{"StackTrace":[]},"MouseEvent":{"Event":[]},"HtmlElement":{"Element":[],"EventTarget":[]},"AnchorElement":{"Element":[],"EventTarget":[]},"AreaElement":{"Element":[],"EventTarget":[]},"CanvasElement":{"Element":[],"EventTarget":[]},"Element":{"EventTarget":[]},"FormElement":{"Element":[],"EventTarget":[]},"Node":{"EventTarget":[]},"SelectElement":{"Element":[],"EventTarget":[]},"UIEvent":{"Event":[]},"Window":{"EventTarget":[]},"_EventStream":{"Stream":["1"]},"_ElementEventStreamImpl":{"_EventStream":["1"],"Stream":["1"]},"SvgElement":{"Element":[],"EventTarget":[]}}'));
+  A._Universe_addErasedTypes(init.typeUniverse, JSON.parse('{"StreamSubscription":1,"MapBase":2}'));
   var string$ = {
     Error_: "Error handler must accept one Object or one Object and a StackTrace as arguments, and return a value of the returned future's type"
   };
@@ -7048,42 +4617,28 @@
     var findType = A.findType;
     return {
       AsyncError: findType("AsyncError"),
-      Comparable_dynamic: findType("Comparable<@>"),
-      Element: findType("Element"),
+      Boid: findType("Boid"),
+      BoidSimulation: findType("BoidSimulation"),
       Error: findType("Error"),
       Event: findType("Event"),
       Function: findType("Function"),
       Future_dynamic: findType("Future<@>"),
-      HttpRequest: findType("HttpRequest"),
-      Iterable_dynamic: findType("Iterable<@>"),
-      JSArray_Oscillator: findType("JSArray<Oscillator>"),
+      JSArray_Boid: findType("JSArray<Boid>"),
       JSArray_String: findType("JSArray<String>"),
-      JSArray_double: findType("JSArray<double>"),
       JSArray_dynamic: findType("JSArray<@>"),
-      JSArray_int: findType("JSArray<int>"),
+      JSArray_of_Boid_Function_Boid_BoidSimulation: findType("JSArray<Boid(Boid,BoidSimulation)>"),
       JSNull: findType("JSNull"),
       JavaScriptFunction: findType("JavaScriptFunction"),
-      JavaScriptIndexingBehavior_dynamic: findType("JavaScriptIndexingBehavior<@>"),
-      List_double: findType("List<double>"),
-      List_int: findType("List<int>"),
-      Map_String_dynamic: findType("Map<String,@>"),
+      List_Boid: findType("List<Boid>"),
+      Map_int_double: findType("Map<int,double>"),
       MouseEvent: findType("MouseEvent"),
-      Node: findType("Node"),
       Null: findType("Null"),
       Object: findType("Object"),
-      OptionElement: findType("OptionElement"),
-      OscillatorCA: findType("OscillatorCA"),
-      ProgressEvent: findType("ProgressEvent"),
-      SelectElement: findType("SelectElement"),
       StackTrace: findType("StackTrace"),
       String: findType("String"),
       TypeError: findType("TypeError"),
       UnknownJavaScriptObject: findType("UnknownJavaScriptObject"),
-      _AsyncCompleter_HttpRequest: findType("_AsyncCompleter<HttpRequest>"),
-      _ElementEventStreamImpl_Event: findType("_ElementEventStreamImpl<Event>"),
       _ElementEventStreamImpl_MouseEvent: findType("_ElementEventStreamImpl<MouseEvent>"),
-      _FrozenElementList_OptionElement: findType("_FrozenElementList<OptionElement>"),
-      _Future_HttpRequest: findType("_Future<HttpRequest>"),
       _Future_dynamic: findType("_Future<@>"),
       _Future_int: findType("_Future<int>"),
       bool: findType("bool"),
@@ -7099,25 +4654,18 @@
       nullable_CanvasElement: findType("CanvasElement?"),
       nullable_CanvasRenderingContext2D: findType("CanvasRenderingContext2D?"),
       nullable_Future_Null: findType("Future<Null>?"),
-      nullable_InputElement: findType("InputElement?"),
-      nullable_List_dynamic: findType("List<@>?"),
       nullable_Object: findType("Object?"),
       nullable__FutureListener_dynamic_dynamic: findType("_FutureListener<@,@>?"),
       nullable_dynamic_Function_Event: findType("@(Event)?"),
-      nullable_int_Function_int_int: findType("int(int,int)?"),
       nullable_void_Function: findType("~()?"),
-      nullable_void_Function_ProgressEvent: findType("~(ProgressEvent)?"),
       num: findType("num"),
       void: findType("~"),
       void_Function: findType("~()"),
-      void_Function_String_dynamic: findType("~(String,@)"),
       void_Function_num: findType("~(num)")
     };
   })();
   (function constants() {
     B.CanvasElement_methods = A.CanvasElement.prototype;
-    B.CanvasRenderingContext2D_methods = A.CanvasRenderingContext2D.prototype;
-    B.HttpRequest_methods = A.HttpRequest.prototype;
     B.Interceptor_methods = J.Interceptor.prototype;
     B.JSArray_methods = J.JSArray.prototype;
     B.JSInt_methods = J.JSInt.prototype;
@@ -7247,11 +4795,9 @@
 };
     B.C_JS_CONST3 = function(hooks) { return hooks; }
 ;
-    B.C_JsonCodec = new A.JsonCodec();
     B.C__JSRandom = new A._JSRandom();
     B.C__RootZone = new A._RootZone();
     B.C__StringStackTrace = new A._StringStackTrace();
-    B.JsonDecoder_null = new A.JsonDecoder(null);
   })();
   (function staticFields() {
     $._JS_INTEROP_INTERCEPTOR_TAG = null;
@@ -7271,7 +4817,6 @@
     $.Zone__current = B.C__RootZone;
     $._toStringVisiting = A._setArrayType([], A.findType("JSArray<Object>"));
     $.animation_request_id = 0;
-    $.rules = A.LinkedHashMap_LinkedHashMap$_empty(type$.String, type$.dynamic);
   })();
   (function lazyInitializers() {
     var _lazyFinal = hunkHelpers.lazyFinal,
@@ -7322,11 +4867,8 @@
       }
     }()));
     _lazyFinal($, "_AsyncRun__scheduleImmediateClosure", "$get$_AsyncRun__scheduleImmediateClosure", () => A._AsyncRun__initializeScheduleImmediate());
-    _lazyFinal($, "_random", "$get$_random1", () => A.Random_Random());
-    _lazyFinal($, "_random0", "$get$_random", () => A.Random_Random());
-    _lazyFinal($, "_random1", "$get$_random0", () => A.Random_Random());
-    _lazyFinal($, "_random2", "$get$_random2", () => A.Random_Random());
-    _lazy($, "ca", "$get$ca", () => A.GameOfLife$(0, 0));
+    _lazyFinal($, "_random", "$get$_random", () => B.C__JSRandom);
+    _lazy($, "simulation", "$get$simulation", () => A.BoidSimulation$(0, 0));
   })();
   (function nativeSupport() {
     !function() {
@@ -7351,8 +4893,8 @@
       }
       init.dispatchPropertyName = init.getIsolateTag("dispatch_record");
     }();
-    hunkHelpers.setOrUpdateInterceptorsByTag({DOMError: J.JavaScriptObject, MediaError: J.JavaScriptObject, NavigatorUserMediaError: J.JavaScriptObject, OverconstrainedError: J.JavaScriptObject, PositionError: J.JavaScriptObject, GeolocationPositionError: J.JavaScriptObject, WebGLRenderingContext: J.JavaScriptObject, WebGL2RenderingContext: J.JavaScriptObject, HTMLAudioElement: A.HtmlElement, HTMLBRElement: A.HtmlElement, HTMLBaseElement: A.HtmlElement, HTMLBodyElement: A.HtmlElement, HTMLButtonElement: A.HtmlElement, HTMLContentElement: A.HtmlElement, HTMLDListElement: A.HtmlElement, HTMLDataElement: A.HtmlElement, HTMLDataListElement: A.HtmlElement, HTMLDetailsElement: A.HtmlElement, HTMLDialogElement: A.HtmlElement, HTMLDivElement: A.HtmlElement, HTMLEmbedElement: A.HtmlElement, HTMLFieldSetElement: A.HtmlElement, HTMLHRElement: A.HtmlElement, HTMLHeadElement: A.HtmlElement, HTMLHeadingElement: A.HtmlElement, HTMLHtmlElement: A.HtmlElement, HTMLIFrameElement: A.HtmlElement, HTMLImageElement: A.HtmlElement, HTMLLIElement: A.HtmlElement, HTMLLabelElement: A.HtmlElement, HTMLLegendElement: A.HtmlElement, HTMLLinkElement: A.HtmlElement, HTMLMapElement: A.HtmlElement, HTMLMediaElement: A.HtmlElement, HTMLMenuElement: A.HtmlElement, HTMLMetaElement: A.HtmlElement, HTMLMeterElement: A.HtmlElement, HTMLModElement: A.HtmlElement, HTMLOListElement: A.HtmlElement, HTMLObjectElement: A.HtmlElement, HTMLOptGroupElement: A.HtmlElement, HTMLOutputElement: A.HtmlElement, HTMLParagraphElement: A.HtmlElement, HTMLParamElement: A.HtmlElement, HTMLPictureElement: A.HtmlElement, HTMLPreElement: A.HtmlElement, HTMLProgressElement: A.HtmlElement, HTMLQuoteElement: A.HtmlElement, HTMLScriptElement: A.HtmlElement, HTMLShadowElement: A.HtmlElement, HTMLSlotElement: A.HtmlElement, HTMLSourceElement: A.HtmlElement, HTMLSpanElement: A.HtmlElement, HTMLStyleElement: A.HtmlElement, HTMLTableCaptionElement: A.HtmlElement, HTMLTableCellElement: A.HtmlElement, HTMLTableDataCellElement: A.HtmlElement, HTMLTableHeaderCellElement: A.HtmlElement, HTMLTableColElement: A.HtmlElement, HTMLTableElement: A.HtmlElement, HTMLTableRowElement: A.HtmlElement, HTMLTableSectionElement: A.HtmlElement, HTMLTemplateElement: A.HtmlElement, HTMLTextAreaElement: A.HtmlElement, HTMLTimeElement: A.HtmlElement, HTMLTitleElement: A.HtmlElement, HTMLTrackElement: A.HtmlElement, HTMLUListElement: A.HtmlElement, HTMLUnknownElement: A.HtmlElement, HTMLVideoElement: A.HtmlElement, HTMLDirectoryElement: A.HtmlElement, HTMLFontElement: A.HtmlElement, HTMLFrameElement: A.HtmlElement, HTMLFrameSetElement: A.HtmlElement, HTMLMarqueeElement: A.HtmlElement, HTMLElement: A.HtmlElement, HTMLAnchorElement: A.AnchorElement, HTMLAreaElement: A.AreaElement, HTMLCanvasElement: A.CanvasElement, CanvasRenderingContext2D: A.CanvasRenderingContext2D, CDATASection: A.CharacterData, CharacterData: A.CharacterData, Comment: A.CharacterData, ProcessingInstruction: A.CharacterData, Text: A.CharacterData, DOMException: A.DomException, Element: A.Element, AbortPaymentEvent: A.Event, AnimationEvent: A.Event, AnimationPlaybackEvent: A.Event, ApplicationCacheErrorEvent: A.Event, BackgroundFetchClickEvent: A.Event, BackgroundFetchEvent: A.Event, BackgroundFetchFailEvent: A.Event, BackgroundFetchedEvent: A.Event, BeforeInstallPromptEvent: A.Event, BeforeUnloadEvent: A.Event, BlobEvent: A.Event, CanMakePaymentEvent: A.Event, ClipboardEvent: A.Event, CloseEvent: A.Event, CustomEvent: A.Event, DeviceMotionEvent: A.Event, DeviceOrientationEvent: A.Event, ErrorEvent: A.Event, ExtendableEvent: A.Event, ExtendableMessageEvent: A.Event, FetchEvent: A.Event, FontFaceSetLoadEvent: A.Event, ForeignFetchEvent: A.Event, GamepadEvent: A.Event, HashChangeEvent: A.Event, InstallEvent: A.Event, MediaEncryptedEvent: A.Event, MediaKeyMessageEvent: A.Event, MediaQueryListEvent: A.Event, MediaStreamEvent: A.Event, MediaStreamTrackEvent: A.Event, MessageEvent: A.Event, MIDIConnectionEvent: A.Event, MIDIMessageEvent: A.Event, MutationEvent: A.Event, NotificationEvent: A.Event, PageTransitionEvent: A.Event, PaymentRequestEvent: A.Event, PaymentRequestUpdateEvent: A.Event, PopStateEvent: A.Event, PresentationConnectionAvailableEvent: A.Event, PresentationConnectionCloseEvent: A.Event, PromiseRejectionEvent: A.Event, PushEvent: A.Event, RTCDataChannelEvent: A.Event, RTCDTMFToneChangeEvent: A.Event, RTCPeerConnectionIceEvent: A.Event, RTCTrackEvent: A.Event, SecurityPolicyViolationEvent: A.Event, SensorErrorEvent: A.Event, SpeechRecognitionError: A.Event, SpeechRecognitionEvent: A.Event, SpeechSynthesisEvent: A.Event, StorageEvent: A.Event, SyncEvent: A.Event, TrackEvent: A.Event, TransitionEvent: A.Event, WebKitTransitionEvent: A.Event, VRDeviceEvent: A.Event, VRDisplayEvent: A.Event, VRSessionEvent: A.Event, MojoInterfaceRequestEvent: A.Event, USBConnectionEvent: A.Event, IDBVersionChangeEvent: A.Event, AudioProcessingEvent: A.Event, OfflineAudioCompletionEvent: A.Event, WebGLContextEvent: A.Event, Event: A.Event, InputEvent: A.Event, SubmitEvent: A.Event, EventTarget: A.EventTarget, HTMLFormElement: A.FormElement, XMLHttpRequest: A.HttpRequest, XMLHttpRequestEventTarget: A.HttpRequestEventTarget, HTMLInputElement: A.InputElement, MouseEvent: A.MouseEvent, DragEvent: A.MouseEvent, PointerEvent: A.MouseEvent, WheelEvent: A.MouseEvent, Document: A.Node, DocumentFragment: A.Node, HTMLDocument: A.Node, ShadowRoot: A.Node, XMLDocument: A.Node, Attr: A.Node, DocumentType: A.Node, Node: A.Node, NodeList: A.NodeList, RadioNodeList: A.NodeList, HTMLOptionElement: A.OptionElement, ProgressEvent: A.ProgressEvent, ResourceProgressEvent: A.ProgressEvent, HTMLSelectElement: A.SelectElement, CompositionEvent: A.UIEvent, FocusEvent: A.UIEvent, KeyboardEvent: A.UIEvent, TextEvent: A.UIEvent, TouchEvent: A.UIEvent, UIEvent: A.UIEvent, Window: A.Window, DOMWindow: A.Window, SVGAElement: A.SvgElement, SVGAnimateElement: A.SvgElement, SVGAnimateMotionElement: A.SvgElement, SVGAnimateTransformElement: A.SvgElement, SVGAnimationElement: A.SvgElement, SVGCircleElement: A.SvgElement, SVGClipPathElement: A.SvgElement, SVGDefsElement: A.SvgElement, SVGDescElement: A.SvgElement, SVGDiscardElement: A.SvgElement, SVGEllipseElement: A.SvgElement, SVGFEBlendElement: A.SvgElement, SVGFEColorMatrixElement: A.SvgElement, SVGFEComponentTransferElement: A.SvgElement, SVGFECompositeElement: A.SvgElement, SVGFEConvolveMatrixElement: A.SvgElement, SVGFEDiffuseLightingElement: A.SvgElement, SVGFEDisplacementMapElement: A.SvgElement, SVGFEDistantLightElement: A.SvgElement, SVGFEFloodElement: A.SvgElement, SVGFEFuncAElement: A.SvgElement, SVGFEFuncBElement: A.SvgElement, SVGFEFuncGElement: A.SvgElement, SVGFEFuncRElement: A.SvgElement, SVGFEGaussianBlurElement: A.SvgElement, SVGFEImageElement: A.SvgElement, SVGFEMergeElement: A.SvgElement, SVGFEMergeNodeElement: A.SvgElement, SVGFEMorphologyElement: A.SvgElement, SVGFEOffsetElement: A.SvgElement, SVGFEPointLightElement: A.SvgElement, SVGFESpecularLightingElement: A.SvgElement, SVGFESpotLightElement: A.SvgElement, SVGFETileElement: A.SvgElement, SVGFETurbulenceElement: A.SvgElement, SVGFilterElement: A.SvgElement, SVGForeignObjectElement: A.SvgElement, SVGGElement: A.SvgElement, SVGGeometryElement: A.SvgElement, SVGGraphicsElement: A.SvgElement, SVGImageElement: A.SvgElement, SVGLineElement: A.SvgElement, SVGLinearGradientElement: A.SvgElement, SVGMarkerElement: A.SvgElement, SVGMaskElement: A.SvgElement, SVGMetadataElement: A.SvgElement, SVGPathElement: A.SvgElement, SVGPatternElement: A.SvgElement, SVGPolygonElement: A.SvgElement, SVGPolylineElement: A.SvgElement, SVGRadialGradientElement: A.SvgElement, SVGRectElement: A.SvgElement, SVGScriptElement: A.SvgElement, SVGSetElement: A.SvgElement, SVGStopElement: A.SvgElement, SVGStyleElement: A.SvgElement, SVGElement: A.SvgElement, SVGSVGElement: A.SvgElement, SVGSwitchElement: A.SvgElement, SVGSymbolElement: A.SvgElement, SVGTSpanElement: A.SvgElement, SVGTextContentElement: A.SvgElement, SVGTextElement: A.SvgElement, SVGTextPathElement: A.SvgElement, SVGTextPositioningElement: A.SvgElement, SVGTitleElement: A.SvgElement, SVGUseElement: A.SvgElement, SVGViewElement: A.SvgElement, SVGGradientElement: A.SvgElement, SVGComponentTransferFunctionElement: A.SvgElement, SVGFEDropShadowElement: A.SvgElement, SVGMPathElement: A.SvgElement});
-    hunkHelpers.setOrUpdateLeafTags({DOMError: true, MediaError: true, NavigatorUserMediaError: true, OverconstrainedError: true, PositionError: true, GeolocationPositionError: true, WebGLRenderingContext: true, WebGL2RenderingContext: true, HTMLAudioElement: true, HTMLBRElement: true, HTMLBaseElement: true, HTMLBodyElement: true, HTMLButtonElement: true, HTMLContentElement: true, HTMLDListElement: true, HTMLDataElement: true, HTMLDataListElement: true, HTMLDetailsElement: true, HTMLDialogElement: true, HTMLDivElement: true, HTMLEmbedElement: true, HTMLFieldSetElement: true, HTMLHRElement: true, HTMLHeadElement: true, HTMLHeadingElement: true, HTMLHtmlElement: true, HTMLIFrameElement: true, HTMLImageElement: true, HTMLLIElement: true, HTMLLabelElement: true, HTMLLegendElement: true, HTMLLinkElement: true, HTMLMapElement: true, HTMLMediaElement: true, HTMLMenuElement: true, HTMLMetaElement: true, HTMLMeterElement: true, HTMLModElement: true, HTMLOListElement: true, HTMLObjectElement: true, HTMLOptGroupElement: true, HTMLOutputElement: true, HTMLParagraphElement: true, HTMLParamElement: true, HTMLPictureElement: true, HTMLPreElement: true, HTMLProgressElement: true, HTMLQuoteElement: true, HTMLScriptElement: true, HTMLShadowElement: true, HTMLSlotElement: true, HTMLSourceElement: true, HTMLSpanElement: true, HTMLStyleElement: true, HTMLTableCaptionElement: true, HTMLTableCellElement: true, HTMLTableDataCellElement: true, HTMLTableHeaderCellElement: true, HTMLTableColElement: true, HTMLTableElement: true, HTMLTableRowElement: true, HTMLTableSectionElement: true, HTMLTemplateElement: true, HTMLTextAreaElement: true, HTMLTimeElement: true, HTMLTitleElement: true, HTMLTrackElement: true, HTMLUListElement: true, HTMLUnknownElement: true, HTMLVideoElement: true, HTMLDirectoryElement: true, HTMLFontElement: true, HTMLFrameElement: true, HTMLFrameSetElement: true, HTMLMarqueeElement: true, HTMLElement: false, HTMLAnchorElement: true, HTMLAreaElement: true, HTMLCanvasElement: true, CanvasRenderingContext2D: true, CDATASection: true, CharacterData: true, Comment: true, ProcessingInstruction: true, Text: true, DOMException: true, Element: false, AbortPaymentEvent: true, AnimationEvent: true, AnimationPlaybackEvent: true, ApplicationCacheErrorEvent: true, BackgroundFetchClickEvent: true, BackgroundFetchEvent: true, BackgroundFetchFailEvent: true, BackgroundFetchedEvent: true, BeforeInstallPromptEvent: true, BeforeUnloadEvent: true, BlobEvent: true, CanMakePaymentEvent: true, ClipboardEvent: true, CloseEvent: true, CustomEvent: true, DeviceMotionEvent: true, DeviceOrientationEvent: true, ErrorEvent: true, ExtendableEvent: true, ExtendableMessageEvent: true, FetchEvent: true, FontFaceSetLoadEvent: true, ForeignFetchEvent: true, GamepadEvent: true, HashChangeEvent: true, InstallEvent: true, MediaEncryptedEvent: true, MediaKeyMessageEvent: true, MediaQueryListEvent: true, MediaStreamEvent: true, MediaStreamTrackEvent: true, MessageEvent: true, MIDIConnectionEvent: true, MIDIMessageEvent: true, MutationEvent: true, NotificationEvent: true, PageTransitionEvent: true, PaymentRequestEvent: true, PaymentRequestUpdateEvent: true, PopStateEvent: true, PresentationConnectionAvailableEvent: true, PresentationConnectionCloseEvent: true, PromiseRejectionEvent: true, PushEvent: true, RTCDataChannelEvent: true, RTCDTMFToneChangeEvent: true, RTCPeerConnectionIceEvent: true, RTCTrackEvent: true, SecurityPolicyViolationEvent: true, SensorErrorEvent: true, SpeechRecognitionError: true, SpeechRecognitionEvent: true, SpeechSynthesisEvent: true, StorageEvent: true, SyncEvent: true, TrackEvent: true, TransitionEvent: true, WebKitTransitionEvent: true, VRDeviceEvent: true, VRDisplayEvent: true, VRSessionEvent: true, MojoInterfaceRequestEvent: true, USBConnectionEvent: true, IDBVersionChangeEvent: true, AudioProcessingEvent: true, OfflineAudioCompletionEvent: true, WebGLContextEvent: true, Event: false, InputEvent: false, SubmitEvent: false, EventTarget: false, HTMLFormElement: true, XMLHttpRequest: true, XMLHttpRequestEventTarget: false, HTMLInputElement: true, MouseEvent: true, DragEvent: true, PointerEvent: true, WheelEvent: true, Document: true, DocumentFragment: true, HTMLDocument: true, ShadowRoot: true, XMLDocument: true, Attr: true, DocumentType: true, Node: false, NodeList: true, RadioNodeList: true, HTMLOptionElement: true, ProgressEvent: true, ResourceProgressEvent: true, HTMLSelectElement: true, CompositionEvent: true, FocusEvent: true, KeyboardEvent: true, TextEvent: true, TouchEvent: true, UIEvent: false, Window: true, DOMWindow: true, SVGAElement: true, SVGAnimateElement: true, SVGAnimateMotionElement: true, SVGAnimateTransformElement: true, SVGAnimationElement: true, SVGCircleElement: true, SVGClipPathElement: true, SVGDefsElement: true, SVGDescElement: true, SVGDiscardElement: true, SVGEllipseElement: true, SVGFEBlendElement: true, SVGFEColorMatrixElement: true, SVGFEComponentTransferElement: true, SVGFECompositeElement: true, SVGFEConvolveMatrixElement: true, SVGFEDiffuseLightingElement: true, SVGFEDisplacementMapElement: true, SVGFEDistantLightElement: true, SVGFEFloodElement: true, SVGFEFuncAElement: true, SVGFEFuncBElement: true, SVGFEFuncGElement: true, SVGFEFuncRElement: true, SVGFEGaussianBlurElement: true, SVGFEImageElement: true, SVGFEMergeElement: true, SVGFEMergeNodeElement: true, SVGFEMorphologyElement: true, SVGFEOffsetElement: true, SVGFEPointLightElement: true, SVGFESpecularLightingElement: true, SVGFESpotLightElement: true, SVGFETileElement: true, SVGFETurbulenceElement: true, SVGFilterElement: true, SVGForeignObjectElement: true, SVGGElement: true, SVGGeometryElement: true, SVGGraphicsElement: true, SVGImageElement: true, SVGLineElement: true, SVGLinearGradientElement: true, SVGMarkerElement: true, SVGMaskElement: true, SVGMetadataElement: true, SVGPathElement: true, SVGPatternElement: true, SVGPolygonElement: true, SVGPolylineElement: true, SVGRadialGradientElement: true, SVGRectElement: true, SVGScriptElement: true, SVGSetElement: true, SVGStopElement: true, SVGStyleElement: true, SVGElement: true, SVGSVGElement: true, SVGSwitchElement: true, SVGSymbolElement: true, SVGTSpanElement: true, SVGTextContentElement: true, SVGTextElement: true, SVGTextPathElement: true, SVGTextPositioningElement: true, SVGTitleElement: true, SVGUseElement: true, SVGViewElement: true, SVGGradientElement: true, SVGComponentTransferFunctionElement: true, SVGFEDropShadowElement: true, SVGMPathElement: true});
+    hunkHelpers.setOrUpdateInterceptorsByTag({DOMError: J.JavaScriptObject, MediaError: J.JavaScriptObject, NavigatorUserMediaError: J.JavaScriptObject, OverconstrainedError: J.JavaScriptObject, PositionError: J.JavaScriptObject, GeolocationPositionError: J.JavaScriptObject, WebGLRenderingContext: J.JavaScriptObject, WebGL2RenderingContext: J.JavaScriptObject, HTMLAudioElement: A.HtmlElement, HTMLBRElement: A.HtmlElement, HTMLBaseElement: A.HtmlElement, HTMLBodyElement: A.HtmlElement, HTMLButtonElement: A.HtmlElement, HTMLContentElement: A.HtmlElement, HTMLDListElement: A.HtmlElement, HTMLDataElement: A.HtmlElement, HTMLDataListElement: A.HtmlElement, HTMLDetailsElement: A.HtmlElement, HTMLDialogElement: A.HtmlElement, HTMLDivElement: A.HtmlElement, HTMLEmbedElement: A.HtmlElement, HTMLFieldSetElement: A.HtmlElement, HTMLHRElement: A.HtmlElement, HTMLHeadElement: A.HtmlElement, HTMLHeadingElement: A.HtmlElement, HTMLHtmlElement: A.HtmlElement, HTMLIFrameElement: A.HtmlElement, HTMLImageElement: A.HtmlElement, HTMLInputElement: A.HtmlElement, HTMLLIElement: A.HtmlElement, HTMLLabelElement: A.HtmlElement, HTMLLegendElement: A.HtmlElement, HTMLLinkElement: A.HtmlElement, HTMLMapElement: A.HtmlElement, HTMLMediaElement: A.HtmlElement, HTMLMenuElement: A.HtmlElement, HTMLMetaElement: A.HtmlElement, HTMLMeterElement: A.HtmlElement, HTMLModElement: A.HtmlElement, HTMLOListElement: A.HtmlElement, HTMLObjectElement: A.HtmlElement, HTMLOptGroupElement: A.HtmlElement, HTMLOptionElement: A.HtmlElement, HTMLOutputElement: A.HtmlElement, HTMLParagraphElement: A.HtmlElement, HTMLParamElement: A.HtmlElement, HTMLPictureElement: A.HtmlElement, HTMLPreElement: A.HtmlElement, HTMLProgressElement: A.HtmlElement, HTMLQuoteElement: A.HtmlElement, HTMLScriptElement: A.HtmlElement, HTMLShadowElement: A.HtmlElement, HTMLSlotElement: A.HtmlElement, HTMLSourceElement: A.HtmlElement, HTMLSpanElement: A.HtmlElement, HTMLStyleElement: A.HtmlElement, HTMLTableCaptionElement: A.HtmlElement, HTMLTableCellElement: A.HtmlElement, HTMLTableDataCellElement: A.HtmlElement, HTMLTableHeaderCellElement: A.HtmlElement, HTMLTableColElement: A.HtmlElement, HTMLTableElement: A.HtmlElement, HTMLTableRowElement: A.HtmlElement, HTMLTableSectionElement: A.HtmlElement, HTMLTemplateElement: A.HtmlElement, HTMLTextAreaElement: A.HtmlElement, HTMLTimeElement: A.HtmlElement, HTMLTitleElement: A.HtmlElement, HTMLTrackElement: A.HtmlElement, HTMLUListElement: A.HtmlElement, HTMLUnknownElement: A.HtmlElement, HTMLVideoElement: A.HtmlElement, HTMLDirectoryElement: A.HtmlElement, HTMLFontElement: A.HtmlElement, HTMLFrameElement: A.HtmlElement, HTMLFrameSetElement: A.HtmlElement, HTMLMarqueeElement: A.HtmlElement, HTMLElement: A.HtmlElement, HTMLAnchorElement: A.AnchorElement, HTMLAreaElement: A.AreaElement, HTMLCanvasElement: A.CanvasElement, CanvasRenderingContext2D: A.CanvasRenderingContext2D, DOMException: A.DomException, Element: A.Element, AbortPaymentEvent: A.Event, AnimationEvent: A.Event, AnimationPlaybackEvent: A.Event, ApplicationCacheErrorEvent: A.Event, BackgroundFetchClickEvent: A.Event, BackgroundFetchEvent: A.Event, BackgroundFetchFailEvent: A.Event, BackgroundFetchedEvent: A.Event, BeforeInstallPromptEvent: A.Event, BeforeUnloadEvent: A.Event, BlobEvent: A.Event, CanMakePaymentEvent: A.Event, ClipboardEvent: A.Event, CloseEvent: A.Event, CustomEvent: A.Event, DeviceMotionEvent: A.Event, DeviceOrientationEvent: A.Event, ErrorEvent: A.Event, ExtendableEvent: A.Event, ExtendableMessageEvent: A.Event, FetchEvent: A.Event, FontFaceSetLoadEvent: A.Event, ForeignFetchEvent: A.Event, GamepadEvent: A.Event, HashChangeEvent: A.Event, InstallEvent: A.Event, MediaEncryptedEvent: A.Event, MediaKeyMessageEvent: A.Event, MediaQueryListEvent: A.Event, MediaStreamEvent: A.Event, MediaStreamTrackEvent: A.Event, MessageEvent: A.Event, MIDIConnectionEvent: A.Event, MIDIMessageEvent: A.Event, MutationEvent: A.Event, NotificationEvent: A.Event, PageTransitionEvent: A.Event, PaymentRequestEvent: A.Event, PaymentRequestUpdateEvent: A.Event, PopStateEvent: A.Event, PresentationConnectionAvailableEvent: A.Event, PresentationConnectionCloseEvent: A.Event, ProgressEvent: A.Event, PromiseRejectionEvent: A.Event, PushEvent: A.Event, RTCDataChannelEvent: A.Event, RTCDTMFToneChangeEvent: A.Event, RTCPeerConnectionIceEvent: A.Event, RTCTrackEvent: A.Event, SecurityPolicyViolationEvent: A.Event, SensorErrorEvent: A.Event, SpeechRecognitionError: A.Event, SpeechRecognitionEvent: A.Event, SpeechSynthesisEvent: A.Event, StorageEvent: A.Event, SyncEvent: A.Event, TrackEvent: A.Event, TransitionEvent: A.Event, WebKitTransitionEvent: A.Event, VRDeviceEvent: A.Event, VRDisplayEvent: A.Event, VRSessionEvent: A.Event, MojoInterfaceRequestEvent: A.Event, ResourceProgressEvent: A.Event, USBConnectionEvent: A.Event, IDBVersionChangeEvent: A.Event, AudioProcessingEvent: A.Event, OfflineAudioCompletionEvent: A.Event, WebGLContextEvent: A.Event, Event: A.Event, InputEvent: A.Event, SubmitEvent: A.Event, EventTarget: A.EventTarget, HTMLFormElement: A.FormElement, MouseEvent: A.MouseEvent, DragEvent: A.MouseEvent, PointerEvent: A.MouseEvent, WheelEvent: A.MouseEvent, Document: A.Node, HTMLDocument: A.Node, Node: A.Node, HTMLSelectElement: A.SelectElement, CompositionEvent: A.UIEvent, FocusEvent: A.UIEvent, KeyboardEvent: A.UIEvent, TextEvent: A.UIEvent, TouchEvent: A.UIEvent, UIEvent: A.UIEvent, Window: A.Window, DOMWindow: A.Window, SVGAElement: A.SvgElement, SVGAnimateElement: A.SvgElement, SVGAnimateMotionElement: A.SvgElement, SVGAnimateTransformElement: A.SvgElement, SVGAnimationElement: A.SvgElement, SVGCircleElement: A.SvgElement, SVGClipPathElement: A.SvgElement, SVGDefsElement: A.SvgElement, SVGDescElement: A.SvgElement, SVGDiscardElement: A.SvgElement, SVGEllipseElement: A.SvgElement, SVGFEBlendElement: A.SvgElement, SVGFEColorMatrixElement: A.SvgElement, SVGFEComponentTransferElement: A.SvgElement, SVGFECompositeElement: A.SvgElement, SVGFEConvolveMatrixElement: A.SvgElement, SVGFEDiffuseLightingElement: A.SvgElement, SVGFEDisplacementMapElement: A.SvgElement, SVGFEDistantLightElement: A.SvgElement, SVGFEFloodElement: A.SvgElement, SVGFEFuncAElement: A.SvgElement, SVGFEFuncBElement: A.SvgElement, SVGFEFuncGElement: A.SvgElement, SVGFEFuncRElement: A.SvgElement, SVGFEGaussianBlurElement: A.SvgElement, SVGFEImageElement: A.SvgElement, SVGFEMergeElement: A.SvgElement, SVGFEMergeNodeElement: A.SvgElement, SVGFEMorphologyElement: A.SvgElement, SVGFEOffsetElement: A.SvgElement, SVGFEPointLightElement: A.SvgElement, SVGFESpecularLightingElement: A.SvgElement, SVGFESpotLightElement: A.SvgElement, SVGFETileElement: A.SvgElement, SVGFETurbulenceElement: A.SvgElement, SVGFilterElement: A.SvgElement, SVGForeignObjectElement: A.SvgElement, SVGGElement: A.SvgElement, SVGGeometryElement: A.SvgElement, SVGGraphicsElement: A.SvgElement, SVGImageElement: A.SvgElement, SVGLineElement: A.SvgElement, SVGLinearGradientElement: A.SvgElement, SVGMarkerElement: A.SvgElement, SVGMaskElement: A.SvgElement, SVGMetadataElement: A.SvgElement, SVGPathElement: A.SvgElement, SVGPatternElement: A.SvgElement, SVGPolygonElement: A.SvgElement, SVGPolylineElement: A.SvgElement, SVGRadialGradientElement: A.SvgElement, SVGRectElement: A.SvgElement, SVGScriptElement: A.SvgElement, SVGSetElement: A.SvgElement, SVGStopElement: A.SvgElement, SVGStyleElement: A.SvgElement, SVGElement: A.SvgElement, SVGSVGElement: A.SvgElement, SVGSwitchElement: A.SvgElement, SVGSymbolElement: A.SvgElement, SVGTSpanElement: A.SvgElement, SVGTextContentElement: A.SvgElement, SVGTextElement: A.SvgElement, SVGTextPathElement: A.SvgElement, SVGTextPositioningElement: A.SvgElement, SVGTitleElement: A.SvgElement, SVGUseElement: A.SvgElement, SVGViewElement: A.SvgElement, SVGGradientElement: A.SvgElement, SVGComponentTransferFunctionElement: A.SvgElement, SVGFEDropShadowElement: A.SvgElement, SVGMPathElement: A.SvgElement});
+    hunkHelpers.setOrUpdateLeafTags({DOMError: true, MediaError: true, NavigatorUserMediaError: true, OverconstrainedError: true, PositionError: true, GeolocationPositionError: true, WebGLRenderingContext: true, WebGL2RenderingContext: true, HTMLAudioElement: true, HTMLBRElement: true, HTMLBaseElement: true, HTMLBodyElement: true, HTMLButtonElement: true, HTMLContentElement: true, HTMLDListElement: true, HTMLDataElement: true, HTMLDataListElement: true, HTMLDetailsElement: true, HTMLDialogElement: true, HTMLDivElement: true, HTMLEmbedElement: true, HTMLFieldSetElement: true, HTMLHRElement: true, HTMLHeadElement: true, HTMLHeadingElement: true, HTMLHtmlElement: true, HTMLIFrameElement: true, HTMLImageElement: true, HTMLInputElement: true, HTMLLIElement: true, HTMLLabelElement: true, HTMLLegendElement: true, HTMLLinkElement: true, HTMLMapElement: true, HTMLMediaElement: true, HTMLMenuElement: true, HTMLMetaElement: true, HTMLMeterElement: true, HTMLModElement: true, HTMLOListElement: true, HTMLObjectElement: true, HTMLOptGroupElement: true, HTMLOptionElement: true, HTMLOutputElement: true, HTMLParagraphElement: true, HTMLParamElement: true, HTMLPictureElement: true, HTMLPreElement: true, HTMLProgressElement: true, HTMLQuoteElement: true, HTMLScriptElement: true, HTMLShadowElement: true, HTMLSlotElement: true, HTMLSourceElement: true, HTMLSpanElement: true, HTMLStyleElement: true, HTMLTableCaptionElement: true, HTMLTableCellElement: true, HTMLTableDataCellElement: true, HTMLTableHeaderCellElement: true, HTMLTableColElement: true, HTMLTableElement: true, HTMLTableRowElement: true, HTMLTableSectionElement: true, HTMLTemplateElement: true, HTMLTextAreaElement: true, HTMLTimeElement: true, HTMLTitleElement: true, HTMLTrackElement: true, HTMLUListElement: true, HTMLUnknownElement: true, HTMLVideoElement: true, HTMLDirectoryElement: true, HTMLFontElement: true, HTMLFrameElement: true, HTMLFrameSetElement: true, HTMLMarqueeElement: true, HTMLElement: false, HTMLAnchorElement: true, HTMLAreaElement: true, HTMLCanvasElement: true, CanvasRenderingContext2D: true, DOMException: true, Element: false, AbortPaymentEvent: true, AnimationEvent: true, AnimationPlaybackEvent: true, ApplicationCacheErrorEvent: true, BackgroundFetchClickEvent: true, BackgroundFetchEvent: true, BackgroundFetchFailEvent: true, BackgroundFetchedEvent: true, BeforeInstallPromptEvent: true, BeforeUnloadEvent: true, BlobEvent: true, CanMakePaymentEvent: true, ClipboardEvent: true, CloseEvent: true, CustomEvent: true, DeviceMotionEvent: true, DeviceOrientationEvent: true, ErrorEvent: true, ExtendableEvent: true, ExtendableMessageEvent: true, FetchEvent: true, FontFaceSetLoadEvent: true, ForeignFetchEvent: true, GamepadEvent: true, HashChangeEvent: true, InstallEvent: true, MediaEncryptedEvent: true, MediaKeyMessageEvent: true, MediaQueryListEvent: true, MediaStreamEvent: true, MediaStreamTrackEvent: true, MessageEvent: true, MIDIConnectionEvent: true, MIDIMessageEvent: true, MutationEvent: true, NotificationEvent: true, PageTransitionEvent: true, PaymentRequestEvent: true, PaymentRequestUpdateEvent: true, PopStateEvent: true, PresentationConnectionAvailableEvent: true, PresentationConnectionCloseEvent: true, ProgressEvent: true, PromiseRejectionEvent: true, PushEvent: true, RTCDataChannelEvent: true, RTCDTMFToneChangeEvent: true, RTCPeerConnectionIceEvent: true, RTCTrackEvent: true, SecurityPolicyViolationEvent: true, SensorErrorEvent: true, SpeechRecognitionError: true, SpeechRecognitionEvent: true, SpeechSynthesisEvent: true, StorageEvent: true, SyncEvent: true, TrackEvent: true, TransitionEvent: true, WebKitTransitionEvent: true, VRDeviceEvent: true, VRDisplayEvent: true, VRSessionEvent: true, MojoInterfaceRequestEvent: true, ResourceProgressEvent: true, USBConnectionEvent: true, IDBVersionChangeEvent: true, AudioProcessingEvent: true, OfflineAudioCompletionEvent: true, WebGLContextEvent: true, Event: false, InputEvent: false, SubmitEvent: false, EventTarget: false, HTMLFormElement: true, MouseEvent: true, DragEvent: true, PointerEvent: true, WheelEvent: true, Document: true, HTMLDocument: true, Node: false, HTMLSelectElement: true, CompositionEvent: true, FocusEvent: true, KeyboardEvent: true, TextEvent: true, TouchEvent: true, UIEvent: false, Window: true, DOMWindow: true, SVGAElement: true, SVGAnimateElement: true, SVGAnimateMotionElement: true, SVGAnimateTransformElement: true, SVGAnimationElement: true, SVGCircleElement: true, SVGClipPathElement: true, SVGDefsElement: true, SVGDescElement: true, SVGDiscardElement: true, SVGEllipseElement: true, SVGFEBlendElement: true, SVGFEColorMatrixElement: true, SVGFEComponentTransferElement: true, SVGFECompositeElement: true, SVGFEConvolveMatrixElement: true, SVGFEDiffuseLightingElement: true, SVGFEDisplacementMapElement: true, SVGFEDistantLightElement: true, SVGFEFloodElement: true, SVGFEFuncAElement: true, SVGFEFuncBElement: true, SVGFEFuncGElement: true, SVGFEFuncRElement: true, SVGFEGaussianBlurElement: true, SVGFEImageElement: true, SVGFEMergeElement: true, SVGFEMergeNodeElement: true, SVGFEMorphologyElement: true, SVGFEOffsetElement: true, SVGFEPointLightElement: true, SVGFESpecularLightingElement: true, SVGFESpotLightElement: true, SVGFETileElement: true, SVGFETurbulenceElement: true, SVGFilterElement: true, SVGForeignObjectElement: true, SVGGElement: true, SVGGeometryElement: true, SVGGraphicsElement: true, SVGImageElement: true, SVGLineElement: true, SVGLinearGradientElement: true, SVGMarkerElement: true, SVGMaskElement: true, SVGMetadataElement: true, SVGPathElement: true, SVGPatternElement: true, SVGPolygonElement: true, SVGPolylineElement: true, SVGRadialGradientElement: true, SVGRectElement: true, SVGScriptElement: true, SVGSetElement: true, SVGStopElement: true, SVGStyleElement: true, SVGElement: true, SVGSVGElement: true, SVGSwitchElement: true, SVGSymbolElement: true, SVGTSpanElement: true, SVGTextContentElement: true, SVGTextElement: true, SVGTextPathElement: true, SVGTextPositioningElement: true, SVGTitleElement: true, SVGUseElement: true, SVGViewElement: true, SVGGradientElement: true, SVGComponentTransferFunctionElement: true, SVGFEDropShadowElement: true, SVGMPathElement: true});
   })();
   convertAllToFastObject(holders);
   convertToFastObject($);
@@ -7383,4 +4925,4 @@
   });
 })();
 
-//# sourceMappingURL=controller.js.map
+//# sourceMappingURL=boids_controller.js.map

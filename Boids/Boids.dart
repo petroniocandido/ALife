@@ -19,14 +19,22 @@ class Boid {
   int get id => _id;
 
   Boid(this._id, this._position, this._direction);
+
+  Point2D vector(int length) => Point2D(
+      position.x + (length * cos(direction)) as int,
+      position.y + (length * sin(direction)) as int);
 }
 
 typedef Boid BoidAction(Boid obj, BoidSimulation sun);
 
 class BoidSimulation {
-  List<int> _shape_dimensions = [];
+  Point2D _shape_dimensions = Point2D(0, 0);
 
-  List<int> get shape_dimensions => _shape_dimensions;
+  Point2D get shape_dimensions => _shape_dimensions;
+
+  BoidSimulation(int _x, int _y) {
+    _shape_dimensions = Point2D(_x, _y);
+  }
 
   int _velocity = 1;
 
@@ -62,9 +70,9 @@ class BoidSimulation {
     for (int id = 0; id < numBoids; id++) {
       boids.add(Boid(
           id,
-          Point2D(_random.nextInt(shape_dimensions[0]),
-              _random.nextInt(shape_dimensions[1])),
-          (4 * pi * _random.nextDouble()) - 2 * pi));
+          Point2D(_random.nextInt(shape_dimensions.x),
+              _random.nextInt(shape_dimensions.y)),
+          ((4 * pi) * _random.nextDouble()) - (2 * pi)));
     }
 
     _actions.add(coherence);
@@ -99,11 +107,8 @@ class BoidSimulation {
   }
 
   Boid move(Boid obj, BoidSimulation sim) {
-    List<Boid> neigh = sim.neighbors(obj);
-    Point2D mid = sim.midPoint(neigh);
-    double a = obj.position.angle(mid);
-    double da = obj.direction - a;
-    obj.direction += -da;
+    obj.position.x += (sim.velocity * cos(obj.direction)) as int;
+    obj.position.y += (sim.velocity * sin(obj.direction)) as int;
     return obj;
   }
 
@@ -137,6 +142,8 @@ class BoidSimulation {
   }
 
   void next() {
+    mapDistances();
+    _swarmMidPoint = midPoint(boids);
     for (Boid boid in _boids) {
       for (BoidAction func in _actions) {
         func.call(boid, this);

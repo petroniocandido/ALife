@@ -17,14 +17,20 @@
     <body id="page-top">
         <ol class="breadcrumb">
             <li><a href="http://petroniocandido.github.io">Home</a></li>
-            <li><a href="#">ALife Showcase</a></li>
+            <li><a href="view.html">ALife Showcase</a></li>
+            <li>Boids</li>
           </ol>
-        <div class="jumbotron">
-            <h1>ALife Showcase</h1>
-            <p>By Petrônio Cândido L. Silva</p>
-            <p><a class="btn btn-primary btn-lg" href="ca.html" role="button">Cellular Automata</a></p>
-            <p><a class="btn btn-primary btn-lg" href="boids.html" role="button">Boids</a></p>
-          </div>
+
+          <button class="btn btn-primary" id="run_boids">Start</button>
+          <button class="btn btn-primary" id="stop_boids">Stop</button>
+        
+        <div style="text-align: center">
+            <canvas id="canvas" width="500" height="500" style="display: block; border:1px solid #000000;"></canvas>
+        </div>
+
+        
+
+        <script src="boids_controller.js"></script>
         
     </body>
 
