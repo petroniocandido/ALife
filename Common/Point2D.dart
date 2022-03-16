@@ -33,6 +33,9 @@ class Point2D {
   int dot(Point2D obj) => x * obj.x + y * obj.y;
 
   int internal_product() => this.dot(this);
+
+  @override
+  String toString() => "$_x, $_y";
 }
 
 double fixAngle(double a) {

@@ -23,6 +23,9 @@ class Boid {
   Point2D vector(int length) => Point2D(
       position.x + (length * cos(direction)) as int,
       position.y + (length * sin(direction)) as int);
+
+  @override
+  String toString() => "($_position, $_direction)";
 }
 
 typedef Boid BoidAction(Boid obj, BoidSimulation sun);
@@ -32,7 +35,7 @@ class BoidSimulation {
 
   Point2D get shape_dimensions => _shape_dimensions;
 
-  BoidSimulation(int _x, int _y) {
+  BoidSimulation(this._numBoids, int _x, int _y) {
     _shape_dimensions = Point2D(_x, _y);
   }
 
@@ -100,15 +103,19 @@ class BoidSimulation {
   Boid separation(Boid obj, BoidSimulation sim) {
     List<Boid> neigh = sim.neighbors(obj);
     Point2D mid = sim.midPoint(neigh);
-    double a = obj.position.angle(mid);
-    double da = obj.direction - a;
-    obj.direction += -da;
+    if (mid.internal_product() > 0) {
+      double a = obj.position.angle(mid);
+      double da = obj.direction - a;
+      obj.direction += -da;
+    }
     return obj;
   }
 
   Boid move(Boid obj, BoidSimulation sim) {
-    obj.position.x += (sim.velocity * cos(obj.direction)) as int;
-    obj.position.y += (sim.velocity * sin(obj.direction)) as int;
+    print(obj);
+    obj.position.x += (sim.velocity * cos(obj.direction)).toInt();
+    obj.position.y += (sim.velocity * sin(obj.direction)).toInt();
+    print(obj);
     return obj;
   }
 
@@ -129,16 +136,18 @@ class BoidSimulation {
   }
 
   Point2D midPoint(List<Boid> swarm) {
-    int px = 0;
-    int py = 0;
-    for (Boid boid in swarm) {
-      px += boid.position.x;
-      py += boid.position.y;
+    num px = 0;
+    num py = 0;
+    if (swarm.length > 0) {
+      for (Boid boid in swarm) {
+        px += boid.position.x;
+        py += boid.position.y;
+      }
+      px = px / swarm.length;
+      py = py / swarm.length;
     }
-    px = (px / swarm.length) as int;
-    py = (py / swarm.length) as int;
 
-    return Point2D(px, py);
+    return Point2D(px.toInt(), py.toInt());
   }
 
   void next() {
@@ -146,8 +155,19 @@ class BoidSimulation {
     _swarmMidPoint = midPoint(boids);
     for (Boid boid in _boids) {
       for (BoidAction func in _actions) {
-        func.call(boid, this);
+        boid = func.call(boid, this);
       }
     }
+  }
+}
+
+void main() {
+  var sim = BoidSimulation(3, 10, 10);
+  sim.velocity = 2;
+  sim.initialize();
+  for (int i = 0; i < 1; i++) {
+    sim.next();
+    var boids = [for (Boid b in sim.boids) b.toString()];
+    print(boids);
   }
 }

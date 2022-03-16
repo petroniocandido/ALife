@@ -11,7 +11,7 @@ final _random = Random();
 
 num animation_request_id = 0;
 
-BoidSimulation simulation = BoidSimulation(0, 0);
+BoidSimulation simulation = BoidSimulation(100, 0, 0);
 
 Map<String, dynamic> rules = {};
 
@@ -39,7 +39,8 @@ void boids_start(MouseEvent event) {
   int canvasWidth = canvas?.width ?? 100;
   int canvasHeight = canvas?.height ?? 100;
 
-  simulation = BoidSimulation(canvasWidth, canvasHeight);
+  simulation = BoidSimulation(100, canvasWidth, canvasHeight);
+  simulation.velocity = 2;
   simulation.initialize();
 
   window.requestAnimationFrame(boids_animation);
@@ -55,9 +56,12 @@ void boids_animation(num timestamp) {
   simulation.next();
 
   for (Boid boid in simulation.boids) {
-    Point2D vec = boid.vector(10);
-    canvas_arrow(context, boid.position.x, boid.position.y, vec.x, vec.y,
-        boid.direction);
+    //Point2D vec = boid.vector(10);
+    //canvas_arrow(context, boid.position.x, boid.position.y, vec.x, vec.y,
+    //    boid.direction);
+    context?.setFillColorRgb(0, 0, 0);
+    context?.fillRect(boid.position.x, boid.position.y, boid.position.x + 10,
+        boid.position.y + 10);
   }
   animation_request_id = window.requestAnimationFrame(boids_animation);
 }

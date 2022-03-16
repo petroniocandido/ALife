@@ -752,9 +752,11 @@
       return closure._interceptor;
     },
     BoundClosure__computeFieldNamed(fieldName) {
-      var t1, i, $name,
+      var names, i, $name,
         template = new A.BoundClosure("receiver", "interceptor"),
-        names = J.JSArray_markFixedList(Object.getOwnPropertyNames(template), type$.nullable_Object);
+        t1 = Object.getOwnPropertyNames(template);
+      t1.fixed$length = Array;
+      names = t1;
       for (t1 = names.length, i = 0; i < t1; ++i) {
         $name = names[i];
         if (template[$name] === fieldName)
@@ -2898,6 +2900,9 @@
     ConcurrentModificationError$(modifiedObject) {
       return new A.ConcurrentModificationError(modifiedObject);
     },
+    print(object) {
+      A.printString(object.toString$0(0));
+    },
     Error: function Error() {
     },
     AssertionError: function AssertionError(t0) {
@@ -3028,8 +3033,8 @@
     },
     SvgElement: function SvgElement() {
     },
-    BoidSimulation$(_x, _y) {
-      var t1 = new A.BoidSimulation(new A.Point2D(0, 0), new A.Point2D(0, 0), A._setArrayType([], type$.JSArray_Boid), A._setArrayType([], type$.JSArray_of_Boid_Function_Boid_BoidSimulation), A.LinkedHashMap_LinkedHashMap$_empty(type$.int, type$.Map_int_double));
+    BoidSimulation$(_numBoids, _x, _y) {
+      var t1 = new A.BoidSimulation(new A.Point2D(0, 0), new A.Point2D(0, 0), A._setArrayType([], type$.JSArray_Boid), _numBoids, A._setArrayType([], type$.JSArray_of_Boid_Function_Boid_BoidSimulation), A.LinkedHashMap_LinkedHashMap$_empty(type$.int, type$.Map_int_double));
       t1._shape_dimensions = new A.Point2D(_x, _y);
       return t1;
     },
@@ -3038,13 +3043,15 @@
       this._direction = t1;
       this._id = t2;
     },
-    BoidSimulation: function BoidSimulation(t0, t1, t2, t3, t4) {
+    BoidSimulation: function BoidSimulation(t0, t1, t2, t3, t4, t5) {
       var _ = this;
       _._shape_dimensions = t0;
+      _._velocity = 1;
       _._swarmMidPoint = t1;
       _._boids = t2;
-      _._actions = t3;
-      _._distances = t4;
+      _._numBoids = t3;
+      _._actions = t4;
+      _._distances = t5;
     },
     Point2D: function Point2D(t0, t1) {
       this._x = t0;
@@ -3071,7 +3078,7 @@
       }
     },
     boids_animation(timestamp) {
-      var canvas, t1, t2, canvasWidth, canvasHeight, t3, t4, _i, boid, t5, t6, t7, t8, t9, angle;
+      var canvas, t1, t2, canvasWidth, canvasHeight, t3, t4, _i, boid, t5, t6;
       A._asNum(timestamp);
       canvas = type$.nullable_CanvasElement._as(document.querySelector("#canvas"));
       t1 = canvas == null;
@@ -3089,39 +3096,37 @@
       $.$get$simulation().next$0();
       for (t3 = $.$get$simulation()._boids, t4 = t3.length, _i = 0; _i < t3.length; t3.length === t4 || (0, A.throwConcurrentModificationError)(t3), ++_i) {
         boid = t3[_i];
-        t5 = boid._position;
-        t6 = A._asInt(t5._x + 10 * Math.cos(boid._direction));
-        t7 = A._asInt(t5._y + 10 * Math.sin(boid._direction));
-        t8 = t5._x;
-        t5 = t5._y;
-        t9 = boid._direction;
         if (!t1)
-          t2.beginPath();
-        angle = Math.atan2(t7 - t5, t6 - t8);
-        t5 = Math.cos(angle);
-        t8 = Math.sin(angle);
-        if (!t1)
-          t2.moveTo(t9 * t5 + t6, t9 * t8 + t7);
-        angle += 2.0943951023931953;
-        t5 = Math.cos(angle);
-        t8 = Math.sin(angle);
-        if (!t1)
-          t2.lineTo(t9 * t5 + t6, t9 * t8 + t7);
-        angle += 2.0943951023931953;
-        t5 = Math.cos(angle);
-        t8 = Math.sin(angle);
-        if (!t1)
-          t2.lineTo(t9 * t5 + t6, t9 * t8 + t7);
-        if (!t1)
-          t2.closePath();
-        if (!t1)
-          t2.fill();
+          B.CanvasRenderingContext2D_methods.set$fillStyle(t2, "rgba(0, 0, 0, 1)");
+        if (!t1) {
+          t5 = boid._position;
+          t6 = t5._x;
+          t5 = t5._y;
+          t2.fillRect(t6, t5, t6 + 10, t5 + 10);
+        }
       }
       $.animation_request_id = B.Window_methods.requestAnimationFrame$1(window, A.boids_controller__boids_animation$closure());
     },
     main_closure: function main_closure() {
     },
     main_closure0: function main_closure0() {
+    },
+    printString(string) {
+      if (typeof dartPrint == "function") {
+        dartPrint(string);
+        return;
+      }
+      if (typeof console == "object" && typeof console.log != "undefined") {
+        console.log(string);
+        return;
+      }
+      if (typeof window == "object")
+        return;
+      if (typeof print == "function") {
+        print(string);
+        return;
+      }
+      throw "Unable to print message: " + String(string);
     },
     throwLateFieldADI(fieldName) {
       return A.throwExpression(new A.LateError("Field '" + fieldName + "' has been assigned during initialization."));
@@ -3180,10 +3185,6 @@
         return B.UnknownJavaScriptObject_methods;
       }
       return B.UnknownJavaScriptObject_methods;
-    },
-    JSArray_markFixedList(list, $T) {
-      list.fixed$length = Array;
-      return list;
     },
     getInterceptor$(receiver) {
       if (typeof receiver == "number") {
@@ -3394,6 +3395,16 @@
     }
   };
   J.JSNumber.prototype = {
+    toInt$0(receiver) {
+      var t1;
+      if (receiver >= -2147483648 && receiver <= 2147483647)
+        return receiver | 0;
+      if (isFinite(receiver)) {
+        t1 = receiver < 0 ? Math.ceil(receiver) : Math.floor(receiver);
+        return t1 + 0;
+      }
+      throw A.wrapException(A.UnsupportedError$("" + receiver + ".toInt()"));
+    },
     toString$0(receiver) {
       if (receiver === 0 && 1 / receiver < 0)
         return "-0.0";
@@ -4310,7 +4321,12 @@
     },
     $isCanvasElement: 1
   };
-  A.CanvasRenderingContext2D.prototype = {$isCanvasRenderingContext2D: 1};
+  A.CanvasRenderingContext2D.prototype = {
+    set$fillStyle(receiver, value) {
+      receiver.fillStyle = value;
+    },
+    $isCanvasRenderingContext2D: 1
+  };
   A.DomException.prototype = {
     toString$0(receiver) {
       return String(receiver);
@@ -4409,13 +4425,17 @@
       return new A._ElementEventStreamImpl(receiver, "click", false, type$._ElementEventStreamImpl_MouseEvent);
     }
   };
-  A.Boid.prototype = {};
+  A.Boid.prototype = {
+    toString$0(_) {
+      return "(" + this._position.toString$0(0) + ", " + A.S(this._direction) + ")";
+    }
+  };
   A.BoidSimulation.prototype = {
     initialize$0() {
-      var t1, id, t2, _this = this;
-      for (t1 = _this._boids, id = 0; false; ++id) {
-        t2 = $.$get$_random();
-        B.JSArray_methods.add$1(t1, new A.Boid(new A.Point2D(t2.nextInt$1(_this._shape_dimensions._x), t2.nextInt$1(_this._shape_dimensions._y)), 12.566370614359172 * t2.nextDouble$0() - 6.283185307179586, id));
+      var t1, t2, id, t3, _this = this;
+      for (t1 = _this._numBoids, t2 = _this._boids, id = 0; id < t1; ++id) {
+        t3 = $.$get$_random();
+        B.JSArray_methods.add$1(t2, new A.Boid(new A.Point2D(t3.nextInt$1(_this._shape_dimensions._x), t3.nextInt$1(_this._shape_dimensions._y)), 12.566370614359172 * t3.nextDouble$0() - 6.283185307179586, id));
       }
       t1 = _this._actions;
       B.JSArray_methods.add$1(t1, _this.get$coherence());
@@ -4453,21 +4473,26 @@
       return ix;
     },
     separation$2(obj, sim) {
-      var a, t1;
+      var mid, a, t1;
       type$.Boid._as(obj);
       type$.BoidSimulation._as(sim);
-      a = obj._position.angle$1(sim.midPoint$1(sim.neighbors$1(obj)));
-      t1 = obj._direction;
-      obj._direction = t1 + -(t1 - a);
+      mid = sim.midPoint$1(sim.neighbors$1(obj));
+      if (mid.dot$1(mid) > 0) {
+        a = obj._position.angle$1(mid);
+        t1 = obj._direction;
+        obj._direction = t1 + -(t1 - a);
+      }
       return obj;
     },
     move$2(obj, sim) {
       var t1;
       type$.Boid._as(obj);
       type$.BoidSimulation._as(sim);
+      A.print(obj);
       t1 = obj._position;
-      t1._x = t1._x + A._asInt(Math.cos(obj._direction));
-      t1._y = t1._y + A._asInt(Math.sin(obj._direction));
+      t1._x = t1._x + B.JSNumber_methods.toInt$0(sim._velocity * Math.cos(obj._direction));
+      t1._y = t1._y + B.JSNumber_methods.toInt$0(sim._velocity * Math.sin(obj._direction));
+      A.print(obj);
       return obj;
     },
     mapDistances$0() {
@@ -4493,12 +4518,20 @@
     midPoint$1(swarm) {
       var t1, px, py, _i, t2;
       type$.List_Boid._as(swarm);
-      for (t1 = swarm.length, px = 0, py = 0, _i = 0; _i < t1; ++_i) {
-        t2 = swarm[_i]._position;
-        px += t2._x;
-        py += t2._y;
+      t1 = swarm.length;
+      if (t1 > 0) {
+        for (px = 0, py = 0, _i = 0; _i < t1; ++_i) {
+          t2 = swarm[_i]._position;
+          px += t2._x;
+          py += t2._y;
+        }
+        px /= t1;
+        py /= t1;
+      } else {
+        px = 0;
+        py = 0;
       }
-      return new A.Point2D(A._asInt(px / t1), A._asInt(py / t1));
+      return new A.Point2D(B.JSNumber_methods.toInt$0(px), B.JSNumber_methods.toInt$0(py));
     },
     next$0() {
       var t1, t2, t3, _i, boid, t4, _i0, _this = this;
@@ -4508,7 +4541,7 @@
       for (t2 = t1.length, t3 = _this._actions, _i = 0; _i < t1.length; t1.length === t2 || (0, A.throwConcurrentModificationError)(t1), ++_i) {
         boid = t1[_i];
         for (t4 = t3.length, _i0 = 0; _i0 < t3.length; t3.length === t4 || (0, A.throwConcurrentModificationError)(t3), ++_i0)
-          t3[_i0].call$2(boid, _this);
+          boid = t3[_i0].call$2(boid, _this);
       }
     }
   };
@@ -4518,6 +4551,9 @@
     },
     dot$1(obj) {
       return this._x * obj._x + this._y * obj._y;
+    },
+    toString$0(_) {
+      return "" + this._x + ", " + this._y;
     }
   };
   A.main_closure.prototype = {
@@ -4530,8 +4566,8 @@
       if (canvasWidth == null)
         canvasWidth = 100;
       canvasHeight = t1 ? null : canvas.height;
-      t1 = A.BoidSimulation$(canvasWidth, canvasHeight == null ? 100 : canvasHeight);
-      $.simulation = t1;
+      t1 = $.simulation = A.BoidSimulation$(100, canvasWidth, canvasHeight == null ? 100 : canvasHeight);
+      t1._velocity = 2;
       t1.initialize$0();
       B.Window_methods.requestAnimationFrame$1(window, A.boids_controller__boids_animation$closure());
     },
@@ -4666,9 +4702,11 @@
   })();
   (function constants() {
     B.CanvasElement_methods = A.CanvasElement.prototype;
+    B.CanvasRenderingContext2D_methods = A.CanvasRenderingContext2D.prototype;
     B.Interceptor_methods = J.Interceptor.prototype;
     B.JSArray_methods = J.JSArray.prototype;
     B.JSInt_methods = J.JSInt.prototype;
+    B.JSNumber_methods = J.JSNumber.prototype;
     B.JSString_methods = J.JSString.prototype;
     B.JavaScriptFunction_methods = J.JavaScriptFunction.prototype;
     B.JavaScriptObject_methods = J.JavaScriptObject.prototype;
@@ -4868,7 +4906,7 @@
     }()));
     _lazyFinal($, "_AsyncRun__scheduleImmediateClosure", "$get$_AsyncRun__scheduleImmediateClosure", () => A._AsyncRun__initializeScheduleImmediate());
     _lazyFinal($, "_random", "$get$_random", () => B.C__JSRandom);
-    _lazy($, "simulation", "$get$simulation", () => A.BoidSimulation$(0, 0));
+    _lazy($, "simulation", "$get$simulation", () => A.BoidSimulation$(100, 0, 0));
   })();
   (function nativeSupport() {
     !function() {
