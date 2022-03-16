@@ -39,10 +39,10 @@ class Point2D {
 }
 
 double fixAngle(double a) {
-  if (-2 * pi > a) {
-    return a + 4 * pi;
-  } else if (a > 2 * pi) {
-    return a - 4 * pi;
+  if (-pi > a) {
+    return a + (2 * pi);
+  } else if (a > pi) {
+    return a - (2 * pi);
   }
   return a;
 }

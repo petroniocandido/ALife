@@ -8,6 +8,8 @@ class Boid {
 
   Point2D get position => _position;
 
+  void set position(Point2D p) => _position = p;
+
   double _direction = 0;
 
   double get direction => _direction;
@@ -75,7 +77,7 @@ class BoidSimulation {
           id,
           Point2D(_random.nextInt(shape_dimensions.x),
               _random.nextInt(shape_dimensions.y)),
-          ((4 * pi) * _random.nextDouble()) - (2 * pi)));
+          _random.nextDouble()));
     }
 
     _actions.add(coherence);
@@ -85,8 +87,7 @@ class BoidSimulation {
 
   Boid coherence(Boid obj, BoidSimulation sim) {
     double a = obj.position.angle(sim.swarmMidPoint);
-    double da = obj.direction - a;
-    obj.direction += da;
+    obj.direction = obj.direction + a;
     return obj;
   }
 
@@ -105,17 +106,16 @@ class BoidSimulation {
     Point2D mid = sim.midPoint(neigh);
     if (mid.internal_product() > 0) {
       double a = obj.position.angle(mid);
-      double da = obj.direction - a;
-      obj.direction += -da;
+      //double da = obj.direction - a;
+      obj.direction = obj.direction - a;
     }
     return obj;
   }
 
   Boid move(Boid obj, BoidSimulation sim) {
-    print(obj);
     obj.position.x += (sim.velocity * cos(obj.direction)).toInt();
     obj.position.y += (sim.velocity * sin(obj.direction)).toInt();
-    print(obj);
+    obj.position = keepBounds(obj.position);
     return obj;
   }
 
@@ -133,6 +133,14 @@ class BoidSimulation {
         _distances[j]?[i] = d;
       }
     }
+  }
+
+  Point2D keepBounds(Point2D p) {
+    p.x = p.x < 0 ? p.x + shape_dimensions.x : p.x;
+    p.y = p.y < 0 ? p.y + shape_dimensions.y : p.y;
+    p.x = p.x > shape_dimensions.x ? p.x - shape_dimensions.x : p.x;
+    p.y = p.y > shape_dimensions.y ? p.y - shape_dimensions.y : p.y;
+    return p;
   }
 
   Point2D midPoint(List<Boid> swarm) {

@@ -5,7 +5,6 @@ import 'dart:async';
 
 //import 'CellularAutomata.dart';
 import '../../Boids/Boids.dart';
-import '../../Common/Point2D.dart';
 
 final _random = Random();
 
@@ -16,6 +15,18 @@ BoidSimulation simulation = BoidSimulation(100, 0, 0);
 Map<String, dynamic> rules = {};
 
 void main() {
+  querySelector("#num_boids")?.onChange.listen((event) {
+    changeLabel("num_boids", "lbl_num_boids");
+  });
+
+  querySelector("#velocity")?.onChange.listen((event) {
+    changeLabel("velocity", "lbl_velocity");
+  });
+
+  querySelector("#radius")?.onChange.listen((event) {
+    changeLabel("radius", "lbl_radius");
+  });
+
   querySelector("#run_boids")?.onClick.listen((event) {
     boids_start(event);
   });
@@ -39,8 +50,19 @@ void boids_start(MouseEvent event) {
   int canvasWidth = canvas?.width ?? 100;
   int canvasHeight = canvas?.height ?? 100;
 
-  simulation = BoidSimulation(100, canvasWidth, canvasHeight);
-  simulation.velocity = 2;
+  var num_boids = querySelector("#num_boids") as InputElement?;
+  int n = int.parse(num_boids?.value ?? "100");
+
+  simulation = BoidSimulation(n, canvasWidth, canvasHeight);
+
+  var velocity = querySelector("#velocity") as InputElement?;
+
+  simulation.velocity = int.parse(velocity?.value ?? "0");
+
+  var radius = querySelector("#radius") as InputElement?;
+
+  simulation.radius = double.parse(radius?.value ?? "20");
+
   simulation.initialize();
 
   window.requestAnimationFrame(boids_animation);
@@ -56,12 +78,11 @@ void boids_animation(num timestamp) {
   simulation.next();
 
   for (Boid boid in simulation.boids) {
-    //Point2D vec = boid.vector(10);
-    //canvas_arrow(context, boid.position.x, boid.position.y, vec.x, vec.y,
-    //    boid.direction);
+    /*Point2D vec = boid.vector(10);
+    canvas_arrow(context, boid.position.x, boid.position.y, vec.x, vec.y,
+        boid.direction);*/
     context?.setFillColorRgb(0, 0, 0);
-    context?.fillRect(boid.position.x, boid.position.y, boid.position.x + 10,
-        boid.position.y + 10);
+    context?.fillRect(boid.position.x, boid.position.y, 10, 10);
   }
   animation_request_id = window.requestAnimationFrame(boids_animation);
 }
