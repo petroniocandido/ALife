@@ -13,7 +13,7 @@ class Point2D {
 
   Point2D(this._x, this._y);
 
-  double distance(Point2D obj) => sqrt((x - obj.x) ^ 2 + (y - obj.y) ^ 2);
+  double distance(Point2D obj) => sqrt(pow(x - obj.x, 2) + pow(y - obj.y, 2));
 
   double angle(Point2D obj) =>
       atan(this.dot(obj) / (this.internal_product() + obj.internal_product()));
@@ -33,9 +33,19 @@ class Point2D {
         (this.x.toDouble() * obj).toInt(), (this.y.toDouble() * obj).toInt());
   }
 
-  int dot(Point2D obj) => x * obj.x + y * obj.y;
+  Point2D operator -() {
+    return Point2D(-x, -y);
+  }
 
-  int internal_product() => this.dot(this);
+  double dot(Point2D obj) =>
+      x.toDouble() * obj.x.toDouble() + y.toDouble() * obj.y.toDouble();
+
+  double internal_product() => sqrt(this.dot(this));
+
+  void restringe(int v) {
+    x = x > v ? v : x;
+    y = y > v ? v : y;
+  }
 
   @override
   String toString() => "$_x, $_y";
@@ -48,4 +58,10 @@ double fixAngle(double a) {
     return a - (2 * pi);
   }
   return a;
+}
+
+void main() {
+  var a = Point2D(0, 0);
+  var b = Point2D(10, 10);
+  print(1 - a.internal_product() / 15);
 }

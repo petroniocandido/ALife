@@ -3104,6 +3104,7 @@
     BoidSimulation: function BoidSimulation(t0, t1, t2, t3, t4, t5, t6) {
       var _ = this;
       _._shape_dimensions = t0;
+      _._velocity = 1;
       _._radius = 2;
       _._swarmMidPoint = t1;
       _._boids = t2;
@@ -4644,11 +4645,13 @@
   };
   A.BoidSimulation.prototype = {
     initialize$0() {
-      var t1, id, t2, t3, _this = this;
+      var id, t2, t3, _this = this,
+        t1 = _this._shape_dimensions;
+      Math.sqrt(t1.dot$1(t1));
       for (t1 = _this._numBoids, id = 0; id < t1; ++id) {
         t2 = _this._boids;
         t3 = $.$get$_random();
-        B.JSArray_methods.add$1(t2, new A.Boid(new A.Point2D(t3.nextInt$1(_this._shape_dimensions._x), t3.nextInt$1(_this._shape_dimensions._y)), new A.Point2D(0, 0), id));
+        B.JSArray_methods.add$1(t2, new A.Boid(new A.Point2D(t3.nextInt$1(_this._shape_dimensions._x), t3.nextInt$1(_this._shape_dimensions._y)), new A.Point2D(t3.nextInt$1(2), t3.nextInt$1(2)), id));
       }
       t1 = _this._actions;
       B.JSArray_methods.add$1(t1, _this.get$coherence());
@@ -4685,20 +4688,20 @@
       type$.Boid._as(obj);
       type$.BoidSimulation._as(sim);
       v = obj._position.$sub(0, sim._swarmMidPoint);
-      obj._direction = obj._direction.$add(0, v.$mul(0, 0.01));
+      obj._direction = obj._direction.$sub(0, v);
       return obj;
     },
     separation$2(obj, sim) {
       var neigh, t1, _i, b, t2, t3, t4, scale;
       type$.Boid._as(obj);
       neigh = type$.BoidSimulation._as(sim).neighbors$1(obj);
-      for (t1 = neigh.length, _i = 0; _i < t1; ++_i) {
+      for (t1 = neigh.length, _i = 0; _i < neigh.length; neigh.length === t1 || (0, A.throwConcurrentModificationError)(neigh), ++_i) {
         b = neigh[_i];
         t2 = obj._position;
         t3 = b._position;
         t4 = t2._x - t3._x;
         t3 = t2._y - t3._y;
-        scale = this._radius / (t4 * t4 + t3 * t3 + 0.00001);
+        scale = 1 - Math.sqrt(t4 * t4 + t3 * t3) / this._radius;
         t2 = obj._direction;
         t4 = B.JSNumber_methods.toInt$0(t4 * scale);
         t3 = B.JSNumber_methods.toInt$0(t3 * scale);
@@ -4707,21 +4710,39 @@
       return obj;
     },
     move$2(obj, sim) {
-      var t1, t2, t3, t4;
+      var t1, t2, t3, t4, _this = this;
       type$.Boid._as(obj);
       type$.BoidSimulation._as(sim);
-      t1 = obj._position = obj._position.$add(0, obj._direction.$mul(0, 0.01));
-      t2 = t1._x;
-      if (t2 < 0)
-        t2 = this._shape_dimensions._x;
-      t1._x = t2;
+      t1 = obj._direction;
+      t2 = _this._velocity;
+      t3 = t1._x;
+      t1._x = t3 > t2 ? t2 : t3;
       t3 = t1._y;
+      t1._y = t3 > t2 ? t2 : t3;
+      t2 = obj._position;
+      t1 = t1.$mul(0, 0.005);
+      t3 = t2._x + t1._x;
+      t1 = t2._y + t1._y;
+      t2 = obj._position = new A.Point2D(t3, t1);
+      if (t3 <= 0 || t3 >= _this._shape_dimensions._x) {
+        t3 = obj._direction;
+        t3._x = -t3._x;
+      }
+      if (t1 <= 0 || t1 >= _this._shape_dimensions._y) {
+        t1 = obj._direction;
+        t1._y = -t1._y;
+      }
+      t1 = t2._x;
+      if (t1 < 0)
+        t1 = _this._shape_dimensions._x;
+      t2._x = t1;
+      t3 = t2._y;
       if (t3 < 0)
-        t3 = this._shape_dimensions._y;
-      t1._y = t3;
-      t4 = this._shape_dimensions;
-      t1._x = t2 >= t4._x ? 0 : t2;
-      t1._y = t3 >= t4._y ? 0 : t3;
+        t3 = _this._shape_dimensions._y;
+      t2._y = t3;
+      t4 = _this._shape_dimensions;
+      t2._x = t1 >= t4._x ? 0 : t1;
+      t2._y = t3 >= t4._y ? 0 : t3;
       return obj;
     },
     mapDistances$0() {
@@ -4736,7 +4757,7 @@
           boidB = t4[j0];
           t4 = boidA._position;
           t5 = boidB._position;
-          d = Math.sqrt((t4._x - t5._x ^ 2 + (t4._y - t5._y) ^ 2) >>> 0);
+          d = Math.sqrt(Math.pow(t4._x - t5._x, 2) + Math.pow(t4._y - t5._y, 2));
           t5 = t1.$index(0, i);
           if (t5 != null)
             t5.$indexSet(0, j0, d);
@@ -4788,14 +4809,14 @@
     }
   };
   A.Point2D.prototype = {
-    $add(_, obj) {
-      return new A.Point2D(this._x + obj._x, this._y + obj._y);
-    },
     $sub(_, obj) {
       return new A.Point2D(this._x - obj._x, this._y - obj._y);
     },
     $mul(_, obj) {
       return new A.Point2D(B.JSNumber_methods.toInt$0(this._x * obj), B.JSNumber_methods.toInt$0(this._y * obj));
+    },
+    dot$1(obj) {
+      return this._x * obj._x + this._y * obj._y;
     },
     toString$0(_) {
       return "" + this._x + ", " + this._y;
@@ -4821,7 +4842,7 @@
   };
   A.main_closure2.prototype = {
     call$1($event) {
-      var t1, canvas, t2, canvasWidth, canvasHeight, num_boids, t3, velocity, radius, _null = null;
+      var t1, canvas, t2, canvasWidth, canvasHeight, num_boids, t3, velocity, t4, radius, _null = null;
       type$.MouseEvent._as($event);
       t1 = document;
       canvas = type$.nullable_CanvasElement._as(t1.querySelector("#canvas"));
@@ -4837,9 +4858,9 @@
       t3 = num_boids == null ? _null : num_boids.value;
       $.simulation = A.BoidSimulation$(A.int_parse(t3 == null ? "100" : t3), canvasWidth, canvasHeight);
       velocity = t2._as(t1.querySelector("#velocity"));
-      $.$get$simulation();
-      t3 = velocity == null ? _null : velocity.value;
-      A.int_parse(t3 == null ? "0" : t3);
+      t3 = $.$get$simulation();
+      t4 = velocity == null ? _null : velocity.value;
+      t3._velocity = A.int_parse(t4 == null ? "0" : t4);
       radius = t2._as(t1.querySelector("#radius"));
       t1 = $.$get$simulation();
       t2 = radius == null ? _null : radius.value;
