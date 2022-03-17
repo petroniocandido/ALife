@@ -3,6 +3,8 @@ import 'dart:math';
 
 final _random = Random();
 
+num eps = 0.00001;
+
 class Boid {
   Point2D _position = Point2D(0, 0);
 
@@ -10,21 +12,20 @@ class Boid {
 
   void set position(Point2D p) => _position = p;
 
-  double _direction = 0;
+  Point2D _direction = Point2D(0, 0);
 
-  double get direction => _direction;
+  Point2D get direction => _direction;
 
-  void set direction(double d) => _direction = d;
+  void set direction(Point2D p) => _direction = p;
 
   int _id = 0;
 
   int get id => _id;
 
-  Boid(this._id, this._position, this._direction);
+  Boid(this._id, this._position);
 
-  Point2D vector(int length) => Point2D(
-      position.x + (length * cos(direction)) as int,
-      position.y + (length * sin(direction)) as int);
+  Point2D operator -(Boid obj) =>
+      Point2D(obj.position.x - position.x, obj.position.y - position.y);
 
   @override
   String toString() => "($_position, $_direction)";
@@ -61,6 +62,10 @@ class BoidSimulation {
 
   List<Boid> get boids => _boids;
 
+  var _workingBoids = <Boid>[];
+
+  List<Boid> get workingBoids => _workingBoids;
+
   int _numBoids = 0;
 
   int get numBoids => _numBoids;
@@ -69,6 +74,8 @@ class BoidSimulation {
 
   Map<int, Map<int, double>> _distances = {};
 
+  double _momentum = 0.01;
+
   // Abstract Methods
 
   void initialize() {
@@ -76,19 +83,12 @@ class BoidSimulation {
       boids.add(Boid(
           id,
           Point2D(_random.nextInt(shape_dimensions.x),
-              _random.nextInt(shape_dimensions.y)),
-          _random.nextDouble()));
+              _random.nextInt(shape_dimensions.y))));
     }
 
     _actions.add(coherence);
     _actions.add(separation);
     _actions.add(move);
-  }
-
-  Boid coherence(Boid obj, BoidSimulation sim) {
-    double a = obj.position.angle(sim.swarmMidPoint);
-    obj.direction = obj.direction + a;
-    return obj;
   }
 
   List<Boid> neighbors(Boid boid) {
@@ -101,21 +101,29 @@ class BoidSimulation {
     return ix;
   }
 
+  Boid coherence(Boid obj, BoidSimulation sim) {
+    Point2D v = obj.position - sim.swarmMidPoint;
+    obj.direction += (v * _momentum);
+    return obj;
+  }
+
   Boid separation(Boid obj, BoidSimulation sim) {
     List<Boid> neigh = sim.neighbors(obj);
-    Point2D mid = sim.midPoint(neigh);
-    if (mid.internal_product() > 0) {
-      double a = obj.position.angle(mid);
-      //double da = obj.direction - a;
-      obj.direction = obj.direction - a;
+    for (Boid b in neigh) {
+      Point2D v = obj.position - b.position;
+      num scale = radius / (v.internal_product() + eps);
+      obj.direction -= (v * scale);
     }
     return obj;
   }
 
   Boid move(Boid obj, BoidSimulation sim) {
+    /*obj.direction = fixAngle(obj.direction);
     obj.position.x += (sim.velocity * cos(obj.direction)).toInt();
     obj.position.y += (sim.velocity * sin(obj.direction)).toInt();
-    obj.position = keepBounds(obj.position);
+    */
+    obj.position += obj.direction * _momentum;
+    obj = keepBounds(obj);
     return obj;
   }
 
@@ -135,6 +143,30 @@ class BoidSimulation {
     }
   }
 
+  Boid keepBounds(Boid p) {
+    /*if (p.position.x <= 0 ||
+        p.position.y <= 0 ||
+        p.position.x >= shape_dimensions.x ||
+        p.position.y >= shape_dimensions.y) {
+      p.direction = 2 * pi - p.direction;
+    }
+
+    p.position.x = p.position.x < 0 ? 0 : p.position.x;
+    p.position.y = p.position.y < 0 ? 0 : p.position.y;
+    p.position.x =
+        p.position.x >= shape_dimensions.x ? shape_dimensions.x : p.position.x;
+    p.position.y =
+        p.position.y >= shape_dimensions.y ? shape_dimensions.y : p.position.y;
+*/
+    p.position.x = p.position.x < 0 ? shape_dimensions.x : p.position.x;
+    p.position.y = p.position.y < 0 ? shape_dimensions.y : p.position.y;
+    p.position.x = p.position.x >= shape_dimensions.x ? 0 : p.position.x;
+    p.position.y = p.position.y >= shape_dimensions.y ? 0 : p.position.y;
+
+    return p;
+  }
+
+/*
   Point2D keepBounds(Point2D p) {
     p.x = p.x < 0 ? p.x + shape_dimensions.x : p.x;
     p.y = p.y < 0 ? p.y + shape_dimensions.y : p.y;
@@ -142,7 +174,7 @@ class BoidSimulation {
     p.y = p.y > shape_dimensions.y ? p.y - shape_dimensions.y : p.y;
     return p;
   }
-
+*/
   Point2D midPoint(List<Boid> swarm) {
     num px = 0;
     num py = 0;
@@ -159,13 +191,15 @@ class BoidSimulation {
   }
 
   void next() {
+    _workingBoids = _boids.toList();
     mapDistances();
     _swarmMidPoint = midPoint(boids);
-    for (Boid boid in _boids) {
+    for (Boid boid in _workingBoids) {
       for (BoidAction func in _actions) {
         boid = func.call(boid, this);
       }
     }
+    _boids = _workingBoids.toList();
   }
 }
 
