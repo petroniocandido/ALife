@@ -109,22 +109,22 @@ class BoidSimulation {
 
   Boid coherence(Boid obj, BoidSimulation sim) {
     Point2D v = obj.position - sim.swarmMidPoint;
-    obj.direction -= v;
+    obj.direction += v * _momentum;
     return obj;
   }
 
   Boid separation(Boid obj, BoidSimulation sim) {
     List<Boid> neigh = sim.neighbors(obj);
-    for (Boid b in neigh) {
+    /*for (Boid b in neigh) {
       Point2D v = obj.position - b.position;
-      num scale = 1 - v.internal_product() / radius;
-      obj.direction -= v * scale;
-    }
+      //num scale = 1 - v.internal_product() / radius;
+      obj.direction -= v * _momentum;
+    }*/
 
-    /*Point2D v = obj.position - midPoint(neigh);
-    num scale = 1 - v.internal_product() / radius;
+    Point2D v = obj.position - midPoint(neigh);
+    //num scale = 1 - v.internal_product() / radius;
     obj.direction -= v;
-    */
+
     return obj;
   }
 
@@ -133,7 +133,8 @@ class BoidSimulation {
     obj.position.x += (sim.velocity * cos(obj.direction)).toInt();
     obj.position.y += (sim.velocity * sin(obj.direction)).toInt();
     */
-    obj.direction.restringe(velocity);
+    ;
+    //obj.direction.restringe(velocity);
     obj.position += obj.direction * _momentum;
     obj = keepBounds(obj);
     return obj;

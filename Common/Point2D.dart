@@ -43,8 +43,10 @@ class Point2D {
   double internal_product() => sqrt(this.dot(this));
 
   void restringe(int v) {
-    x = x > v ? v : x;
-    y = y > v ? v : y;
+    _x = _x > v ? v : _x;
+    _x = _x < -v ? -v : _x;
+    _y = _y > v ? v : _y;
+    _y = _y < -v ? -v : _y;
   }
 
   @override
@@ -62,6 +64,7 @@ double fixAngle(double a) {
 
 void main() {
   var a = Point2D(0, 0);
-  var b = Point2D(10, 10);
-  print(1 - a.internal_product() / 15);
+  var b = Point2D(1, -10);
+  b.restringe(2);
+  print(b);
 }
