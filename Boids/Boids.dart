@@ -78,22 +78,38 @@ class BoidSimulation {
 
   double _momentum = 0.005;
 
-  double _coherence_norm = 1;
+  double get momentum => _momentum;
+
+  void set momentum(double d) => _momentum = d;
+
+  double _coherence_factor = 1;
+
+  Point2D _avoidance = Point2D(10, 10);
 
   // Abstract Methods
 
   void initialize() {
-    _coherence_norm = shape_dimensions.internal_product();
+    var dx = shape_dimensions.x ~/ 2;
+    var hx = dx ~/ 2;
+    var dy = shape_dimensions.y ~/ 2;
+    var hy = dy ~/ 2;
+
+    _avoidance.x = shape_dimensions.x ~/ 5;
+    _avoidance.y = shape_dimensions.y ~/ 5;
+
     for (int id = 0; id < numBoids; id++) {
       boids.add(Boid(
           id,
-          Point2D(_random.nextInt(shape_dimensions.x),
-              _random.nextInt(shape_dimensions.y)),
-          Point2D(_random.nextInt(2), _random.nextInt(2))));
+          Point2D(_random.nextInt(dx) + hx, _random.nextInt(dy) + hy),
+          Point2D(_random.nextInt(10) - 5, _random.nextInt(10) - 5)));
     }
+
+    _coherence_factor = shape_dimensions.internal_product();
 
     _actions.add(coherence);
     _actions.add(separation);
+    _actions.add(aligment);
+    _actions.add(avoidLimits);
     _actions.add(move);
   }
 
@@ -109,33 +125,52 @@ class BoidSimulation {
 
   Boid coherence(Boid obj, BoidSimulation sim) {
     Point2D v = obj.position - sim.swarmMidPoint;
-    obj.direction += v * _momentum;
+    obj.direction += v * (v.internal_product() / _coherence_factor) * _momentum;
     return obj;
   }
 
   Boid separation(Boid obj, BoidSimulation sim) {
     List<Boid> neigh = sim.neighbors(obj);
-    /*for (Boid b in neigh) {
+    for (Boid b in neigh) {
       Point2D v = obj.position - b.position;
       //num scale = 1 - v.internal_product() / radius;
-      obj.direction -= v * _momentum;
-    }*/
-
+      obj.direction -= v * _momentum; //* scale
+    }
+/*
     Point2D v = obj.position - midPoint(neigh);
-    //num scale = 1 - v.internal_product() / radius;
+    //num scale = 1 - (v.internal_product() / radius);
     obj.direction -= v;
+*/
+    return obj;
+  }
+
+  Boid aligment(Boid obj, BoidSimulation sim) {
+    List<Boid> neigh = sim.neighbors(obj);
+    Point2D v = meanVector(neigh);
+    obj.direction += v * _momentum;
 
     return obj;
   }
 
+  Boid avoidLimits(Boid obj, BoidSimulation sim) {
+    if (obj.position.x < _avoidance.x) {
+      obj.direction.x += _avoidance.x - obj.position.x;
+    } else if (obj.position.x > shape_dimensions.x - _avoidance.x) {
+      obj.direction.x -= (_avoidance.x - (shape_dimensions.x - obj.position.x));
+    }
+    if (obj.position.y < _avoidance.y) {
+      obj.direction.y += _avoidance.y - obj.position.y;
+    } else if (obj.position.y > shape_dimensions.y - _avoidance.y) {
+      obj.direction.y -= (_avoidance.y - (shape_dimensions.y - obj.position.y));
+    }
+    return obj;
+  }
+
   Boid move(Boid obj, BoidSimulation sim) {
-    /*obj.direction = fixAngle(obj.direction);
-    obj.position.x += (sim.velocity * cos(obj.direction)).toInt();
-    obj.position.y += (sim.velocity * sin(obj.direction)).toInt();
-    */
-    ;
-    //obj.direction.restringe(velocity);
-    obj.position += obj.direction * _momentum;
+    var mod =
+        sim.velocity / max(obj.direction.internal_product(), sim.velocity);
+    obj.position += obj.direction * mod; // * _momentum;
+
     obj = keepBounds(obj);
     return obj;
   }
@@ -163,10 +198,12 @@ class BoidSimulation {
     if (p.position.y <= 0 || p.position.y >= shape_dimensions.y) {
       p.direction.y = -p.direction.y;
     }
+    /*
     p.position.x = p.position.x < 0 ? shape_dimensions.x : p.position.x;
     p.position.y = p.position.y < 0 ? shape_dimensions.y : p.position.y;
     p.position.x = p.position.x >= shape_dimensions.x ? 0 : p.position.x;
     p.position.y = p.position.y >= shape_dimensions.y ? 0 : p.position.y;
+    */
 
     return p;
   }
@@ -178,6 +215,21 @@ class BoidSimulation {
       for (Boid boid in swarm) {
         px += boid.position.x;
         py += boid.position.y;
+      }
+      px = px / swarm.length;
+      py = py / swarm.length;
+    }
+
+    return Point2D(px.toInt(), py.toInt());
+  }
+
+  Point2D meanVector(List<Boid> swarm) {
+    num px = 0;
+    num py = 0;
+    if (swarm.length > 0) {
+      for (Boid boid in swarm) {
+        px += boid.direction.x;
+        py += boid.direction.y;
       }
       px = px / swarm.length;
       py = py / swarm.length;
@@ -203,7 +255,7 @@ void main() {
   var sim = BoidSimulation(3, 10, 10);
   sim.velocity = 2;
   sim.initialize();
-  for (int i = 0; i < 1; i++) {
+  for (int i = 0; i < 5; i++) {
     sim.next();
     var boids = [for (Boid b in sim.boids) b.toString()];
     print(boids);

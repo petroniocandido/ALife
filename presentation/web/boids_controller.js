@@ -3092,7 +3092,7 @@
     },
     BoidSimulation$(_numBoids, _x, _y) {
       var t1 = type$.JSArray_Boid;
-      t1 = new A.BoidSimulation(new A.Point2D(0, 0), new A.Point2D(0, 0), A._setArrayType([], t1), A._setArrayType([], t1), _numBoids, A._setArrayType([], type$.JSArray_of_Boid_Function_Boid_BoidSimulation), A.LinkedHashMap_LinkedHashMap$_empty(type$.int, type$.Map_int_double));
+      t1 = new A.BoidSimulation(new A.Point2D(0, 0), new A.Point2D(0, 0), A._setArrayType([], t1), A._setArrayType([], t1), _numBoids, A._setArrayType([], type$.JSArray_of_Boid_Function_Boid_BoidSimulation), A.LinkedHashMap_LinkedHashMap$_empty(type$.int, type$.Map_int_double), 0.005, new A.Point2D(10, 10));
       t1._shape_dimensions = new A.Point2D(_x, _y);
       return t1;
     },
@@ -3101,9 +3101,10 @@
       this._direction = t1;
       this._id = t2;
     },
-    BoidSimulation: function BoidSimulation(t0, t1, t2, t3, t4, t5, t6) {
+    BoidSimulation: function BoidSimulation(t0, t1, t2, t3, t4, t5, t6, t7, t8) {
       var _ = this;
       _._shape_dimensions = t0;
+      _._velocity = 1;
       _._radius = 2;
       _._swarmMidPoint = t1;
       _._boids = t2;
@@ -3111,6 +3112,9 @@
       _._numBoids = t4;
       _._actions = t5;
       _._distances = t6;
+      _._momentum = t7;
+      _._coherence_factor = 1;
+      _._avoidance = t8;
     },
     Point2D: function Point2D(t0, t1) {
       this._x = t0;
@@ -3135,7 +3139,7 @@
         type$.nullable_void_Function._as(null);
         A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
       }
-      t2 = t1.querySelector("#radius");
+      t2 = t1.querySelector("#momentum");
       if (t2 != null) {
         t2 = J.get$onChange$x(t2);
         t3 = t2.$ti;
@@ -3143,11 +3147,19 @@
         type$.nullable_void_Function._as(null);
         A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
       }
+      t2 = t1.querySelector("#radius");
+      if (t2 != null) {
+        t2 = J.get$onChange$x(t2);
+        t3 = t2.$ti;
+        t4 = t3._eval$1("~(1)?")._as(new A.main_closure2());
+        type$.nullable_void_Function._as(null);
+        A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
+      }
       t2 = t1.querySelector("#run_boids");
       if (t2 != null) {
         t2 = J.get$onClick$x(t2);
         t3 = t2.$ti;
-        t4 = t3._eval$1("~(1)?")._as(new A.main_closure2());
+        t4 = t3._eval$1("~(1)?")._as(new A.main_closure3());
         type$.nullable_void_Function._as(null);
         A._EventStreamSubscription$(t2._target, t2._eventType, t4, false, t3._precomputed1);
       }
@@ -3155,7 +3167,7 @@
       if (t1 != null) {
         t1 = J.get$onClick$x(t1);
         t2 = t1.$ti;
-        t3 = t2._eval$1("~(1)?")._as(new A.main_closure3());
+        t3 = t2._eval$1("~(1)?")._as(new A.main_closure4());
         type$.nullable_void_Function._as(null);
         A._EventStreamSubscription$(t1._target, t1._eventType, t3, false, t2._precomputed1);
       }
@@ -3179,9 +3191,11 @@
       canvasWidth = t1 ? null : canvas.width;
       if (canvasWidth == null)
         canvasWidth = 100;
+      B.JSInt_methods._tdivFast$1(canvasWidth, 2);
       canvasHeight = t1 ? null : canvas.height;
       if (canvasHeight == null)
         canvasHeight = 100;
+      B.JSInt_methods._tdivFast$1(canvasHeight, 2);
       t1 = t2 == null;
       if (!t1)
         t2.clearRect(0, 0, canvasWidth, canvasHeight);
@@ -3192,7 +3206,7 @@
           B.CanvasRenderingContext2D_methods.set$fillStyle(t2, "rgba(0, 0, 0, 1)");
         if (!t1) {
           t5 = boid._position;
-          t2.fillRect(t5._x, t5._y, 10, 10);
+          t2.fillRect(B.JSInt_methods._tdivFast$1(t5._x, 3), B.JSInt_methods._tdivFast$1(t5._y, 3), 3, 3);
         }
       }
       $.animation_request_id = B.Window_methods.requestAnimationFrame$1(window, A.boids_controller__boids_animation$closure());
@@ -3206,6 +3220,8 @@
     main_closure2: function main_closure2() {
     },
     main_closure3: function main_closure3() {
+    },
+    main_closure4: function main_closure4() {
     },
     throwLateFieldADI(fieldName) {
       return A.throwExpression(new A.LateError("Field '" + fieldName + "' has been assigned during initialization."));
@@ -3569,6 +3585,20 @@
       factor = Math.pow(2, floorLog2);
       scaled = absolute < 1 ? absolute / factor : factor / absolute;
       return ((scaled * 9007199254740992 | 0) + (scaled * 3542243181176521 | 0)) * 599197 + floorLog2 * 1259 & 536870911;
+    },
+    _tdivFast$1(receiver, other) {
+      return (receiver | 0) === receiver ? receiver / other | 0 : this._tdivSlow$1(receiver, other);
+    },
+    _tdivSlow$1(receiver, other) {
+      var quotient = receiver / other;
+      if (quotient >= -2147483648 && quotient <= 2147483647)
+        return quotient | 0;
+      if (quotient > 0) {
+        if (quotient !== 1 / 0)
+          return Math.floor(quotient);
+      } else if (quotient > -1 / 0)
+        return Math.ceil(quotient);
+      throw A.wrapException(A.UnsupportedError$("Result of truncating division is " + A.S(quotient) + ": " + A.S(receiver) + " ~/ " + other));
     },
     _shrOtherPositive$1(receiver, other) {
       var t1;
@@ -4644,19 +4674,29 @@
   };
   A.BoidSimulation.prototype = {
     initialize$0() {
-      var id, t3, _this = this,
+      var dy, hy, t3, id, _this = this,
         t1 = _this._shape_dimensions,
-        t2 = t1._x;
+        t2 = t1._x,
+        dx = B.JSInt_methods._tdivFast$1(t2, 2),
+        hx = B.JSInt_methods._tdivFast$1(dx, 2);
       t1 = t1._y;
-      Math.sqrt(t2 * t2 + t1 * t1);
+      dy = B.JSInt_methods._tdivFast$1(t1, 2);
+      hy = B.JSInt_methods._tdivFast$1(dy, 2);
+      t3 = _this._avoidance;
+      t3._x = B.JSInt_methods._tdivFast$1(t2, 5);
+      t3._y = B.JSInt_methods._tdivFast$1(t1, 5);
       for (t1 = _this._numBoids, id = 0; id < t1; ++id) {
         t2 = _this._boids;
         t3 = $.$get$_random();
-        B.JSArray_methods.add$1(t2, new A.Boid(new A.Point2D(t3.nextInt$1(_this._shape_dimensions._x), t3.nextInt$1(_this._shape_dimensions._y)), new A.Point2D(t3.nextInt$1(2), t3.nextInt$1(2)), id));
+        B.JSArray_methods.add$1(t2, new A.Boid(new A.Point2D(t3.nextInt$1(dx) + hx, t3.nextInt$1(dy) + hy), new A.Point2D(t3.nextInt$1(10) - 5, t3.nextInt$1(10) - 5), id));
       }
+      t1 = _this._shape_dimensions;
+      _this._coherence_factor = Math.sqrt(t1.dot$1(t1));
       t1 = _this._actions;
       B.JSArray_methods.add$1(t1, _this.get$coherence());
       B.JSArray_methods.add$1(t1, _this.get$separation());
+      B.JSArray_methods.add$1(t1, _this.get$aligment());
+      B.JSArray_methods.add$1(t1, _this.get$avoidLimits());
       B.JSArray_methods.add$1(t1, _this.get$move());
     },
     neighbors$1(boid) {
@@ -4689,43 +4729,86 @@
       type$.Boid._as(obj);
       type$.BoidSimulation._as(sim);
       v = obj._position.$sub(0, sim._swarmMidPoint);
-      obj._direction = obj._direction.$add(0, v.$mul(0, 0.005));
+      obj._direction = obj._direction.$add(0, v.$mul(0, Math.sqrt(v.dot$1(v)) / this._coherence_factor).$mul(0, this._momentum));
       return obj;
     },
     separation$2(obj, sim) {
-      var neigh, v;
+      var neigh, t1, _i, b, t2, t3, t4, t5, t6, t7;
       type$.Boid._as(obj);
       neigh = type$.BoidSimulation._as(sim).neighbors$1(obj);
-      v = obj._position.$sub(0, this.midPoint$1(neigh));
-      obj._direction = obj._direction.$sub(0, v);
+      for (t1 = neigh.length, _i = 0; _i < t1; ++_i) {
+        b = neigh[_i];
+        t2 = obj._position;
+        t3 = b._position;
+        t4 = t2._x;
+        t5 = t3._x;
+        t2 = t2._y;
+        t3 = t3._y;
+        t6 = obj._direction;
+        t7 = this._momentum;
+        t5 = B.JSNumber_methods.toInt$0((t4 - t5) * t7);
+        t7 = B.JSNumber_methods.toInt$0((t2 - t3) * t7);
+        obj._direction = new A.Point2D(t6._x - t5, t6._y - t7);
+      }
+      return obj;
+    },
+    aligment$2(obj, sim) {
+      var v;
+      type$.Boid._as(obj);
+      v = this.meanVector$1(type$.BoidSimulation._as(sim).neighbors$1(obj));
+      obj._direction = obj._direction.$add(0, v.$mul(0, this._momentum));
+      return obj;
+    },
+    avoidLimits$2(obj, sim) {
+      var t1, t2, t3, t4, t5, t6;
+      type$.Boid._as(obj);
+      type$.BoidSimulation._as(sim);
+      t1 = obj._position;
+      t2 = t1._x;
+      t3 = this._avoidance;
+      t4 = t3._x;
+      if (t2 < t4) {
+        t5 = obj._direction;
+        t5._x = t5._x + (t4 - t2);
+      } else {
+        t5 = this._shape_dimensions._x;
+        if (t2 > t5 - t4) {
+          t6 = obj._direction;
+          t6._x = t6._x - (t4 - (t5 - t2));
+        }
+      }
+      t1 = t1._y;
+      t3 = t3._y;
+      if (t1 < t3) {
+        t2 = obj._direction;
+        t2._y = t2._y + (t3 - t1);
+      } else {
+        t2 = this._shape_dimensions._y;
+        if (t1 > t2 - t3) {
+          t4 = obj._direction;
+          t4._y = t4._y - (t3 - (t2 - t1));
+        }
+      }
       return obj;
     },
     move$2(obj, sim) {
-      var t1, t2, t3, t4, _this = this;
+      var t1, t2;
       type$.Boid._as(obj);
       type$.BoidSimulation._as(sim);
-      t1 = obj._position = obj._position.$add(0, obj._direction.$mul(0, 0.005));
-      t2 = t1._x;
-      if (t2 <= 0 || t2 >= _this._shape_dimensions._x) {
-        t2 = obj._direction;
-        t2._x = -t2._x;
+      t1 = sim._velocity;
+      t2 = obj._direction;
+      t2 = Math.max(Math.sqrt(t2.dot$1(t2)), sim._velocity);
+      t2 = obj._position = obj._position.$add(0, obj._direction.$mul(0, t1 / t2));
+      t1 = t2._x;
+      if (t1 <= 0 || t1 >= this._shape_dimensions._x) {
+        t1 = obj._direction;
+        t1._x = -t1._x;
       }
-      t2 = t1._y;
-      if (t2 <= 0 || t2 >= _this._shape_dimensions._y) {
-        t2 = obj._direction;
-        t2._y = -t2._y;
+      t1 = t2._y;
+      if (t1 <= 0 || t1 >= this._shape_dimensions._y) {
+        t1 = obj._direction;
+        t1._y = -t1._y;
       }
-      t2 = t1._x;
-      if (t2 < 0)
-        t2 = _this._shape_dimensions._x;
-      t1._x = t2;
-      t3 = t1._y;
-      if (t3 < 0)
-        t3 = _this._shape_dimensions._y;
-      t1._y = t3;
-      t4 = _this._shape_dimensions;
-      t1._x = t2 >= t4._x ? 0 : t2;
-      t1._y = t3 >= t4._y ? 0 : t3;
       return obj;
     },
     mapDistances$0() {
@@ -4757,6 +4840,24 @@
       if (t1 > 0) {
         for (px = 0, py = 0, _i = 0; _i < t1; ++_i) {
           t2 = swarm[_i]._position;
+          px += t2._x;
+          py += t2._y;
+        }
+        px /= t1;
+        py /= t1;
+      } else {
+        px = 0;
+        py = 0;
+      }
+      return new A.Point2D(B.JSNumber_methods.toInt$0(px), B.JSNumber_methods.toInt$0(py));
+    },
+    meanVector$1(swarm) {
+      var t1, px, py, _i, t2;
+      type$.List_Boid._as(swarm);
+      t1 = swarm.length;
+      if (t1 > 0) {
+        for (px = 0, py = 0, _i = 0; _i < t1; ++_i) {
+          t2 = swarm[_i]._direction;
           px += t2._x;
           py += t2._y;
         }
@@ -4801,6 +4902,9 @@
     $mul(_, obj) {
       return new A.Point2D(B.JSNumber_methods.toInt$0(this._x * obj), B.JSNumber_methods.toInt$0(this._y * obj));
     },
+    dot$1(obj) {
+      return this._x * obj._x + this._y * obj._y;
+    },
     toString$0(_) {
       return "" + this._x + ", " + this._y;
     }
@@ -4819,13 +4923,19 @@
   };
   A.main_closure1.prototype = {
     call$1($event) {
-      A.changeLabel("radius", "lbl_radius");
+      A.changeLabel("momentum", "lbl_momentum");
     },
     $signature: 1
   };
   A.main_closure2.prototype = {
     call$1($event) {
-      var t1, canvas, t2, canvasWidth, canvasHeight, num_boids, t3, velocity, radius, _null = null;
+      A.changeLabel("radius", "lbl_radius");
+    },
+    $signature: 1
+  };
+  A.main_closure3.prototype = {
+    call$1($event) {
+      var t1, canvas, t2, canvasWidth, canvasHeight, num_boids, t3, momentum, t4, velocity, radius, _null = null;
       type$.MouseEvent._as($event);
       t1 = document;
       canvas = type$.nullable_CanvasElement._as(t1.querySelector("#canvas"));
@@ -4839,11 +4949,15 @@
       t2 = type$.nullable_InputElement;
       num_boids = t2._as(t1.querySelector("#num_boids"));
       t3 = num_boids == null ? _null : num_boids.value;
-      $.simulation = A.BoidSimulation$(A.int_parse(t3 == null ? "100" : t3), canvasWidth, canvasHeight);
+      $.simulation = A.BoidSimulation$(A.int_parse(t3 == null ? "100" : t3), canvasWidth * 3, canvasHeight * 3);
+      momentum = t2._as(t1.querySelector("#momentum"));
+      t3 = $.$get$simulation();
+      t4 = momentum == null ? _null : momentum.value;
+      t3._momentum = A.int_parse(t4 == null ? "0" : t4) / 1000;
       velocity = t2._as(t1.querySelector("#velocity"));
-      $.$get$simulation();
-      t3 = velocity == null ? _null : velocity.value;
-      A.int_parse(t3 == null ? "0" : t3);
+      t3 = $.$get$simulation();
+      t4 = velocity == null ? _null : velocity.value;
+      t3._velocity = A.int_parse(t4 == null ? "5" : t4);
       radius = t2._as(t1.querySelector("#radius"));
       t1 = $.$get$simulation();
       t2 = radius == null ? _null : radius.value;
@@ -4853,7 +4967,7 @@
     },
     $signature: 5
   };
-  A.main_closure3.prototype = {
+  A.main_closure4.prototype = {
     call$1($event) {
       var t1, t2;
       type$.MouseEvent._as($event);
@@ -4881,6 +4995,8 @@
     var _;
     _instance_2_u(_ = A.BoidSimulation.prototype, "get$coherence", "coherence$2", 2);
     _instance_2_u(_, "get$separation", "separation$2", 2);
+    _instance_2_u(_, "get$aligment", "aligment$2", 2);
+    _instance_2_u(_, "get$avoidLimits", "avoidLimits$2", 2);
     _instance_2_u(_, "get$move", "move$2", 2);
     _static_1(A, "boids_controller__boids_animation$closure", "boids_animation", 13);
   })();
@@ -4896,7 +5012,7 @@
     _inheritMany(J.JSNumber, [J.JSInt, J.JSNumNotInt]);
     _inheritMany(A.Error, [A.LateError, A.TypeError, A.JsNoSuchMethodError, A.UnknownJsTypeError, A.RuntimeError, A._Error, A.AssertionError, A.NullThrownError, A.ArgumentError, A.UnsupportedError, A.UnimplementedError, A.ConcurrentModificationError, A.CyclicInitializationError]);
     _inherit(A.NullError, A.TypeError);
-    _inheritMany(A.Closure, [A.Closure0Args, A.Closure2Args, A.TearOffClosure, A.initHooks_closure, A.initHooks_closure1, A._AsyncRun__initializeScheduleImmediate_internalCallback, A._AsyncRun__initializeScheduleImmediate_closure, A._Future__propagateToListeners_handleWhenCompleteCallback_closure, A.Stream_length_closure, A._RootZone_bindUnaryCallbackGuarded_closure, A._EventStreamSubscription_closure, A.main_closure, A.main_closure0, A.main_closure1, A.main_closure2, A.main_closure3]);
+    _inheritMany(A.Closure, [A.Closure0Args, A.Closure2Args, A.TearOffClosure, A.initHooks_closure, A.initHooks_closure1, A._AsyncRun__initializeScheduleImmediate_internalCallback, A._AsyncRun__initializeScheduleImmediate_closure, A._Future__propagateToListeners_handleWhenCompleteCallback_closure, A.Stream_length_closure, A._RootZone_bindUnaryCallbackGuarded_closure, A._EventStreamSubscription_closure, A.main_closure, A.main_closure0, A.main_closure1, A.main_closure2, A.main_closure3, A.main_closure4]);
     _inheritMany(A.TearOffClosure, [A.StaticClosure, A.BoundClosure]);
     _inherit(A.MapBase, A.MapMixin);
     _inherit(A.JsLinkedHashMap, A.MapBase);

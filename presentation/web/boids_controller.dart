@@ -23,6 +23,10 @@ void main() {
     changeLabel("velocity", "lbl_velocity");
   });
 
+  querySelector("#momentum")?.onChange.listen((event) {
+    changeLabel("momentum", "lbl_momentum");
+  });
+
   querySelector("#radius")?.onChange.listen((event) {
     changeLabel("radius", "lbl_radius");
   });
@@ -53,11 +57,15 @@ void boids_start(MouseEvent event) {
   var num_boids = querySelector("#num_boids") as InputElement?;
   int n = int.parse(num_boids?.value ?? "100");
 
-  simulation = BoidSimulation(n, canvasWidth, canvasHeight);
+  simulation = BoidSimulation(n, canvasWidth * 3, canvasHeight * 3);
+
+  var momentum = querySelector("#momentum") as InputElement?;
+
+  simulation.momentum = int.parse(momentum?.value ?? "0") / 1000;
 
   var velocity = querySelector("#velocity") as InputElement?;
 
-  simulation.velocity = int.parse(velocity?.value ?? "0");
+  simulation.velocity = int.parse(velocity?.value ?? "5");
 
   var radius = querySelector("#radius") as InputElement?;
 
@@ -72,17 +80,16 @@ void boids_animation(num timestamp) {
   var canvas = querySelector("#canvas") as CanvasElement?;
   var context = canvas?.getContext('2d') as CanvasRenderingContext2D?;
   int canvasWidth = canvas?.width ?? 100;
+  int hw = canvasWidth ~/ 2;
   int canvasHeight = canvas?.height ?? 100;
+  int hh = canvasHeight ~/ 2;
   context?.clearRect(0, 0, canvasWidth, canvasHeight);
 
   simulation.next();
 
   for (Boid boid in simulation.boids) {
-    /*Point2D vec = boid.vector(10);
-    canvas_arrow(context, boid.position.x, boid.position.y, vec.x, vec.y,
-        boid.direction);*/
     context?.setFillColorRgb(0, 0, 0);
-    context?.fillRect(boid.position.x, boid.position.y, 10, 10);
+    context?.fillRect(boid.position.x ~/ 3, boid.position.y ~/ 3, 3, 3);
   }
   animation_request_id = window.requestAnimationFrame(boids_animation);
 }
