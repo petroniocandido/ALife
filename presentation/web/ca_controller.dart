@@ -162,54 +162,47 @@ void ca1d_start(MouseEvent event) {
   var w_ele = querySelector("#caWidth") as InputElement?;
   int w = int.parse(w_ele?.value ?? "0");
 
-  var t = querySelector("#teste") as Element;
-
   var sel = querySelector("#CellularAutomata1D") as SelectElement;
 
   String key = sel.options[sel.selectedIndex ?? 0].value;
 
   Map<String, dynamic> r = rules[key];
 
-  t.text = r.toString();
   ca = SimpleCellularAutomata1D(w, r);
   ca.initialize();
 
-  window.requestAnimationFrame(sierpinski_animation_boxes);
+  window.requestAnimationFrame(ca1d_animation_boxes);
 }
 
-void sierpinski_start(MouseEvent event) {
-  var t = querySelector("#teste") as Element;
-  var w_ele = querySelector("#caWidth") as InputElement?;
-  int w = int.parse(w_ele?.value ?? "0");
-
-  ca = SierpinskiTriangle(w);
-  ca.initialize();
-
-  window.requestAnimationFrame(sierpinski_animation_boxes);
-}
-
-void sierpinski_animation_boxes(num timestamp) {
+void ca1d_animation_boxes(num timestamp) {
   animation_request_id = timestamp;
 
   var canvas = querySelector("#canvas") as CanvasElement?;
   var context = canvas?.getContext('2d') as CanvasRenderingContext2D?;
   int canvasWidth = canvas?.width ?? 100;
   int canvasHeight = canvas?.height ?? 100;
+
+  if (ca.iteration >= ca.shape[0]) {
+    window.cancelAnimationFrame((animation_request_id as int) + 1);
+    return;
+  }
+
   context?.clearRect(0, 0, canvasWidth, canvasHeight);
 
   double boxW = canvasWidth / ca.shape[0];
   double boxH = canvasHeight / ca.shape[0];
 
-  for (int y = 0; y < canvasHeight; y++) {
-    var img = ca.next();
-    for (int x = 0; x < ca.shape[0]; x++) {
-      int state = img[x];
-      context?.setFillColorRgb(state * 255, state * 255, state * 255);
-      context?.fillRect(x * boxW, y * boxH, boxW, boxH);
+  if (ca.iteration <= ca.shape[0]) {
+    for (int y = 0; y < canvasHeight; y++) {
+      var img = ca.next();
+      for (int x = 0; x < ca.shape[0]; x++) {
+        int state = img[x];
+        context?.setFillColorRgb(state * 255, state * 255, state * 255);
+        context?.fillRect(x * boxW, y * boxH, boxW, boxH);
+      }
     }
+    animation_request_id = window.requestAnimationFrame(ca1d_animation_boxes);
   }
-  animation_request_id =
-      window.requestAnimationFrame(sierpinski_animation_boxes);
 }
 
 void sierpinski_animation_image(num timestamp) {

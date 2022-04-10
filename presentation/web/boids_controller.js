@@ -4683,8 +4683,8 @@
       dy = B.JSInt_methods._tdivFast$1(t1, 2);
       hy = B.JSInt_methods._tdivFast$1(dy, 2);
       t3 = _this._avoidance;
-      t3._x = B.JSInt_methods._tdivFast$1(t2, 5);
-      t3._y = B.JSInt_methods._tdivFast$1(t1, 5);
+      t3._x = B.JSInt_methods._tdivFast$1(t2, 3);
+      t3._y = B.JSInt_methods._tdivFast$1(t1, 3);
       for (t1 = _this._numBoids, id = 0; id < t1; ++id) {
         t2 = _this._boids;
         t3 = $.$get$_random();
@@ -4769,24 +4769,24 @@
       t4 = t3._x;
       if (t2 < t4) {
         t5 = obj._direction;
-        t5._x = t5._x + (t4 - t2);
+        t5._x = A._asInt(t5._x - Math.max(t4 - t2, 1));
       } else {
         t5 = this._shape_dimensions._x;
         if (t2 > t5 - t4) {
           t6 = obj._direction;
-          t6._x = t6._x - (t4 - (t5 - t2));
+          t6._x = A._asInt(t6._x + Math.max(t4 - (t5 - t2), 1));
         }
       }
       t1 = t1._y;
       t3 = t3._y;
       if (t1 < t3) {
         t2 = obj._direction;
-        t2._y = t2._y + (t3 - t1);
+        t2._y = A._asInt(t2._y - Math.max(t3 - t1, 1));
       } else {
         t2 = this._shape_dimensions._y;
         if (t1 > t2 - t3) {
           t4 = obj._direction;
-          t4._y = t4._y - (t3 - (t2 - t1));
+          t4._y = A._asInt(t4._y + Math.max(t3 - (t2 - t1), 1));
         }
       }
       return obj;

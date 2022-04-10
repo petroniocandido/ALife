@@ -1,16 +1,21 @@
 abstract class CellularAutomata<T> {
+  // The shape are the dimensions of the simulation grid
   final List<int> _shape;
   List<int> get shape => _shape;
 
   int num_cells = 0;
+
+  // This variable is used to find the cell neighborhood
   List<int> _shape_dimensions = [];
 
   List<int> get shape_dimensions => _shape_dimensions;
 
+  // The cell states in the current iteration
   List<T> _cellsCurrent = [];
 
   List<T> get cells => _cellsCurrent;
 
+  // The cell states being computed for the next iteration
   List<T> _cellsWorking = [];
 
   List<T> get cellsWorking => _cellsWorking;
@@ -18,6 +23,10 @@ abstract class CellularAutomata<T> {
   T operator [](int i) => _cellsCurrent[i];
 
   int padding = 0;
+
+  int _iteration = 0;
+
+  int get iteration => _iteration;
 
   CellularAutomata(this._shape) {
     num_cells = _shape.reduce((i, j) => i * j);
@@ -44,6 +53,7 @@ abstract class CellularAutomata<T> {
   ///////////////////////////////////////////////
 
   void initialize([Map? args]) {
+    _iteration = 0;
     _cellsCurrent = [];
     _cellsWorking = [];
     for (int i = 0; i < num_cells; i++) {
@@ -89,6 +99,7 @@ abstract class CellularAutomata<T> {
   }
 
   List<T> next() {
+    _iteration++;
     begin();
     for (int i = 0; i < num_cells; i++) {
       cellUpdate(i);
@@ -98,7 +109,7 @@ abstract class CellularAutomata<T> {
   }
 
   List<T> run(int iterations) {
-    for (int i = 0; i < iterations; i++) {
+    for (_iteration = 0; _iteration < iterations; _iteration++) {
       begin();
       for (int i = 0; i < num_cells; i++) {
         cellUpdate(i);

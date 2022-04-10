@@ -94,8 +94,8 @@ class BoidSimulation {
     var dy = shape_dimensions.y ~/ 2;
     var hy = dy ~/ 2;
 
-    _avoidance.x = shape_dimensions.x ~/ 5;
-    _avoidance.y = shape_dimensions.y ~/ 5;
+    _avoidance.x = shape_dimensions.x ~/ 3;
+    _avoidance.y = shape_dimensions.y ~/ 3;
 
     for (int id = 0; id < numBoids; id++) {
       boids.add(Boid(
@@ -154,14 +154,16 @@ class BoidSimulation {
 
   Boid avoidLimits(Boid obj, BoidSimulation sim) {
     if (obj.position.x < _avoidance.x) {
-      obj.direction.x += _avoidance.x - obj.position.x;
+      obj.direction.x -= max(_avoidance.x - obj.position.x, 1);
     } else if (obj.position.x > shape_dimensions.x - _avoidance.x) {
-      obj.direction.x -= (_avoidance.x - (shape_dimensions.x - obj.position.x));
+      obj.direction.x +=
+          max(_avoidance.x - (shape_dimensions.x - obj.position.x), 1);
     }
     if (obj.position.y < _avoidance.y) {
-      obj.direction.y += _avoidance.y - obj.position.y;
+      obj.direction.y -= max(_avoidance.y - obj.position.y, 1);
     } else if (obj.position.y > shape_dimensions.y - _avoidance.y) {
-      obj.direction.y -= (_avoidance.y - (shape_dimensions.y - obj.position.y));
+      obj.direction.y +=
+          max(_avoidance.y - (shape_dimensions.y - obj.position.y), 1);
     }
     return obj;
   }
@@ -169,7 +171,7 @@ class BoidSimulation {
   Boid move(Boid obj, BoidSimulation sim) {
     var mod =
         sim.velocity / max(obj.direction.internal_product(), sim.velocity);
-    obj.position += obj.direction * mod; // * _momentum;
+    obj.position += obj.direction * mod;
 
     obj = keepBounds(obj);
     return obj;
